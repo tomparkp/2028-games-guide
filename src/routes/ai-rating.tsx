@@ -6,86 +6,84 @@ function AIRating() {
   return (
     <div className="wrap">
       <div className="page-header">
-        <h1>AI Rating Methodology</h1>
+        <h1>AI Rating System</h1>
         <p className="page-sub">How sessions are scored and what the numbers mean</p>
       </div>
       <div className="about-content">
         <p>
-          Every session is rated by an AI model across six dimensions, each scored 1&ndash;10.
-          These are combined using a weighted average to produce an aggregate rating.
-          The ratings are opinionated and meant to help surface interesting sessions &mdash;
-          they are not official or authoritative.
+          Every session is rated by an AI model across five dimensions, each scored 1&ndash;10.
+          These are combined using a weighted average to produce an aggregate rating (rounded
+          to a whole number). The ratings are opinionated and designed to help surface interesting
+          sessions &mdash; they are not official or authoritative.
+        </p>
+        <p>
+          Price is intentionally excluded from the rating. It&rsquo;s shown in the table so you
+          can make your own value judgment &mdash; what&rsquo;s worth it depends on your budget
+          and what seats you&rsquo;re looking at.
         </p>
 
         <h2>Dimensions &amp; Weights</h2>
 
         <div className="rating-dimension">
-          <h3>Prestige <span className="rating-weight">25%</span></h3>
+          <h3>Significance <span className="rating-weight">30%</span></h3>
           <p>
-            How significant is this session in the context of Olympic competition? Gold medal
-            finals score highest, followed by other medal matches and semifinals. Sessions with
-            multiple finals in a single sitting get a bonus. Preliminary rounds and qualifications
-            score lowest. Track &amp; field and swimming finals get an additional prestige boost
-            given their historic significance.
+            How important is this session in the context of Olympic competition? Gold medal
+            finals score highest, followed by other medal matches and semifinals. Sport popularity
+            matters &mdash; a basketball final carries more global weight than a niche sport final.
+            Sessions with multiple medal events get a significant boost since you&rsquo;re witnessing
+            more history in a single sitting.
           </p>
         </div>
 
         <div className="rating-dimension">
-          <h3>Value <span className="rating-weight">20%</span></h3>
+          <h3>Experience <span className="rating-weight">25%</span></h3>
           <p>
-            How much bang for your buck? Ticket prices are compared against percentiles across
-            all sessions. Cheaper sessions score higher, but value is also adjusted for prestige &mdash;
-            a high-prestige session at a moderate price is better value than a low-prestige session
-            at the same price. Free/unticketed events score well here.
+            How good will it be to watch live? This combines sport watchability with venue quality,
+            but contextually &mdash; an iconic venue hosting a gold medal final scores much higher
+            than the same venue hosting an early-round qualification. Evening sessions get a small
+            boost, but only for high-energy sports where the crowd atmosphere genuinely changes
+            after dark.
           </p>
         </div>
 
         <div className="rating-dimension">
-          <h3>Atmosphere <span className="rating-weight">20%</span></h3>
+          <h3>Star Power <span className="rating-weight">15%</span></h3>
           <p>
-            How exciting will the live experience be? Each sport has a base atmosphere score
-            reflecting how engaging it is as a spectator event (e.g., basketball and beach volleyball
-            score high, shooting and sailing score lower). Finals and medal rounds get a boost,
-            as do evening sessions which tend to have more energy.
+            How likely are you to see globally recognized athletes? Sports like basketball,
+            gymnastics, track &amp; field, and tennis have higher base star power. Later rounds
+            guarantee top athletes are competing, while preliminary heats may not feature
+            the biggest names in every matchup.
           </p>
         </div>
 
         <div className="rating-dimension">
           <h3>Uniqueness <span className="rating-weight">15%</span></h3>
           <p>
-            How special or rare is this opportunity? New or returning Olympic sports (flag football,
-            lacrosse, cricket, squash, baseball, 3x3 basketball) score highly. Iconic venue pairings
-            also boost uniqueness &mdash; baseball at Dodger Stadium, athletics at the Coliseum,
-            football at the Rose Bowl, surfing at Trestles. Ceremonies are rated maximum uniqueness.
+            How rare or special is this opportunity? New and returning Olympic sports (flag football,
+            lacrosse, cricket, squash, baseball, 3x3 basketball) get a bonus that scales with
+            round importance &mdash; a flag football gold medal is more unique than pool play.
+            Iconic venue pairings (baseball at Dodger Stadium, athletics at the Coliseum, surfing
+            at Trestles) only boost uniqueness for meaningful rounds.
           </p>
         </div>
 
         <div className="rating-dimension">
-          <h3>Star Power <span className="rating-weight">10%</span></h3>
+          <h3>Demand <span className="rating-weight">15%</span></h3>
           <p>
-            How likely are you to see globally recognized athletes? Sports like basketball, gymnastics,
-            track &amp; field, and tennis score high. Finals and medal rounds get a boost since top
-            athletes are guaranteed to compete, while preliminary rounds see a reduction since stars
-            may not be present in every heat.
+            How sought-after will this session be? This estimates how hard tickets will be to get
+            based on sport popularity (especially in a US host city), round type, and price ceiling
+            as a market signal. Cultural moment events &mdash; ceremonies, the 100m final, gymnastics
+            all-around, USA basketball &mdash; get an additional boost. Baseball at Dodger Stadium
+            rates maximum demand.
           </p>
         </div>
 
-        <div className="rating-dimension">
-          <h3>Venue <span className="rating-weight">10%</span></h3>
-          <p>
-            How iconic or notable is the venue? The LA Memorial Coliseum, Rose Bowl Stadium, and
-            Dodger Stadium score 10/10. Other notable venues like SoFi Stadium, Intuit Dome, Venice
-            Beach, and Trestles State Beach also score well. Standard competition venues receive a
-            baseline score.
-          </p>
-        </div>
-
-        <h2>How to Read the Scores</h2>
+        <h2>Reading the Scores</h2>
         <ul>
-          <li><strong className="rating-great-text">8.0+</strong> &mdash; Exceptional sessions you should strongly consider</li>
-          <li><strong className="rating-good-text">6.5&ndash;7.9</strong> &mdash; Strong sessions with good overall appeal</li>
-          <li><strong className="rating-fair-text">5.0&ndash;6.4</strong> &mdash; Decent sessions, solid if you&rsquo;re interested in the sport</li>
-          <li><strong className="rating-low-text">&lt; 5.0</strong> &mdash; Early rounds or niche sports, still Olympic experiences</li>
+          <li><strong className="rating-great-text">8&ndash;10</strong> &mdash; Exceptional sessions you should strongly consider</li>
+          <li><strong className="rating-good-text">6&ndash;7</strong> &mdash; Strong sessions with good overall appeal</li>
+          <li><strong className="rating-fair-text">4&ndash;5</strong> &mdash; Decent sessions, solid if you&rsquo;re interested in the sport</li>
+          <li><strong className="rating-low-text">1&ndash;3</strong> &mdash; Early rounds or niche sports, still Olympic experiences</li>
         </ul>
 
         <h2>Limitations</h2>

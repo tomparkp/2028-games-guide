@@ -1,4 +1,6 @@
+import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import { Bookmark } from 'lucide-react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import { fmtPrice } from '@/lib/format'
 import type { Session, SortColumn, SortState, GroupBy } from '@/types/session'
@@ -138,7 +140,54 @@ export function SessionTable({
   onToggleBookmark,
   groupBy,
 }: SessionTableProps) {
-  const groups = groupSessions(sessions, groupBy)
+  const listRef = useRef<HTMLTableRowElement | null>(null)
+  const [scrollMargin, setScrollMargin] = useState(0)
+
+  const items = useMemo(() => {
+    const groups = groupSessions(sessions, groupBy)
+    return groups.flatMap((g) => {
+      if (!groupBy) return g.sessions.map((s) => ({ type: 'session' as const, session: s }))
+      return [
+        { type: 'group' as const, label: g.label, count: g.sessions.length },
+        ...g.sessions.map((s) => ({ type: 'session' as const, session: s })),
+      ]
+    })
+  }, [sessions, groupBy])
+
+  useLayoutEffect(() => {
+    const el = listRef.current
+    if (!el) return
+
+    const updateMargin = () => {
+      setScrollMargin(el.getBoundingClientRect().top + window.scrollY)
+    }
+
+    updateMargin()
+    const ro = new ResizeObserver(updateMargin)
+    ro.observe(el)
+    window.addEventListener('resize', updateMargin)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', updateMargin)
+    }
+  }, [items.length, groupBy, sessions.length])
+
+  const rowVirtualizer = useWindowVirtualizer({
+    count: items.length,
+    estimateSize: () => 52,
+    overscan: 12,
+    scrollMargin,
+    enabled: items.length > 0,
+  })
+
+  const virtualRows = rowVirtualizer.getVirtualItems()
+  const totalSize = rowVirtualizer.getTotalSize()
+  // Virtual item `start`/`end` include `scrollMargin` (document-style coords). Spacer rows in
+  // <tbody> are laid out from the table top, so subtract `scrollMargin` to avoid a gap under thead.
+  const paddingTop = virtualRows.length > 0 ? Math.max(0, virtualRows[0].start - scrollMargin) : 0
+  const lastVirtual = virtualRows[virtualRows.length - 1]
+  const paddingBottom =
+    virtualRows.length > 0 ? Math.max(0, totalSize - (lastVirtual.end - scrollMargin)) : 0
 
   return (
     <div className="tbl-wrap">
@@ -169,26 +218,45 @@ export function SessionTable({
               </td>
             </tr>
           )}
-          {groups.map((group) => (
+          {sessions.length > 0 && (
             <>
-              {groupBy && (
-                <tr key={`group-${group.label}`} className="group-header">
-                  <td colSpan={8}>
-                    <span className="group-label">{groupLabel(groupBy)}:</span> {group.label}
-                    <span className="group-count">{group.sessions.length}</span>
-                  </td>
+              <tr ref={listRef} className="vt-anchor" aria-hidden>
+                <td colSpan={8} className="vt-anchor-cell" />
+              </tr>
+              {paddingTop > 0 && (
+                <tr className="vt-spacer" aria-hidden>
+                  <td colSpan={8} className="vt-spacer-cell" style={{ height: paddingTop }} />
                 </tr>
               )}
-              {group.sessions.map((e) => (
-                <SessionRow
-                  key={e.id}
-                  e={e}
-                  on={isBookmarked(e.id)}
-                  onToggleBookmark={onToggleBookmark}
-                />
-              ))}
+              {virtualRows.map((vRow) => {
+                const item = items[vRow.index]
+                if (item.type === 'group') {
+                  return (
+                    <tr key={`group-${item.label}-${vRow.key}`} className="group-header">
+                      <td colSpan={8}>
+                        <span className="group-label">{groupLabel(groupBy)}:</span> {item.label}
+                        <span className="group-count">{item.count}</span>
+                      </td>
+                    </tr>
+                  )
+                }
+                const e = item.session
+                return (
+                  <SessionRow
+                    key={`session-${e.id}-${vRow.key}`}
+                    e={e}
+                    on={isBookmarked(e.id)}
+                    onToggleBookmark={onToggleBookmark}
+                  />
+                )
+              })}
+              {paddingBottom > 0 && (
+                <tr className="vt-spacer" aria-hidden>
+                  <td colSpan={8} className="vt-spacer-cell" style={{ height: paddingBottom }} />
+                </tr>
+              )}
             </>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

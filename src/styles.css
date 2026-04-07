@@ -82,9 +82,12 @@ body {
   color: var(--ink);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+html[data-theme-transitioning] body {
   transition:
-    background 0.3s,
-    color 0.3s;
+    background 0.22s,
+    color 0.22s;
 }
 
 /* -- Hero -- */
@@ -207,11 +210,22 @@ body {
 }
 
 /* -- Filter bar (sticky) -- */
+/* Sentinel for IntersectionObserver: sits between hero and sticky bar (see useStickyFilterBorder) */
+.filter-stick-sentinel {
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
 .filter-bar {
   position: sticky;
   top: 0;
   z-index: 10;
   background: var(--bg);
+}
+
+.filter-bar--stuck {
+  border-bottom: 1px solid var(--border);
 }
 .filters {
   display: flex;
@@ -280,6 +294,27 @@ body {
   border-radius: 8px;
   background: var(--surface);
 }
+
+/* Window-virtualized tbody: anchor + spacers must not affect column layout */
+.vt-anchor {
+  height: 0;
+  line-height: 0;
+}
+.vt-anchor-cell {
+  padding: 0 !important;
+  border: none !important;
+  height: 0 !important;
+  line-height: 0;
+  font-size: 0;
+}
+.vt-spacer td.vt-spacer-cell {
+  padding: 0 !important;
+  border: none !important;
+  vertical-align: top;
+  line-height: 0;
+  font-size: 0;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -322,7 +357,6 @@ td {
   padding: 7px 10px;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
-  transition: background 0.1s;
 }
 tr:hover td {
   background: var(--surface2);
@@ -685,6 +719,8 @@ tr:hover td {
 /* -- Agenda view -- */
 .agenda-day {
   margin-bottom: 24px;
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
 }
 .agenda-day-header {
   display: flex;

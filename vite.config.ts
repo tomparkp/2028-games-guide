@@ -5,14 +5,29 @@ import viteReact from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-const config = defineConfig({
-  plugins: [
-    devtools(),
-    tsconfigPaths({ projects: ['./tsconfig.json'] }),
-    tailwindcss(),
-    tanstackStart(),
-    viteReact(),
-  ],
-})
+export default defineConfig(({ command }) => {
+  const isDev = command === 'serve'
 
-export default config
+  return {
+    plugins: [
+      ...(isDev ? [devtools()] : []),
+      tsconfigPaths({ projects: ['./tsconfig.json'] }),
+      tailwindcss(),
+      tanstackStart(),
+      viteReact(),
+    ],
+    build: {
+      target: 'esnext',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return
+            if (id.includes('/@tanstack/')) return 'tanstack'
+            if (id.includes('/react-dom/') || id.includes('/react/')) return 'react'
+            return
+          },
+        },
+      },
+    },
+  }
+})

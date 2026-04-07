@@ -24,7 +24,6 @@ To add a new route, create a file in `src/routes/` — TanStack will automatical
 
 ```tsx
 import { Link } from '@tanstack/react-router'
-
 ;<Link to="/about">About</Link>
 ```
 

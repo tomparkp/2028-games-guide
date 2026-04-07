@@ -19,27 +19,27 @@ const VenuesRoute = VenuesRouteImport.update({
   id: '/venues',
   path: '/venues',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/venues.lazy').then((d) => d.Route))
 const CalendarRoute = CalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/calendar.lazy').then((d) => d.Route))
 const AiRatingRoute = AiRatingRouteImport.update({
   id: '/ai-rating',
   path: '/ai-rating',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/ai-rating.lazy').then((d) => d.Route))
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute

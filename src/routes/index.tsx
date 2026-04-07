@@ -5,7 +5,7 @@ import { useBookmarks } from '@/hooks/useBookmarks'
 import { FilterBar } from '@/components/FilterBar'
 import { SessionTable } from '@/components/SessionTable'
 import { BookmarkSection } from '@/components/BookmarkSection'
-import type { Filters, SortColumn, SortState } from '@/types/session'
+import type { Filters, SortColumn, SortState, GroupBy } from '@/types/session'
 import { filterSessions, sortSessions } from '@/lib/filter'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
@@ -23,6 +23,7 @@ const defaultFilters: Filters = {
 function SessionPicker() {
   const [filters, setFilters] = useState<Filters>(defaultFilters)
   const [sort, setSort] = useState<SortState>({ col: 'agg', dir: 'desc' })
+  const [groupBy, setGroupBy] = useState<GroupBy>('')
   const { bookmarks, toggle, clearAll, isBookmarked } = useBookmarks()
 
   const filtered = useMemo(() => filterSessions(sessions, filters), [filters])
@@ -50,7 +51,7 @@ function SessionPicker() {
         <p className="sub">{sessions.length} sessions &middot; all sports &middot; rated &amp; sortable &middot; bookmark to save</p>
       </div>
 
-      <FilterBar filters={filters} onChange={setFilters} />
+      <FilterBar filters={filters} onChange={setFilters} groupBy={groupBy} onGroupByChange={setGroupBy} />
 
       <div className="wrap">
         <BookmarkSection
@@ -66,6 +67,7 @@ function SessionPicker() {
           onSort={handleSort}
           isBookmarked={isBookmarked}
           onToggleBookmark={toggle}
+          groupBy={groupBy}
         />
 
         <div className="footer-note">

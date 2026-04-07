@@ -1,12 +1,14 @@
-import type { Filters } from '@/types/session'
+import type { Filters, GroupBy } from '@/types/session'
 import { sports, zones, roundTypes } from '@/data/sessions'
 
 interface FilterBarProps {
   filters: Filters
   onChange: (filters: Filters) => void
+  groupBy: GroupBy
+  onGroupByChange: (groupBy: GroupBy) => void
 }
 
-export function FilterBar({ filters, onChange }: FilterBarProps) {
+export function FilterBar({ filters, onChange, groupBy, onGroupByChange }: FilterBarProps) {
   function update(key: keyof Filters, value: string) {
     onChange({ ...filters, [key]: value })
   }
@@ -21,6 +23,7 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           className={filters.search ? 'active' : ''}
           onChange={(e) => update('search', e.target.value)}
         />
+        <span className="filter-spacer" />
         <select className={filters.sport ? 'active' : ''} value={filters.sport} onChange={(e) => update('sport', e.target.value)}>
           <option value="">All Sports</option>
           {sports.map((s) => (
@@ -54,7 +57,14 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           <option value="0-500">Under $500</option>
           <option value="500-99999">$500+</option>
         </select>
-
+        <span className="filter-spacer" />
+        <select className={groupBy ? 'active' : ''} value={groupBy} onChange={(e) => onGroupByChange(e.target.value as GroupBy)}>
+          <option value="">No Grouping</option>
+          <option value="sport">Group by Sport</option>
+          <option value="rt">Group by Round</option>
+          <option value="zone">Group by Zone</option>
+          <option value="date">Group by Date</option>
+        </select>
       </div>
     </div>
   )

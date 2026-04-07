@@ -1,0 +1,14 @@
+---
+description: Git worktrees live under .worktrees/ in this repo (not ~/.cursor/worktrees).
+alwaysApply: true
+---
+
+# Git worktrees
+
+When creating a **git worktree** for this project (including Glass / parallel-agent style isolation):
+
+1. **Path**: Put it under **`.worktrees/`** at the **repository root** (same level as `package.json`), e.g. `.worktrees/my-feature-abc`.
+2. **Command shape**: From the main checkout, e.g. `git worktree add .worktrees/<folder-name> [-b <branch>] [<commit-ish>]` (adjust flags to match the task).
+3. **Do not** default to `~/.cursor/worktrees/...` for this repo unless the user explicitly asks for that layout.
+
+Rationale: keeps worktrees inside the workspace so agent sandboxes and project tools see the checkout, and avoids relying on a global Cursor-only path.

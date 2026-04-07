@@ -2,7 +2,7 @@ import type { Session } from '@/types/session'
 import { ScorePill } from './ScorePill'
 import { fmtPrice } from '@/lib/format'
 import { exportBookmarksCSV } from '@/lib/csv'
-import { Star } from 'lucide-react'
+import { Bookmark } from 'lucide-react'
 
 interface BookmarkSectionProps {
   sessions: Session[]
@@ -38,8 +38,8 @@ export function BookmarkSection({ sessions, bookmarks, onToggleBookmark, onClear
     <div className="bm-section">
       <div className="bm-section-head">
         <h2>
-          <Star size={16} fill="var(--gold)" stroke="var(--gold)" strokeWidth={1.5} />
-          Starred <span className="count">{items.length}</span>
+          <Bookmark size={16} fill="var(--gold)" stroke="var(--gold)" />
+          Bookmarked <span className="count">{items.length}</span>
         </h2>
         <div className="bm-stats">
           <span>{fmtPrice(totLo, totHi)} est.</span>
@@ -89,9 +89,9 @@ export function BookmarkSection({ sessions, bookmarks, onToggleBookmark, onClear
                   <button
                     className="bm"
                     onClick={() => onToggleBookmark(e.id)}
-                    title="Unstar"
+                    title="Remove bookmark"
                   >
-                    <Star size={20} className="bm-on" fill="var(--gold)" stroke="var(--gold)" strokeWidth={1.5} />
+                    <Bookmark size={20} className="bm-on" fill="var(--gold)" stroke="var(--gold)" />
                   </button>
                 </td>
               </tr>

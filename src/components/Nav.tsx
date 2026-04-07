@@ -5,7 +5,7 @@ const tabs = [
   { to: '/', label: 'Sessions' },
   { to: '/venues', label: 'Venues' },
   { to: '/calendar', label: 'Calendar' },
-  { to: '/ai-rating', label: 'Rating System' },
+  { to: '/ai-rating', label: 'AI Ratings' },
   { to: '/about', label: 'About' },
 ] as const
 

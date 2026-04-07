@@ -1,7 +1,7 @@
 import type { Session, SortColumn, SortState, GroupBy } from '@/types/session'
 import { ScorePill } from './ScorePill'
 import { fmtPrice } from '@/lib/format'
-import { Pin } from 'lucide-react'
+import { Star } from 'lucide-react'
 
 interface SessionTableProps {
   sessions: Session[]
@@ -89,10 +89,11 @@ function SessionRow({ e, on, onToggleBookmark }: { e: Session; on: boolean; onTo
         <button
           className="bm"
           onClick={() => onToggleBookmark(e.id)}
-          title={on ? 'Unpin' : 'Pin'}
+          title={on ? 'Unstar' : 'Star'}
         >
-          <Pin
+          <Star
             size={20}
+            strokeWidth={1.5}
             className={on ? 'bm-on' : 'bm-off'}
             fill={on ? 'var(--gold)' : 'none'}
             stroke={on ? 'var(--gold)' : 'var(--ink3)'}

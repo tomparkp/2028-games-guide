@@ -1,7 +1,7 @@
 import type { Session, SortColumn, SortState, GroupBy } from '@/types/session'
 import { ScorePill } from './ScorePill'
 import { fmtPrice } from '@/lib/format'
-import { Bookmark } from 'lucide-react'
+import { Pin } from 'lucide-react'
 
 interface SessionTableProps {
   sessions: Session[]
@@ -89,9 +89,9 @@ function SessionRow({ e, on, onToggleBookmark }: { e: Session; on: boolean; onTo
         <button
           className="bm"
           onClick={() => onToggleBookmark(e.id)}
-          title={on ? 'Remove bookmark' : 'Bookmark'}
+          title={on ? 'Unpin' : 'Pin'}
         >
-          <Bookmark
+          <Pin
             size={20}
             className={on ? 'bm-on' : 'bm-off'}
             fill={on ? 'var(--gold)' : 'none'}
@@ -118,11 +118,11 @@ export function SessionTable({ sessions, sort, onSort, isBookmarked, onToggleBoo
             <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
             <th>Round</th>
             <SortHeader
-              label="Rating"
+              label="AI Rating"
               col="agg"
               sort={sort}
               onSort={onSort}
-              title="Aggregate rating (prestige, value, atmosphere, uniqueness, star power, venue)"
+              title="AI-generated aggregate rating (prestige, value, atmosphere, uniqueness, star power, venue)"
             />
             <th style={{ width: 36 }}></th>
           </tr>

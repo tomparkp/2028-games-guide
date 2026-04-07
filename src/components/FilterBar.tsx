@@ -43,7 +43,7 @@ export function FilterBar({ filters, onChange, groupBy, onGroupByChange }: Filte
           ))}
         </select>
         <select className={filters.score ? 'active' : ''} value={filters.score} onChange={(e) => update('score', e.target.value)}>
-          <option value="">Any Rating</option>
+          <option value="">Any AI Rating</option>
           <option value="8">8+ (Great)</option>
           <option value="7">7+ (Good)</option>
           <option value="6">6+ (Decent)</option>

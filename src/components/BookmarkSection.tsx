@@ -2,7 +2,7 @@ import type { Session } from '@/types/session'
 import { ScorePill } from './ScorePill'
 import { fmtPrice } from '@/lib/format'
 import { exportBookmarksCSV } from '@/lib/csv'
-import { Bookmark } from 'lucide-react'
+import { Pin } from 'lucide-react'
 
 interface BookmarkSectionProps {
   sessions: Session[]
@@ -38,8 +38,8 @@ export function BookmarkSection({ sessions, bookmarks, onToggleBookmark, onClear
     <div className="bm-section">
       <div className="bm-section-head">
         <h2>
-          <Bookmark size={16} fill="var(--gold)" stroke="var(--gold)" />
-          Bookmarked <span className="count">{items.length}</span>
+          <Pin size={16} fill="var(--gold)" stroke="var(--gold)" />
+          Pinned <span className="count">{items.length}</span>
         </h2>
         <div className="bm-stats">
           <span>{fmtPrice(totLo, totHi)} est.</span>
@@ -63,7 +63,7 @@ export function BookmarkSection({ sessions, bookmarks, onToggleBookmark, onClear
               <th>Zone</th>
               <th>Price</th>
               <th>Round</th>
-              <th title="Aggregate rating">Rating</th>
+              <th title="AI-generated aggregate rating">AI Rating</th>
               <th style={{ width: 36 }}></th>
             </tr>
           </thead>
@@ -89,9 +89,9 @@ export function BookmarkSection({ sessions, bookmarks, onToggleBookmark, onClear
                   <button
                     className="bm"
                     onClick={() => onToggleBookmark(e.id)}
-                    title="Remove bookmark"
+                    title="Unpin"
                   >
-                    <Bookmark size={20} className="bm-on" fill="var(--gold)" stroke="var(--gold)" />
+                    <Pin size={20} className="bm-on" fill="var(--gold)" stroke="var(--gold)" />
                   </button>
                 </td>
               </tr>

@@ -1,4 +1,5 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { Nav } from '../components/Nav'
 
 import appCss from '../styles.css?url'
 
@@ -26,6 +27,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <Nav />
         {children}
         <Scripts />
       </body>

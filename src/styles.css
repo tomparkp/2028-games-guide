@@ -88,7 +88,7 @@ body {
 /* -- Hero -- */
 .hero {
   position: relative;
-  padding: 48px 24px 28px;
+  padding: 48px 24px 24px;
   text-align: center;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
@@ -136,6 +136,45 @@ body {
   font-size: 0.82rem;
   position: relative;
   font-weight: 300;
+}
+
+.hero .disclaimer {
+  font-size: 0.72rem;
+  color: var(--ink3);
+  margin-top: 8px;
+  position: relative;
+  font-weight: 300;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* -- Nav tabs -- */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 20px;
+  position: relative;
+}
+.nav-tab {
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink3);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+.nav-tab:hover {
+  color: var(--ink);
+  background: var(--surface2);
+}
+.nav-tab-active {
+  color: var(--ink);
+  background: var(--surface2);
+  font-weight: 600;
 }
 
 /* -- Theme toggle -- */
@@ -570,6 +609,101 @@ tr:hover td {
   font-weight: 300;
 }
 
+/* -- Page header -- */
+.page-header {
+  margin-bottom: 16px;
+}
+.page-header h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.page-sub {
+  font-size: 0.78rem;
+  color: var(--ink3);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+/* -- About -- */
+.about-content {
+  max-width: 680px;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--ink2);
+}
+.about-content h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+.about-content p {
+  margin-bottom: 12px;
+}
+.about-content ul {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+.about-content li {
+  margin-bottom: 6px;
+}
+
+/* -- Rating methodology -- */
+.rating-dimension {
+  margin-bottom: 16px;
+}
+.rating-dimension h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.rating-weight {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--ink3);
+}
+.rating-great-text { color: #3dba6f; }
+.rating-good-text { color: #b8a832; }
+.rating-fair-text { color: #d49633; }
+.rating-low-text { color: #c84a3a; }
+
+/* -- Calendar -- */
+.calendar-day {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.calendar-day-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.calendar-day-header h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+.calendar-day-stats {
+  font-size: 0.72rem;
+  color: var(--ink3);
+  font-weight: 300;
+}
+.calendar-sports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 /* -- Footer note -- */
 .footer-note {
   text-align: center;
@@ -585,11 +719,14 @@ tr:hover td {
     font-size: 1.6rem;
   }
   .hero {
-    padding: 36px 16px 24px;
+    padding: 36px 16px 12px;
   }
   .filters {
     gap: 4px;
     padding: 8px 10px;
+  }
+  .filters input {
+    width: 140px;
   }
   .bm-section-head {
     flex-wrap: wrap;

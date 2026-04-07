@@ -7,7 +7,6 @@ import { SessionTable } from '@/components/SessionTable'
 import { BookmarkSection } from '@/components/BookmarkSection'
 import type { Filters, SortColumn, SortState, GroupBy } from '@/types/session'
 import { filterSessions, sortSessions } from '@/lib/filter'
-import { ThemeToggle } from '@/components/ThemeToggle'
 
 export const Route = createFileRoute('/')({ component: SessionPicker })
 
@@ -38,19 +37,6 @@ function SessionPicker() {
 
   return (
     <>
-      <div className="hero">
-        <ThemeToggle />
-        <div className="rings">
-          <div className="ring" />
-          <div className="ring" />
-          <div className="ring" />
-          <div className="ring" />
-          <div className="ring" />
-        </div>
-        <h1><em>LA28</em> Session Picker</h1>
-        <p className="sub">{sessions.length} sessions &middot; all sports &middot; rated &amp; sortable &middot; bookmark to save</p>
-      </div>
-
       <FilterBar filters={filters} onChange={setFilters} groupBy={groupBy} onGroupByChange={setGroupBy} />
 
       <div className="wrap">

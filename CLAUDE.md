@@ -18,7 +18,7 @@ This is a **TanStack Start** (React 19) full-stack app with SSR, file-based rout
 Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` by the TanStack Router plugin. Do not edit `routeTree.gen.ts` manually.
 
 - `__root.tsx` — Root layout wrapping all pages (HTML document, Header, Footer, devtools)
-- Filename maps to path: `about.tsx` → `/about`, `index.tsx` → `/`
+- Filename maps to path: `venues.tsx` → `/venues`, `index.tsx` → `/`
 - Routes use `createFileRoute()` / `createRootRoute()`
 - Router config in `src/router.tsx`: preloads on intent, scroll restoration enabled
 

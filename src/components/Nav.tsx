@@ -9,7 +9,6 @@ const tabs = [
   { to: '/venues', label: 'Venues' },
   { to: '/calendar', label: 'Agenda' },
   { to: '/ai-rating', label: 'AI Ratings' },
-  { to: '/about', label: 'About' },
 ] as const
 
 const ringColors = [

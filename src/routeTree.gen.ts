@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenuesRouteImport } from './routes/venues'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as AiRatingRouteImport } from './routes/ai-rating'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const VenuesRoute = VenuesRouteImport.update({
@@ -30,11 +29,6 @@ const AiRatingRoute = AiRatingRouteImport.update({
   path: '/ai-rating',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/ai-rating.lazy').then((d) => d.Route))
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,14 +37,12 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/ai-rating': typeof AiRatingRoute
   '/calendar': typeof CalendarRoute
   '/venues': typeof VenuesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/ai-rating': typeof AiRatingRoute
   '/calendar': typeof CalendarRoute
   '/venues': typeof VenuesRoute
@@ -58,22 +50,20 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/ai-rating': typeof AiRatingRoute
   '/calendar': typeof CalendarRoute
   '/venues': typeof VenuesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/ai-rating' | '/calendar' | '/venues'
+  fullPaths: '/' | '/ai-rating' | '/calendar' | '/venues'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/ai-rating' | '/calendar' | '/venues'
-  id: '__root__' | '/' | '/about' | '/ai-rating' | '/calendar' | '/venues'
+  to: '/' | '/ai-rating' | '/calendar' | '/venues'
+  id: '__root__' | '/' | '/ai-rating' | '/calendar' | '/venues'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   AiRatingRoute: typeof AiRatingRoute
   CalendarRoute: typeof CalendarRoute
   VenuesRoute: typeof VenuesRoute
@@ -102,13 +92,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiRatingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -121,7 +104,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   AiRatingRoute: AiRatingRoute,
   CalendarRoute: CalendarRoute,
   VenuesRoute: VenuesRoute,

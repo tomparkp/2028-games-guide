@@ -95,10 +95,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-html[data-theme-transitioning] body {
-  transition:
-    background 0.22s,
-    color 0.22s;
+html[data-theme-switching] *,
+html[data-theme-switching] *::before,
+html[data-theme-switching] *::after {
+  transition: none !important;
 }
 
 /* Custom select arrow (SVG background can't be a utility) */

@@ -22,11 +22,11 @@ export function ThemeToggle() {
     setDark(next)
     const theme = next ? 'dark' : 'light'
     localStorage.setItem(STORAGE_KEY, theme)
-    document.documentElement.setAttribute('data-theme-transitioning', 'true')
-    document.documentElement.setAttribute('data-theme', theme)
-    window.setTimeout(() => {
-      document.documentElement.removeAttribute('data-theme-transitioning')
-    }, 250)
+    const doc = document.documentElement
+    doc.setAttribute('data-theme-switching', '')
+    doc.setAttribute('data-theme', theme)
+    doc.offsetHeight
+    doc.removeAttribute('data-theme-switching')
   }
 
   return (

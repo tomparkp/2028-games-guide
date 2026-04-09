@@ -254,7 +254,7 @@ export function SessionDetail({
                 <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
                   Summary
                 </h3>
-                <div className="mt-2 space-y-3 text-[0.86rem] font-medium leading-snug text-ink">
+                <div className="mt-2 space-y-3 text-[0.86rem] font-medium leading-relaxed text-ink">
                   {insights.summary.split('\n\n').map((para, i) => (
                     <p key={i}>{para}</p>
                   ))}
@@ -284,17 +284,13 @@ export function SessionDetail({
                             {dim.score.toFixed(1)}
                           </span>
                         </div>
-                        <p className="mt-1.5 text-[0.72rem] leading-snug text-ink3">
+                        <p className="mt-1.5 text-[0.72rem] leading-normal text-ink3">
                           {dim.explanation}
                         </p>
                       </div>
                     )
                   })}
                 </div>
-
-                <p className="mt-3 text-[0.78rem] leading-relaxed text-ink3">
-                  {insights.overallExplanation}
-                </p>
               </div>
 
               {/* ── Contenders ── */}

@@ -1,4 +1,4 @@
-import { ChevronsRight } from 'lucide-react'
+import { ChevronsRight, X } from 'lucide-react'
 import { type PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/lib/cn'
@@ -12,6 +12,21 @@ const labelClass = 'text-[0.64rem] font-semibold uppercase tracking-[0.08em] tex
 const DEFAULT_WIDTH = 576
 const MIN_WIDTH = 360
 const MAX_WIDTH = 900
+const MD_BREAKPOINT = 768
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false)
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MD_BREAKPOINT - 1}px)`)
+    setMobile(mql.matches)
+    function onChange(e: MediaQueryListEvent) {
+      setMobile(e.matches)
+    }
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
+  }, [])
+  return mobile
+}
 
 export function SessionDetail({
   session,
@@ -23,6 +38,7 @@ export function SessionDetail({
   const panelRef = useRef<HTMLDivElement>(null)
   const widthRef = useRef(DEFAULT_WIDTH)
   const [width, setWidth] = useState(DEFAULT_WIDTH)
+  const isMobile = useIsMobile()
 
   const lastSessionRef = useRef<Session | null>(null)
   if (session) lastSessionRef.current = session
@@ -44,7 +60,16 @@ export function SessionDetail({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
 
+  useEffect(() => {
+    if (!isOpen || !isMobile) return
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, isMobile])
+
   function handleResizeStart(e: ReactPointerEvent) {
+    if (isMobile) return
     e.preventDefault()
     const startX = e.clientX
     const startWidth = widthRef.current
@@ -78,41 +103,54 @@ export function SessionDetail({
   }
 
   return (
-    <div
-      ref={panelRef}
-      role="dialog"
-      aria-label={displayed?.name}
-      aria-hidden={!isOpen}
-      style={{ width }}
-      className={cn(
-        'fixed inset-y-0 right-0 z-50 max-w-full border-l border-border bg-surface shadow-2xl transition-transform duration-200 ease-panel',
-        isOpen ? 'translate-x-0' : 'translate-x-full',
-      )}
-    >
-      {/* Resize handle */}
+    <>
+      {/* Backdrop (mobile only) */}
       <div
-        className="group/edge absolute inset-y-0 -left-1 z-20 w-2 cursor-col-resize"
-        onPointerDown={handleResizeStart}
-        onDoubleClick={handleResizeDoubleClick}
-      >
-        <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-transparent transition-colors group-hover/edge:bg-gold/40 group-active/edge:bg-gold/60" />
-      </div>
+        className={cn(
+          'fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 md:hidden',
+          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
+        )}
+        onClick={onClose}
+        aria-hidden
+      />
 
-      {/* Scrollable content */}
-      <div className="h-full overflow-y-auto">
-        {displayed && insights && (
-          <div className="px-5 py-3">
-            {/* Toolbar */}
-            <div className="flex items-center gap-1 mb-4">
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Collapse panel"
-                className="flex size-7 items-center justify-center rounded-md text-ink3 transition-colors hover:bg-surface2 hover:text-ink"
-              >
-                <ChevronsRight size={16} />
-              </button>
-            </div>
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-label={displayed?.name}
+        aria-hidden={!isOpen}
+        style={isMobile ? undefined : { width }}
+        className={cn(
+          'fixed inset-y-0 right-0 z-50 border-l border-border bg-surface shadow-2xl transition-transform duration-200 ease-panel',
+          'max-md:w-full max-md:border-l-0 md:max-w-full',
+          isOpen ? 'translate-x-0' : 'translate-x-full',
+        )}
+      >
+        {/* Resize handle (desktop only) */}
+        <div
+          className="group/edge absolute inset-y-0 -left-1 z-20 w-2 cursor-col-resize max-md:hidden"
+          onPointerDown={handleResizeStart}
+          onDoubleClick={handleResizeDoubleClick}
+        >
+          <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-transparent transition-colors group-hover/edge:bg-gold/40 group-active/edge:bg-gold/60" />
+        </div>
+
+        {/* Scrollable content */}
+        <div className="h-full overflow-y-auto overscroll-contain">
+          {displayed && insights && (
+            <div className="px-5 py-3 max-md:px-4">
+              {/* Toolbar */}
+              <div className="flex items-center gap-1 mb-4">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close panel"
+                  className="flex size-10 items-center justify-center rounded-md text-ink3 transition-colors hover:bg-surface2 hover:text-ink md:size-7"
+                >
+                  <ChevronsRight size={16} className="hidden md:block" />
+                  <X size={20} className="md:hidden" />
+                </button>
+              </div>
 
             {/* Title */}
             <h2 className="text-[1.25rem] font-semibold text-ink leading-tight">
@@ -182,5 +220,6 @@ export function SessionDetail({
         )}
       </div>
     </div>
+    </>
   )
 }

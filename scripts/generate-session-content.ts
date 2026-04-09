@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import Anthropic from '@anthropic-ai/sdk'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'

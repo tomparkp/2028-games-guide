@@ -72,7 +72,6 @@ export function SessionDetail({
   onToggleBookmark?: (id: string) => void
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
   const widthRef = useRef(DEFAULT_WIDTH)
   const [width, setWidth] = useState(DEFAULT_WIDTH)
   const isMobile = useIsMobile()
@@ -97,12 +96,6 @@ export function SessionDetail({
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, isMobile, onClose])
-
-  // Reset scroll to top when the selected session changes on desktop
-  useEffect(() => {
-    if (!isOpen || isMobile) return
-    scrollRef.current?.scrollTo({ top: 0 })
-  }, [session?.id, isOpen, isMobile])
 
   function handleResizeStart(e: ReactPointerEvent) {
     e.preventDefault()
@@ -334,7 +327,7 @@ export function SessionDetail({
       </div>
 
       {/* Scrollable content */}
-      <div ref={scrollRef} className="flex h-full flex-col overflow-y-auto overscroll-contain">
+      <div className="flex h-full flex-col overflow-y-auto overscroll-contain">
         {panelContent}
       </div>
     </div>

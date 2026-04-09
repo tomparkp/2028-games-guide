@@ -3,7 +3,7 @@ import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import { ScorePill } from '@/components/ScorePill'
-import { fmtPrice } from '@/lib/format'
+import { fmtPrice, fmtTime } from '@/lib/format'
 import { roundTagClasses } from '@/lib/tw'
 import type { Session } from '@/types/session'
 
@@ -92,7 +92,7 @@ function Schedule() {
   const measureElement = dayVirtualizer.measureElement
 
   return (
-    <div className="max-w-[900px] mx-auto px-4 pt-4 pb-15">
+    <div className="max-w-[1400px] mx-auto px-4 pt-4 pb-15">
       <div className="mb-6">
         <h1 className="font-display text-2xl font-normal text-ink -tracking-[0.02em]">Schedule</h1>
         <p className="text-[0.78rem] text-ink3 font-light mt-0.5">
@@ -154,7 +154,7 @@ function SessionCard({ session: s }: { session: Session }) {
           </div>
           <div className="text-[0.88rem] text-ink leading-snug font-medium">{s.desc}</div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1.5 text-[0.72rem] text-ink3">
-            <span>{s.time}</span>
+            <span>{fmtTime(s.time)}</span>
             <span className="text-border">|</span>
             <span>{s.venue}</span>
             <span className="text-border">|</span>

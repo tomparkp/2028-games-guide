@@ -1,4 +1,4 @@
-import { Bookmark, ChevronDown, SlidersHorizontal } from 'lucide-react'
+import { ChevronDown, SlidersHorizontal, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { cn } from '@/lib/cn'
@@ -13,8 +13,6 @@ interface FilterBarProps {
   onGroupByChange: (groupBy: GroupBy) => void
   sports: string[]
   zones: string[]
-  bookmarkCount: number
-  onOpenBookmarks: () => void
 }
 
 const inputBase =
@@ -50,8 +48,6 @@ export function FilterBar({
   onGroupByChange,
   sports,
   zones,
-  bookmarkCount,
-  onOpenBookmarks,
 }: FilterBarProps) {
   const { sentinelRef, stuck } = useStickyFilterBorder()
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -61,6 +57,34 @@ export function FilterBar({
     onChange({ ...filters, [key]: value })
   }
 
+  const searchInput = (desktop: boolean) => (
+    <div className={cn('relative', !desktop && 'flex-1 min-w-0')}>
+      <input
+        type="text"
+        placeholder="Search events..."
+        value={filters.search}
+        className={cn(
+          inputBase,
+          'placeholder:text-ink3',
+          desktop ? 'w-[150px]' : 'w-full',
+          filters.search && 'pr-6',
+          filters.search && activeCls,
+        )}
+        onChange={(e) => update('search', e.target.value)}
+      />
+      {filters.search && (
+        <button
+          type="button"
+          onClick={() => update('search', '')}
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-ink3 hover:text-ink transition-colors cursor-pointer"
+          aria-label="Clear search"
+        >
+          <X size={14} />
+        </button>
+      )}
+    </div>
+  )
+
   const filterSelects = (
     <>
       <select
@@ -68,7 +92,7 @@ export function FilterBar({
         value={filters.sport}
         onChange={(e) => update('sport', e.target.value)}
       >
-        <option value="" className="text-ink bg-surface">All Sports</option>
+        <option value="" className="text-ink bg-surface">Sport</option>
         {sports.map((s) => (
           <option key={s} value={s} className="text-ink bg-surface">
             {s}
@@ -80,7 +104,7 @@ export function FilterBar({
         value={filters.round}
         onChange={(e) => update('round', e.target.value)}
       >
-        <option value="" className="text-ink bg-surface">All Rounds</option>
+        <option value="" className="text-ink bg-surface">Round</option>
         {roundTypes.map((r) => (
           <option key={r} value={r} className="text-ink bg-surface">
             {r}
@@ -92,7 +116,7 @@ export function FilterBar({
         value={filters.zone}
         onChange={(e) => update('zone', e.target.value)}
       >
-        <option value="" className="text-ink bg-surface">All Zones</option>
+        <option value="" className="text-ink bg-surface">Zone</option>
         {zones.map((z) => (
           <option key={z} value={z} className="text-ink bg-surface">
             {z}
@@ -104,101 +128,57 @@ export function FilterBar({
         value={filters.score}
         onChange={(e) => update('score', e.target.value)}
       >
-        <option value="" className="text-ink bg-surface">Any Rating</option>
-        <option value="8">8+ (Great)</option>
-        <option value="6">6+ (Good)</option>
-        <option value="4">4+ (Decent)</option>
+        <option value="" className="text-ink bg-surface">Rating</option>
+        <option value="8">8+</option>
+        <option value="6">6+</option>
+        <option value="4">4+</option>
       </select>
       <select
         className={cn(selectCls, filters.price && activeCls)}
         value={filters.price}
         onChange={(e) => update('price', e.target.value)}
       >
-        <option value="" className="text-ink bg-surface">Any Price</option>
-        <option value="0-50">Under $50</option>
-        <option value="0-100">Under $100</option>
-        <option value="0-200">Under $200</option>
-        <option value="0-500">Under $500</option>
+        <option value="" className="text-ink bg-surface">Price</option>
+        <option value="0-50">&lt;$50</option>
+        <option value="0-100">&lt;$100</option>
+        <option value="0-200">&lt;$200</option>
+        <option value="0-500">&lt;$500</option>
         <option value="500-99999">$500+</option>
-      </select>
-      <select
-        className={cn(selectCls, groupBy && activeCls)}
-        value={groupBy}
-        onChange={(e) => onGroupByChange(e.target.value as GroupBy)}
-      >
-        <option value="" className="text-ink bg-surface">No Grouping</option>
-        <option value="sport">Group by Sport</option>
-        <option value="rt">Group by Round</option>
-        <option value="zone">Group by Zone</option>
-        <option value="date">Group by Date</option>
       </select>
     </>
   )
 
-  const savedButton = (
-    <button
-      type="button"
-      onClick={onOpenBookmarks}
-      className={cn(actionBtnCls, bookmarkCount > 0 && actionActiveCls)}
+  const groupBySelect = (
+    <select
+      className={cn(selectCls, groupBy && activeCls)}
+      value={groupBy}
+      onChange={(e) => onGroupByChange(e.target.value as GroupBy)}
     >
-      <Bookmark
-        size={14}
-        fill={bookmarkCount > 0 ? 'var(--gold)' : 'none'}
-        stroke={bookmarkCount > 0 ? 'var(--gold)' : 'currentColor'}
-      />
-      <span>Saved</span>
-      {bookmarkCount > 0 && (
-        <span className={badgeCls}>{bookmarkCount}</span>
-      )}
-    </button>
+      <option value="" className="text-ink bg-surface">Group By</option>
+      <option value="sport">Sport</option>
+      <option value="rt">Round</option>
+      <option value="zone">Zone</option>
+      <option value="date">Date</option>
+    </select>
   )
 
   return (
     <>
       <div ref={sentinelRef} className="h-px m-0 pointer-events-none" aria-hidden />
       <div className={cn('sticky top-0 z-10 bg-bg', stuck && 'border-b border-border')}>
-        {/* ─── Wide desktop: single row ─── */}
-        <div className="hidden min-[1080px]:flex items-center gap-1 px-4 py-2.5 mx-auto max-w-[1400px]">
-          <input
-            type="text"
-            placeholder="Search events..."
-            value={filters.search}
-            className={cn(inputBase, 'w-[150px] placeholder:text-ink3', filters.search && activeCls)}
-            onChange={(e) => update('search', e.target.value)}
-          />
-          {savedButton}
+        {/* ─── Desktop: single row ─── */}
+        <div className="hidden min-[880px]:flex items-center gap-1.5 px-4 py-2.5 mx-auto max-w-[1400px]">
+          {searchInput(true)}
           <span className="flex-1" />
           {filterSelects}
+          <span className="flex-1" />
+          {groupBySelect}
         </div>
 
-        {/* ─── Tablet: search+saved on top, filters wrap below ─── */}
-        <div className="hidden min-[540px]:block min-[1080px]:hidden px-4 py-2 mx-auto max-w-[1400px] space-y-1.5">
-          <div className="flex items-center gap-1.5">
-            <input
-              type="text"
-              placeholder="Search events..."
-              value={filters.search}
-              className={cn(inputBase, 'w-[150px] placeholder:text-ink3', filters.search && activeCls)}
-              onChange={(e) => update('search', e.target.value)}
-            />
-            {savedButton}
-          </div>
-          <div className="flex flex-wrap items-center gap-1">
-            {filterSelects}
-          </div>
-        </div>
-
-        {/* ─── Mobile: collapsible filters ─── */}
-        <div className="min-[540px]:hidden px-3 py-2 mx-auto max-w-[1400px] space-y-1.5">
+        {/* ─── Mobile / narrow: collapsible filters ─── */}
+        <div className="min-[880px]:hidden px-3 py-2 mx-auto max-w-[1400px] space-y-1.5">
           <div className="flex gap-1.5">
-            <input
-              type="text"
-              placeholder="Search events..."
-              value={filters.search}
-              className={cn(inputBase, 'flex-1 min-w-0 placeholder:text-ink3', filters.search && activeCls)}
-              onChange={(e) => update('search', e.target.value)}
-            />
-            {savedButton}
+            {searchInput(false)}
             <button
               type="button"
               onClick={() => setFiltersOpen((o) => !o)}
@@ -224,8 +204,9 @@ export function FilterBar({
             )}
           >
             <div className="overflow-hidden">
-              <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-2 pt-1 pb-0.5">
+              <div className="grid grid-cols-2 max-[400px]:grid-cols-1 gap-2 pt-1 pb-0.5">
                 {filterSelects}
+                {groupBySelect}
               </div>
             </div>
           </div>

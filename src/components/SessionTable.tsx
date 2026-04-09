@@ -81,6 +81,97 @@ function groupSessions(sessions: Session[], key: GroupBy): { label: string; sess
   return Array.from(groups.entries()).map(([label, items]) => ({ label, sessions: items }))
 }
 
+/* ─── Mobile card ─── */
+
+function SessionCard({
+  session,
+  selected,
+  onSelect,
+  bookmarked,
+  onToggleBookmark,
+}: {
+  session: Session
+  selected: boolean
+  onSelect: (session: Session) => void
+  bookmarked: boolean
+  onToggleBookmark: (id: string) => void
+}) {
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
+      onClick={() => onSelect(session)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect(session)
+        }
+      }}
+      className={cn(
+        'rounded-lg border border-border bg-surface p-3 transition-colors duration-100 active:bg-surface2',
+        selected && 'border-gold bg-gold-dim',
+      )}
+    >
+      <div className="flex items-start gap-2">
+        <div className="min-w-0 flex-1">
+          <div className="font-semibold text-ink text-[0.84rem] leading-tight">
+            {session.name}
+          </div>
+          <div className="mt-0.5 text-[0.72rem] text-ink3 line-clamp-1">
+            {session.desc}
+          </div>
+        </div>
+        <button
+          type="button"
+          className="size-10 shrink-0 flex items-center justify-center rounded-md transition-all duration-100 hover:bg-gold-dim -mr-1 -mt-1"
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggleBookmark(session.id)
+          }}
+          title={bookmarked ? 'Remove from saved' : 'Save'}
+          aria-label={bookmarked ? `Remove ${session.name} from saved` : `Save ${session.name}`}
+        >
+          <Bookmark
+            size={20}
+            className="transition-all duration-100"
+            fill={bookmarked ? 'var(--gold)' : 'none'}
+            stroke={bookmarked ? 'var(--gold)' : 'var(--ink3)'}
+          />
+        </button>
+      </div>
+
+      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.72rem] text-ink2">
+        <span className="whitespace-nowrap">{session.date} · {fmtTime(session.time)}</span>
+        <span className="text-border">|</span>
+        <span className="whitespace-nowrap">{session.venue}</span>
+      </div>
+
+      <div className="mt-2 flex items-center gap-2">
+        <span className="inline-block px-1.5 py-0.5 rounded-md text-[0.6rem] font-semibold bg-surface3 text-ink2 whitespace-nowrap tracking-[0.02em]">
+          {session.zone}
+        </span>
+        <span className={roundTagClasses(session.rt)}>{session.rt}</span>
+        <span className="font-semibold tabular-nums text-[0.78rem] text-ink">
+          {fmtPrice(session.pLo, session.pHi)}
+        </span>
+        <span className="ml-auto">
+          <ScorePill
+            agg={session.agg}
+            rSig={session.rSig}
+            rExp={session.rExp}
+            rStar={session.rStar}
+            rUniq={session.rUniq}
+            rDem={session.rDem}
+          />
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Desktop table row ─── */
+
 function SessionRow({
   session,
   selected,
@@ -181,6 +272,24 @@ function SessionRow({
   )
 }
 
+/* ─── Group divider (shared) ─── */
+
+function GroupBanner({ groupBy, label, count }: { groupBy: GroupBy; label: string; count: number }) {
+  return (
+    <div className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border">
+      <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
+        {groupLabel(groupBy)}:
+      </span>{' '}
+      {label}
+      <span className="ml-1.5 text-[0.58rem] font-bold text-bg bg-ink3 px-[5px] py-px rounded-lg align-middle">
+        {count}
+      </span>
+    </div>
+  )
+}
+
+/* ─── Main component ─── */
+
 export function SessionTable({
   sessions,
   sort,
@@ -203,68 +312,103 @@ export function SessionTable({
   }, [sessions, groupBy])
 
   return (
-    <div className="overflow-x-auto border border-border rounded-lg bg-surface">
-      <table className="w-full border-collapse text-[0.78rem]">
-        <thead className="sticky top-0 z-2">
-          <tr>
-            <SortHeader label="Event" col="name" sort={sort} onSort={onSort} />
-            <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
-            <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
-            <th className={thBase}>Zone</th>
-            <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
-            <th className={thBase}>Round</th>
-            <SortHeader
-              label="AI Rating"
-              col="agg"
-              sort={sort}
-              onSort={onSort}
-              title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
-            />
-            <th className={cn(thBase, 'w-9')}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {sessions.length === 0 && (
-            <tr>
-              <td colSpan={8} className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
-                No sessions match your filters
-              </td>
-            </tr>
-          )}
-          {sessions.length > 0 &&
-            items.map((item) => {
-              if (item.type === 'group') {
-                return (
-                  <tr key={`group-${item.label}`}>
-                    <td
-                      colSpan={8}
-                      className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border sticky top-[33px] z-1"
-                    >
-                      <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
-                        {groupLabel(groupBy)}:
-                      </span>{' '}
-                      {item.label}
-                      <span className="ml-1.5 text-[0.58rem] font-bold text-bg bg-ink3 px-[5px] py-px rounded-lg align-middle">
-                        {item.count}
-                      </span>
-                    </td>
-                  </tr>
-                )
-              }
-
+    <>
+      {/* ─── Mobile card list ─── */}
+      <div className="md:hidden space-y-2">
+        {sessions.length === 0 && (
+          <div className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
+            No sessions match your filters
+          </div>
+        )}
+        {sessions.length > 0 &&
+          items.map((item) => {
+            if (item.type === 'group') {
               return (
-                <SessionRow
-                  key={item.session.id}
-                  session={item.session}
-                  selected={selectedSessionId === item.session.id}
-                  onSelect={onSelectSession}
-                  bookmarked={isBookmarked(item.session.id)}
-                  onToggleBookmark={onToggleBookmark}
+                <GroupBanner
+                  key={`group-${item.label}`}
+                  groupBy={groupBy}
+                  label={item.label}
+                  count={item.count}
                 />
               )
-            })}
-        </tbody>
-      </table>
-    </div>
+            }
+            return (
+              <SessionCard
+                key={item.session.id}
+                session={item.session}
+                selected={selectedSessionId === item.session.id}
+                onSelect={onSelectSession}
+                bookmarked={isBookmarked(item.session.id)}
+                onToggleBookmark={onToggleBookmark}
+              />
+            )
+          })}
+      </div>
+
+      {/* ─── Desktop table ─── */}
+      <div className="hidden md:block overflow-x-auto border border-border rounded-lg bg-surface">
+        <table className="w-full border-collapse text-[0.78rem]">
+          <thead className="sticky top-0 z-2">
+            <tr>
+              <SortHeader label="Event" col="name" sort={sort} onSort={onSort} />
+              <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
+              <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
+              <th className={thBase}>Zone</th>
+              <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
+              <th className={thBase}>Round</th>
+              <SortHeader
+                label="AI Rating"
+                col="agg"
+                sort={sort}
+                onSort={onSort}
+                title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
+              />
+              <th className={cn(thBase, 'w-9')}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {sessions.length === 0 && (
+              <tr>
+                <td colSpan={8} className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
+                  No sessions match your filters
+                </td>
+              </tr>
+            )}
+            {sessions.length > 0 &&
+              items.map((item) => {
+                if (item.type === 'group') {
+                  return (
+                    <tr key={`group-${item.label}`}>
+                      <td
+                        colSpan={8}
+                        className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border sticky top-[33px] z-1"
+                      >
+                        <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
+                          {groupLabel(groupBy)}:
+                        </span>{' '}
+                        {item.label}
+                        <span className="ml-1.5 text-[0.58rem] font-bold text-bg bg-ink3 px-[5px] py-px rounded-lg align-middle">
+                          {item.count}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                }
+
+                return (
+                  <SessionRow
+                    key={item.session.id}
+                    session={item.session}
+                    selected={selectedSessionId === item.session.id}
+                    onSelect={onSelectSession}
+                    bookmarked={isBookmarked(item.session.id)}
+                    onToggleBookmark={onToggleBookmark}
+                  />
+                )
+              })}
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }

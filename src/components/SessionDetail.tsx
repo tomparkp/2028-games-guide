@@ -1,5 +1,6 @@
 import { Bookmark, ChevronsRight, MapPin, UserRound, X } from 'lucide-react'
 import { type PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from 'react'
+import type { TouchEvent as ReactTouchEvent } from 'react'
 
 import { cn } from '@/lib/cn'
 import { getSessionInsights } from '@/lib/ai-scorecard'
@@ -75,6 +76,12 @@ export function SessionDetail({
   const [width, setWidth] = useState(DEFAULT_WIDTH)
   const isMobile = useIsMobile()
 
+  const swipeStartX = useRef(0)
+  const swipeStartY = useRef(0)
+  const swipeStartTime = useRef(0)
+  const swipeTracking = useRef(false)
+  const [swipeOffset, setSwipeOffset] = useState(0)
+
   const lastSessionRef = useRef<Session | null>(null)
   if (session) lastSessionRef.current = session
   const displayed = session ?? lastSessionRef.current
@@ -137,6 +144,44 @@ export function SessionDetail({
     setWidth(DEFAULT_WIDTH)
   }
 
+  function handleTouchStart(e: ReactTouchEvent) {
+    if (!isMobile) return
+    const t = e.touches[0]
+    swipeStartX.current = t.clientX
+    swipeStartY.current = t.clientY
+    swipeStartTime.current = Date.now()
+    swipeTracking.current = false
+  }
+
+  function handleTouchMove(e: ReactTouchEvent) {
+    if (!isMobile) return
+    const t = e.touches[0]
+    const dx = t.clientX - swipeStartX.current
+    const dy = Math.abs(t.clientY - swipeStartY.current)
+
+    if (!swipeTracking.current) {
+      // Commit to horizontal swipe only when clearly more horizontal than vertical
+      if (Math.abs(dx) > dy && Math.abs(dx) > 8) {
+        swipeTracking.current = true
+      } else {
+        return
+      }
+    }
+
+    if (dx > 0) setSwipeOffset(dx)
+  }
+
+  function handleTouchEnd() {
+    if (!isMobile || !swipeTracking.current) return
+    swipeTracking.current = false
+    const elapsed = Date.now() - swipeStartTime.current
+    const velocity = swipeOffset / Math.max(elapsed, 1)
+    if (swipeOffset >= 100 || velocity > 0.4) {
+      onClose()
+    }
+    setSwipeOffset(0)
+  }
+
   return (
     <>
       {/* Backdrop (mobile only) */}
@@ -154,12 +199,21 @@ export function SessionDetail({
         role="dialog"
         aria-label={displayed?.name}
         aria-hidden={!isOpen}
-        style={isMobile ? undefined : { width }}
+        style={
+          isMobile
+            ? swipeOffset > 0
+              ? { transform: `translateX(${swipeOffset}px)`, transition: 'none' }
+              : undefined
+            : { width }
+        }
         className={cn(
           'fixed inset-y-0 right-0 z-50 border-l border-border bg-surface shadow-2xl transition-transform duration-200 ease-panel',
           'max-md:w-full max-md:border-l-0 md:max-w-full',
           isOpen ? 'translate-x-0' : 'translate-x-full',
         )}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Resize handle (desktop only) */}
         <div
@@ -168,6 +222,11 @@ export function SessionDetail({
           onDoubleClick={handleResizeDoubleClick}
         >
           <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-transparent transition-colors group-hover/edge:bg-gold/40 group-active/edge:bg-gold/60" />
+        </div>
+
+        {/* Drag handle (mobile only) */}
+        <div className="flex justify-center pt-2.5 pb-1 md:hidden" aria-hidden>
+          <div className="h-1 w-10 rounded-full bg-border2" />
         </div>
 
         {/* Scrollable content */}

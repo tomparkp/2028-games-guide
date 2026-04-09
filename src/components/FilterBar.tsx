@@ -66,7 +66,7 @@ export function FilterBar({
         className={cn(
           inputBase,
           'placeholder:text-ink3',
-          desktop ? 'w-[150px]' : 'w-full',
+          desktop ? 'w-[150px] lg:w-[220px]' : 'w-full',
           filters.search && 'pr-6',
           filters.search && activeCls,
         )}

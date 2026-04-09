@@ -226,7 +226,7 @@ export function BookmarkPanel({
                     onClick={() => exportBookmarksCSV(items)}
                   >
                     <Download size={12} />
-                    Export
+                    Export CSV
                   </button>
                   <button
                     type="button"

@@ -1,6 +1,6 @@
+import { Drawer } from '@base-ui/react/drawer'
 import { Bookmark, ChevronsRight, MapPin, UserRound, X } from 'lucide-react'
 import { type PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from 'react'
-import type { TouchEvent as ReactTouchEvent } from 'react'
 
 import { cn } from '@/lib/cn'
 import { getSessionInsights } from '@/lib/ai-scorecard'
@@ -72,15 +72,10 @@ export function SessionDetail({
   onToggleBookmark?: (id: string) => void
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const widthRef = useRef(DEFAULT_WIDTH)
   const [width, setWidth] = useState(DEFAULT_WIDTH)
   const isMobile = useIsMobile()
-
-  const swipeStartX = useRef(0)
-  const swipeStartY = useRef(0)
-  const swipeStartTime = useRef(0)
-  const swipeTracking = useRef(false)
-  const [swipeOffset, setSwipeOffset] = useState(0)
 
   const lastSessionRef = useRef<Session | null>(null)
   if (session) lastSessionRef.current = session
@@ -93,25 +88,23 @@ export function SessionDetail({
     [displayed],
   )
 
+  // Escape key dismissal (desktop only — Drawer handles it natively on mobile)
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen || isMobile) return
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
     }
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
+  }, [isOpen, isMobile, onClose])
 
+  // Reset scroll to top when the selected session changes on desktop
   useEffect(() => {
-    if (!isOpen || !isMobile) return
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen, isMobile])
+    if (!isOpen || isMobile) return
+    scrollRef.current?.scrollTo({ top: 0 })
+  }, [session?.id, isOpen, isMobile])
 
   function handleResizeStart(e: ReactPointerEvent) {
-    if (isMobile) return
     e.preventDefault()
     const startX = e.clientX
     const startWidth = widthRef.current
@@ -144,233 +137,206 @@ export function SessionDetail({
     setWidth(DEFAULT_WIDTH)
   }
 
-  function handleTouchStart(e: ReactTouchEvent) {
-    if (!isMobile) return
-    const t = e.touches[0]
-    swipeStartX.current = t.clientX
-    swipeStartY.current = t.clientY
-    swipeStartTime.current = Date.now()
-    swipeTracking.current = false
-  }
-
-  function handleTouchMove(e: ReactTouchEvent) {
-    if (!isMobile) return
-    const t = e.touches[0]
-    const dx = t.clientX - swipeStartX.current
-    const dy = Math.abs(t.clientY - swipeStartY.current)
-
-    if (!swipeTracking.current) {
-      // Commit to horizontal swipe only when clearly more horizontal than vertical
-      if (Math.abs(dx) > dy && Math.abs(dx) > 8) {
-        swipeTracking.current = true
-      } else {
-        return
-      }
-    }
-
-    if (dx > 0) setSwipeOffset(dx)
-  }
-
-  function handleTouchEnd() {
-    if (!isMobile || !swipeTracking.current) return
-    swipeTracking.current = false
-    const elapsed = Date.now() - swipeStartTime.current
-    const velocity = swipeOffset / Math.max(elapsed, 1)
-    if (swipeOffset >= 100 || velocity > 0.4) {
-      onClose()
-    }
-    setSwipeOffset(0)
-  }
-
-  return (
+  const panelContent = displayed && insights ? (
     <>
-      {/* Backdrop (mobile only) */}
-      <div
-        className={cn(
-          'fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 md:hidden',
-          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
-        )}
-        onClick={onClose}
-        aria-hidden
-      />
+      {/* ── Header zone ── */}
+      <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
+        {/* Toolbar row */}
+        <div className="mb-3 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close panel"
+            className="flex size-10 items-center justify-center rounded-md text-ink3 transition-colors hover:bg-surface2 hover:text-ink md:size-9"
+          >
+            <ChevronsRight size={18} className="hidden md:block" />
+            <X size={20} className="md:hidden" />
+          </button>
 
-      <div
-        ref={panelRef}
-        role="dialog"
-        data-session-detail-panel
-        aria-label={displayed?.name}
-        aria-hidden={!isOpen}
-        style={
-          isMobile
-            ? swipeOffset > 0
-              ? { transform: `translateX(${swipeOffset}px)`, transition: 'none' }
-              : undefined
-            : { width }
-        }
-        className={cn(
-          'fixed inset-y-0 right-0 z-50 border-l border-border bg-surface shadow-2xl transition-transform duration-200 ease-panel',
-          'max-md:w-full max-md:border-l-0 md:max-w-full',
-          isOpen ? 'translate-x-0' : 'translate-x-full',
-        )}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* Resize handle (desktop only) */}
-        <div
-          className="group/edge absolute inset-y-0 -left-1 z-20 w-2 cursor-col-resize max-md:hidden"
-          onPointerDown={handleResizeStart}
-          onDoubleClick={handleResizeDoubleClick}
-        >
-          <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-transparent transition-colors group-hover/edge:bg-gold/40 group-active/edge:bg-gold/60" />
-        </div>
-
-        {/* Drag handle (mobile only) */}
-        <div className="flex justify-center pt-2.5 pb-1 md:hidden" aria-hidden>
-          <div className="h-1 w-10 rounded-full bg-border2" />
-        </div>
-
-        {/* Scrollable content */}
-        <div className="flex h-full flex-col overflow-y-auto overscroll-contain">
-          {displayed && insights && (
-            <>
-              {/* ── Header zone ── */}
-              <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
-                {/* Toolbar row */}
-                <div className="mb-3 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    aria-label="Close panel"
-                    className="flex size-10 items-center justify-center rounded-md text-ink3 transition-colors hover:bg-surface2 hover:text-ink md:size-9"
-                  >
-                    <ChevronsRight size={18} className="hidden md:block" />
-                    <X size={20} className="md:hidden" />
-                  </button>
-
-                  {onToggleBookmark && isBookmarked && (
-                    <button
-                      type="button"
-                      onClick={() => onToggleBookmark(displayed.id)}
-                      title={isBookmarked(displayed.id) ? 'Remove from saved' : 'Save session'}
-                      aria-label={
-                        isBookmarked(displayed.id)
-                          ? `Remove ${displayed.name} from saved`
-                          : `Save ${displayed.name}`
-                      }
-                      className="flex size-10 items-center justify-center rounded-md transition-all duration-100 hover:bg-gold-dim md:size-9"
-                    >
-                      <Bookmark
-                        size={20}
-                        className="transition-all duration-100"
-                        fill={isBookmarked(displayed.id) ? 'var(--gold)' : 'none'}
-                        stroke={isBookmarked(displayed.id) ? 'var(--gold)' : 'var(--ink3)'}
-                      />
-                    </button>
-                  )}
-                </div>
-
-                {/* Tags row */}
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <span className={roundTagClasses(displayed.rt)}>{displayed.rt}</span>
-                  {displayed.sport && (
-                    <span className="rounded-lg bg-surface2 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.06em] text-ink3">
-                      {displayed.sport}
-                    </span>
-                  )}
-                </div>
-
-                {/* Title + rating */}
-                <div className="mt-3 flex items-start justify-between gap-3">
-                  <h2 className="font-display text-[1.35rem] font-semibold leading-tight text-ink">
-                    {displayed.name}
-                  </h2>
-                  <span className={cn(ratingClasses(displayed.agg), 'shrink-0 text-[1rem] px-2.5 py-1 min-w-[42px] rounded-xl')}>
-                    {displayed.agg.toFixed(1)}
-                  </span>
-                </div>
-                <p className="mt-1 text-[0.82rem] leading-relaxed text-ink2">{displayed.desc}</p>
-
-                {/* Metadata row */}
-                <div className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.76rem] text-ink3">
-                  <span>{displayed.date}</span>
-                  <span className="text-border2">·</span>
-                  <span>{fmtTime(displayed.time)}</span>
-                  <span className="text-border2">·</span>
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin size={12} className="shrink-0" />
-                    {displayed.venue}
-                  </span>
-                </div>
-
-                {/* Price */}
-                <div className="mt-2 text-[0.9rem] font-semibold tabular-nums text-ink">
-                  {fmtPrice(displayed.pLo, displayed.pHi)}
-                </div>
-              </div>
-
-              {/* ── Blurb ── */}
-              <div className="px-5 pt-2 pb-5 max-md:px-4">
-                <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
-                  Summary
-                </h3>
-                <div className="mt-2 space-y-3 text-[0.86rem] font-medium leading-relaxed text-ink">
-                  {insights.summary.split('\n\n').map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
-                </div>
-              </div>
-
-              {/* ── Scorecard dimensions ── */}
-              <div className="px-5 pt-2 pb-5 max-md:px-4">
-                <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
-                  Scorecard
-                </h3>
-
-                <div className="mt-3 grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
-                  {insights.dimensions.map((dim) => {
-                    const colors = ringColors[dim.key as ScoreKey]
-                    return (
-                      <div
-                        key={dim.key}
-                        className={cn(
-                          'rounded-lg border border-border bg-surface2 border-l-[3px] px-3.5 py-3',
-                          colors?.border,
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[0.78rem] font-semibold text-ink">{dim.label}</span>
-                          <span className={cn('text-[0.9rem] font-bold tabular-nums', colors?.score)}>
-                            {dim.score.toFixed(1)}
-                          </span>
-                        </div>
-                        <p className="mt-1.5 text-[0.72rem] leading-normal text-ink3">
-                          {dim.explanation}
-                        </p>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* ── Potential Contenders ── */}
-              {insights.potentialContenders.length > 0 && (
-                <div className="px-5 pt-2 pb-5 max-md:px-4">
-                  <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
-                    Potential Contenders
-                  </h3>
-                  <div className="mt-3">
-                    <PotentialContendersSection potentialContenders={insights.potentialContenders} />
-                  </div>
-                </div>
-              )}
-
-              {/* Bottom breathing room */}
-              <div className="shrink-0 h-6" />
-            </>
+          {onToggleBookmark && isBookmarked && (
+            <button
+              type="button"
+              onClick={() => onToggleBookmark(displayed.id)}
+              title={isBookmarked(displayed.id) ? 'Remove from saved' : 'Save session'}
+              aria-label={
+                isBookmarked(displayed.id)
+                  ? `Remove ${displayed.name} from saved`
+                  : `Save ${displayed.name}`
+              }
+              className="flex size-10 items-center justify-center rounded-md transition-all duration-100 hover:bg-gold-dim md:size-9"
+            >
+              <Bookmark
+                size={20}
+                className="transition-all duration-100"
+                fill={isBookmarked(displayed.id) ? 'var(--gold)' : 'none'}
+                stroke={isBookmarked(displayed.id) ? 'var(--gold)' : 'var(--ink3)'}
+              />
+            </button>
           )}
         </div>
+
+        {/* Tags row */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className={roundTagClasses(displayed.rt)}>{displayed.rt}</span>
+          {displayed.sport && (
+            <span className="rounded-lg bg-surface2 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.06em] text-ink3">
+              {displayed.sport}
+            </span>
+          )}
+        </div>
+
+        {/* Title + rating */}
+        <div className="mt-3 flex items-start justify-between gap-3">
+          <h2 className="font-display text-[1.35rem] font-semibold leading-tight text-ink">
+            {displayed.name}
+          </h2>
+          <span className={cn(ratingClasses(displayed.agg), 'shrink-0 text-[1rem] px-2.5 py-1 min-w-[42px] rounded-xl')}>
+            {displayed.agg.toFixed(1)}
+          </span>
+        </div>
+        <p className="mt-1 text-[0.82rem] leading-relaxed text-ink2">{displayed.desc}</p>
+
+        {/* Metadata row */}
+        <div className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.76rem] text-ink3">
+          <span>{displayed.date}</span>
+          <span className="text-border2">·</span>
+          <span>{fmtTime(displayed.time)}</span>
+          <span className="text-border2">·</span>
+          <span className="inline-flex items-center gap-1">
+            <MapPin size={12} className="shrink-0" />
+            {displayed.venue}
+          </span>
+        </div>
+
+        {/* Price */}
+        <div className="mt-2 text-[0.9rem] font-semibold tabular-nums text-ink">
+          {fmtPrice(displayed.pLo, displayed.pHi)}
+        </div>
       </div>
+
+      {/* ── Blurb ── */}
+      <div className="px-5 pt-2 pb-5 max-md:px-4">
+        <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
+          Summary
+        </h3>
+        <div className="mt-2 space-y-3 text-[0.86rem] font-medium leading-relaxed text-ink">
+          {insights.summary.split('\n\n').map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Scorecard dimensions ── */}
+      <div className="px-5 pt-2 pb-5 max-md:px-4">
+        <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
+          Scorecard
+        </h3>
+
+        <div className="mt-3 grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
+          {insights.dimensions.map((dim) => {
+            const colors = ringColors[dim.key as ScoreKey]
+            return (
+              <div
+                key={dim.key}
+                className={cn(
+                  'rounded-lg border border-border bg-surface2 border-l-[3px] px-3.5 py-3',
+                  colors?.border,
+                )}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[0.78rem] font-semibold text-ink">{dim.label}</span>
+                  <span className={cn('text-[0.9rem] font-bold tabular-nums', colors?.score)}>
+                    {dim.score.toFixed(1)}
+                  </span>
+                </div>
+                <p className="mt-1.5 text-[0.72rem] leading-normal text-ink3">
+                  {dim.explanation}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ── Potential Contenders ── */}
+      {insights.potentialContenders.length > 0 && (
+        <div className="px-5 pt-2 pb-5 max-md:px-4">
+          <h3 className="text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-ink3">
+            Potential Contenders
+          </h3>
+          <div className="mt-3">
+            <PotentialContendersSection potentialContenders={insights.potentialContenders} />
+          </div>
+        </div>
+      )}
+
+      {/* Bottom breathing room */}
+      <div className="shrink-0 h-6" />
     </>
+  ) : null
+
+  // Mobile: delegate entirely to Base UI Drawer — swipe, scroll reset, body lock,
+  // and backdrop are all handled by the primitive.
+  if (isMobile) {
+    return (
+      <Drawer.Root
+        open={isOpen}
+        onOpenChange={(open) => { if (!open) onClose() }}
+        swipeDirection="right"
+      >
+        <Drawer.Portal>
+          <Drawer.Backdrop className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[swiping]:transition-none" />
+          <Drawer.Viewport className="fixed inset-0 z-50 flex items-stretch justify-end">
+            <Drawer.Popup
+              data-session-detail-panel
+              className={cn(
+                'h-full w-full bg-surface shadow-2xl',
+                'overflow-y-auto overscroll-contain touch-auto',
+                '[transform:translateX(var(--drawer-swipe-movement-x))]',
+                'transition-transform duration-200 ease-panel data-[swiping]:transition-none',
+                'data-[starting-style]:[transform:translateX(100%)] data-[ending-style]:[transform:translateX(100%)]',
+              )}
+            >
+              {/* Drag handle pill */}
+              <div className="flex justify-center pt-2.5 pb-1" aria-hidden>
+                <div className="h-1 w-10 rounded-full bg-border2" />
+              </div>
+              {panelContent}
+            </Drawer.Popup>
+          </Drawer.Viewport>
+        </Drawer.Portal>
+      </Drawer.Root>
+    )
+  }
+
+  // Desktop: resizable fixed side panel
+  return (
+    <div
+      ref={panelRef}
+      role="dialog"
+      data-session-detail-panel
+      aria-label={displayed?.name}
+      aria-hidden={!isOpen}
+      style={{ width }}
+      className={cn(
+        'fixed inset-y-0 right-0 z-50 border-l border-border bg-surface shadow-2xl transition-transform duration-200 ease-panel',
+        'max-w-full',
+        isOpen ? 'translate-x-0' : 'translate-x-full',
+      )}
+    >
+      {/* Resize handle */}
+      <div
+        className="group/edge absolute inset-y-0 -left-1 z-20 w-2 cursor-col-resize"
+        onPointerDown={handleResizeStart}
+        onDoubleClick={handleResizeDoubleClick}
+      >
+        <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-transparent transition-colors group-hover/edge:bg-gold/40 group-active/edge:bg-gold/60" />
+      </div>
+
+      {/* Scrollable content */}
+      <div ref={scrollRef} className="flex h-full flex-col overflow-y-auto overscroll-contain">
+        {panelContent}
+      </div>
+    </div>
   )
 }

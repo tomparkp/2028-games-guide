@@ -1,6 +1,6 @@
-import { useVirtualizer } from '@tanstack/react-virtual'
+import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import { Bookmark } from 'lucide-react'
-import { type KeyboardEvent, useCallback, useMemo, useRef } from 'react'
+import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/lib/cn'
 import { fmtPrice, fmtTime } from '@/lib/format'
@@ -308,8 +308,41 @@ export function SessionTable({
   selectedSessionId,
   onSelectSession,
 }: SessionTableProps) {
-  const desktopScrollRef = useRef<HTMLDivElement>(null)
-  const mobileScrollRef = useRef<HTMLDivElement>(null)
+  const desktopContainerRef = useRef<HTMLDivElement>(null)
+  const mobileContainerRef = useRef<HTMLDivElement>(null)
+  const theadRef = useRef<HTMLTableSectionElement>(null)
+
+  const [isClient, setIsClient] = useState(false)
+  const [desktopScrollMargin, setDesktopScrollMargin] = useState(0)
+  const [mobileScrollMargin, setMobileScrollMargin] = useState(0)
+  const [stickyOffset, setStickyOffset] = useState(0)
+  const [theadHeight, setTheadHeight] = useState(33)
+
+  useEffect(() => setIsClient(true), [])
+
+  useEffect(() => {
+    function measure() {
+      if (desktopContainerRef.current) {
+        const rect = desktopContainerRef.current.getBoundingClientRect()
+        setDesktopScrollMargin(rect.top + window.scrollY)
+      }
+      if (mobileContainerRef.current) {
+        const rect = mobileContainerRef.current.getBoundingClientRect()
+        setMobileScrollMargin(rect.top + window.scrollY)
+      }
+      const bar = document.querySelector('[data-sticky-bar]')
+      if (bar) setStickyOffset(bar.getBoundingClientRect().height)
+      if (theadRef.current) setTheadHeight(theadRef.current.getBoundingClientRect().height)
+    }
+    measure()
+
+    const ro = new ResizeObserver(measure)
+    const bar = document.querySelector('[data-sticky-bar]')
+    if (bar) ro.observe(bar)
+    if (desktopContainerRef.current) ro.observe(desktopContainerRef.current)
+    if (mobileContainerRef.current) ro.observe(mobileContainerRef.current)
+    return () => ro.disconnect()
+  }, [])
 
   const items = useMemo<SessionItem[]>(() => {
     const groups = groupSessions(sessions, groupBy)
@@ -332,83 +365,86 @@ export function SessionTable({
     [items],
   )
 
-  const desktopVirtualizer = useVirtualizer({
+  const desktopVirtualizer = useWindowVirtualizer({
     count: items.length,
-    getScrollElement: () => desktopScrollRef.current,
     estimateSize: desktopEstimateSize,
     overscan: 20,
+    scrollMargin: desktopScrollMargin,
+    enabled: isClient,
   })
 
-  const mobileVirtualizer = useVirtualizer({
+  const mobileVirtualizer = useWindowVirtualizer({
     count: items.length,
-    getScrollElement: () => mobileScrollRef.current,
     estimateSize: mobileEstimateSize,
     overscan: 8,
+    scrollMargin: mobileScrollMargin,
+    enabled: isClient,
   })
 
   const desktopVirtualItems = desktopVirtualizer.getVirtualItems()
   const mobileVirtualItems = mobileVirtualizer.getVirtualItems()
 
-  const desktopPaddingTop = desktopVirtualItems[0]?.start ?? 0
+  const desktopPaddingTop =
+    desktopVirtualItems.length > 0
+      ? desktopVirtualItems[0].start - desktopVirtualizer.options.scrollMargin
+      : 0
   const desktopPaddingBottom =
     desktopVirtualItems.length > 0
       ? desktopVirtualizer.getTotalSize() - (desktopVirtualItems.at(-1)?.end ?? 0)
       : 0
 
-  if (sessions.length === 0) {
-    return (
-      <>
-        <div className="min-[540px]:hidden text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
-          No sessions match your filters
-        </div>
-        <div className="hidden min-[540px]:block overflow-x-auto border border-border rounded-lg bg-surface">
-          <table className="w-full border-collapse text-[0.78rem]">
-            <thead className="sticky top-0 z-2">
-              <tr>
-                <SortHeader label="Event" col="name" sort={sort} onSort={onSort} />
-                <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
-                <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
-                <th className={thBase}>Zone</th>
-                <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
-                <th className={thBase}>Round</th>
-                <SortHeader
-                  label="AI Rating"
-                  col="agg"
-                  sort={sort}
-                  onSort={onSort}
-                  title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
-                />
-                <th className={cn(thBase, 'w-9')}></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colSpan={8} className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
-                  No sessions match your filters
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </>
-    )
-  }
+  const tableHeader = (
+    <tr>
+      <SortHeader label="Event" col="name" sort={sort} onSort={onSort} />
+      <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
+      <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
+      <th className={thBase}>Zone</th>
+      <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
+      <th className={thBase}>Round</th>
+      <SortHeader
+        label="AI Rating"
+        col="agg"
+        sort={sort}
+        onSort={onSort}
+        title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
+      />
+      <th className={cn(thBase, 'w-9')}></th>
+    </tr>
+  )
 
   return (
     <>
-      {/* ─── Mobile card list (virtualized) ─── */}
-      <div
-        ref={mobileScrollRef}
-        className="min-[540px]:hidden overflow-y-auto"
-        style={{ maxHeight: 'calc(100dvh - 10rem)' }}
-      >
-        <div style={{ height: mobileVirtualizer.getTotalSize(), position: 'relative' }}>
-          {mobileVirtualItems.map((virtualRow) => {
-            const item = items[virtualRow.index]
-            if (item.type === 'group') {
+      {/* ─── Mobile card list (window-virtualized) ─── */}
+      <div ref={mobileContainerRef} className="min-[540px]:hidden">
+        {sessions.length === 0 ? (
+          <div className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
+            No sessions match your filters
+          </div>
+        ) : (
+          <div style={{ height: mobileVirtualizer.getTotalSize(), position: 'relative' }}>
+            {mobileVirtualItems.map((virtualRow) => {
+              const item = items[virtualRow.index]
+              if (item.type === 'group') {
+                return (
+                  <div
+                    key={`group-${item.label}`}
+                    data-index={virtualRow.index}
+                    ref={mobileVirtualizer.measureElement}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      transform: `translateY(${virtualRow.start - mobileVirtualizer.options.scrollMargin}px)`,
+                    }}
+                  >
+                    <GroupBanner groupBy={groupBy} label={item.label} count={item.count} />
+                  </div>
+                )
+              }
               return (
                 <div
-                  key={`group-${item.label}`}
+                  key={item.session.id}
                   data-index={virtualRow.index}
                   ref={mobileVirtualizer.measureElement}
                   style={{
@@ -416,103 +452,82 @@ export function SessionTable({
                     top: 0,
                     left: 0,
                     right: 0,
-                    transform: `translateY(${virtualRow.start}px)`,
+                    transform: `translateY(${virtualRow.start - mobileVirtualizer.options.scrollMargin}px)`,
+                    paddingBottom: 8,
                   }}
                 >
-                  <GroupBanner groupBy={groupBy} label={item.label} count={item.count} />
+                  <SessionCard
+                    session={item.session}
+                    selected={selectedSessionId === item.session.id}
+                    onSelect={onSelectSession}
+                    bookmarked={isBookmarked(item.session.id)}
+                    onToggleBookmark={onToggleBookmark}
+                  />
                 </div>
               )
-            }
-            return (
-              <div
-                key={item.session.id}
-                data-index={virtualRow.index}
-                ref={mobileVirtualizer.measureElement}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  transform: `translateY(${virtualRow.start}px)`,
-                  paddingBottom: 8,
-                }}
-              >
-                <SessionCard
-                  session={item.session}
-                  selected={selectedSessionId === item.session.id}
-                  onSelect={onSelectSession}
-                  bookmarked={isBookmarked(item.session.id)}
-                  onToggleBookmark={onToggleBookmark}
-                />
-              </div>
-            )
-          })}
-        </div>
+            })}
+          </div>
+        )}
       </div>
 
-      {/* ─── Desktop table (virtualized) ─── */}
+      {/* ─── Desktop table (window-virtualized) ─── */}
       <div
-        ref={desktopScrollRef}
-        className="hidden min-[540px]:block overflow-auto border border-border rounded-lg bg-surface"
-        style={{ maxHeight: 'calc(100dvh - 12rem)' }}
+        ref={desktopContainerRef}
+        className="hidden min-[540px]:block border border-border rounded-lg bg-surface"
       >
         <table className="w-full border-collapse text-[0.78rem]">
-          <thead className="sticky top-0 z-2">
-            <tr>
-              <SortHeader label="Event" col="name" sort={sort} onSort={onSort} />
-              <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
-              <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
-              <th className={thBase}>Zone</th>
-              <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
-              <th className={thBase}>Round</th>
-              <SortHeader
-                label="AI Rating"
-                col="agg"
-                sort={sort}
-                onSort={onSort}
-                title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
-              />
-              <th className={cn(thBase, 'w-9')}></th>
-            </tr>
+          <thead ref={theadRef} className="sticky z-2" style={{ top: stickyOffset }}>
+            {tableHeader}
           </thead>
           <tbody>
-            {desktopPaddingTop > 0 && (
-              <tr><td colSpan={8} style={{ height: desktopPaddingTop }} /></tr>
-            )}
-            {desktopVirtualItems.map((virtualRow) => {
-              const item = items[virtualRow.index]
-              if (item.type === 'group') {
-                return (
-                  <tr key={`group-${item.label}`} ref={desktopVirtualizer.measureElement} data-index={virtualRow.index}>
-                    <td
-                      colSpan={8}
-                      className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border sticky top-[33px] z-1"
-                    >
-                      <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
-                        {groupLabel(groupBy)}:
-                      </span>{' '}
-                      {item.label}
-                      <span className="ml-1.5 text-[0.58rem] font-bold text-bg bg-ink3 px-[5px] py-px rounded-lg align-middle">
-                        {item.count}
-                      </span>
-                    </td>
-                  </tr>
-                )
-              }
+            {sessions.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
+                  No sessions match your filters
+                </td>
+              </tr>
+            ) : (
+              <>
+                {desktopPaddingTop > 0 && (
+                  <tr><td colSpan={8} style={{ height: desktopPaddingTop }} /></tr>
+                )}
+                {desktopVirtualItems.map((virtualRow) => {
+                  const item = items[virtualRow.index]
+                  if (item.type === 'group') {
+                    return (
+                      <tr key={`group-${item.label}`} ref={desktopVirtualizer.measureElement} data-index={virtualRow.index}>
+                        <td
+                          colSpan={8}
+                          className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border sticky z-1"
+                          style={{ top: stickyOffset + theadHeight }}
+                        >
+                          <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
+                            {groupLabel(groupBy)}:
+                          </span>{' '}
+                          {item.label}
+                          <span className="ml-1.5 text-[0.58rem] font-bold text-bg bg-ink3 px-[5px] py-px rounded-lg align-middle">
+                            {item.count}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  }
 
-              return (
-                <SessionRow
-                  key={item.session.id}
-                  session={item.session}
-                  selected={selectedSessionId === item.session.id}
-                  onSelect={onSelectSession}
-                  bookmarked={isBookmarked(item.session.id)}
-                  onToggleBookmark={onToggleBookmark}
-                />
-              )
-            })}
-            {desktopPaddingBottom > 0 && (
-              <tr><td colSpan={8} style={{ height: desktopPaddingBottom }} /></tr>
+                  return (
+                    <SessionRow
+                      key={item.session.id}
+                      session={item.session}
+                      selected={selectedSessionId === item.session.id}
+                      onSelect={onSelectSession}
+                      bookmarked={isBookmarked(item.session.id)}
+                      onToggleBookmark={onToggleBookmark}
+                    />
+                  )
+                })}
+                {desktopPaddingBottom > 0 && (
+                  <tr><td colSpan={8} style={{ height: desktopPaddingBottom }} /></tr>
+                )}
+              </>
             )}
           </tbody>
         </table>

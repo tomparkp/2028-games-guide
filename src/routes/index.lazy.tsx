@@ -45,17 +45,18 @@ function SessionPicker() {
           ...prev,
           session: prev.session === session.id ? undefined : session.id,
         }),
+        resetScroll: false,
       })
     },
     [navigate],
   )
 
   const handleCloseSession = useCallback(() => {
-    void navigate({ search: (prev) => ({ ...prev, session: undefined }) })
+    void navigate({ search: (prev) => ({ ...prev, session: undefined }), resetScroll: false })
   }, [navigate])
 
   const handleOpenBookmarks = useCallback(() => {
-    void navigate({ search: (prev) => ({ ...prev, session: undefined }) })
+    void navigate({ search: (prev) => ({ ...prev, session: undefined }), resetScroll: false })
     setBookmarkPanelOpen(true)
   }, [navigate])
 

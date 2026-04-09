@@ -361,7 +361,7 @@ export function SessionTable({
       {/* ─── Desktop table ─── */}
       <div className="hidden min-[540px]:block border border-border rounded-lg bg-surface">
         <table className="w-full border-collapse text-[0.78rem]">
-          <thead className="sticky top-[var(--sticky-bar-h,0px)] z-2">
+          <thead>
             {tableHeader}
           </thead>
           <tbody>
@@ -378,7 +378,7 @@ export function SessionTable({
                     <tr key={`group-${item.label}`}>
                       <td
                         colSpan={8}
-                        className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border sticky top-[calc(var(--sticky-bar-h,0px)+var(--thead-h,33px))] z-1"
+                        className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border"
                       >
                         <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
                           {groupLabel(groupBy)}:

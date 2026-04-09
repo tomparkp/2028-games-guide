@@ -1,7 +1,7 @@
 import { Bookmark } from 'lucide-react'
 
 import { exportBookmarksCSV } from '@/lib/csv'
-import { fmtPrice } from '@/lib/format'
+import { fmtPrice, fmtTime } from '@/lib/format'
 import { roundTagClasses } from '@/lib/tw'
 import type { Session } from '@/types/session'
 
@@ -52,31 +52,81 @@ export function BookmarkSection({
             {items.length}
           </span>
         </h2>
-        <div className="ml-auto text-[0.7rem] text-ink3 flex gap-3 font-light max-md:flex-wrap">
+        <div className="ml-auto text-[0.7rem] text-ink3 flex gap-3 font-light max-md:ml-0 max-md:grid max-md:grid-cols-2 max-md:gap-x-4 max-md:gap-y-0.5">
           <span className="whitespace-nowrap">{fmtPrice(totLo, totHi)} est.</span>
           <span className="whitespace-nowrap">
             {days.size} day{days.size !== 1 ? 's' : ''}
           </span>
           <span className="whitespace-nowrap">{ns} non-soccer</span>
           <span className="whitespace-nowrap">{sc} soccer</span>
-          <span className="whitespace-nowrap">Avg rating: {(totAgg / items.length).toFixed(1)}</span>
+          <span className="whitespace-nowrap max-md:col-span-2">Avg rating: {(totAgg / items.length).toFixed(1)}</span>
         </div>
       </div>
       <div className="flex gap-2 mb-2">
         <button
-          className="px-3 py-1 text-[0.7rem] font-semibold border border-border rounded-md bg-surface2 text-ink2 cursor-pointer transition-all duration-150 hover:border-gold hover:text-gold"
+          className="px-3 py-1 text-[0.7rem] font-semibold border border-border rounded-md bg-surface2 text-ink2 cursor-pointer transition-all duration-150 hover:border-gold hover:text-gold max-md:py-2"
           onClick={() => exportBookmarksCSV(items)}
         >
           Export CSV
         </button>
         <button
-          className="px-3 py-1 text-[0.7rem] font-semibold border border-border rounded-md bg-surface2 text-ink2 cursor-pointer transition-all duration-150 hover:border-red hover:text-red"
+          className="px-3 py-1 text-[0.7rem] font-semibold border border-border rounded-md bg-surface2 text-ink2 cursor-pointer transition-all duration-150 hover:border-red hover:text-red max-md:py-2"
           onClick={onClearAll}
         >
           Clear All
         </button>
       </div>
-      <div className="overflow-x-auto border border-[rgba(212,168,67,0.25)] rounded-lg bg-surface">
+
+      {/* ─── Mobile card list ─── */}
+      <div className="md:hidden space-y-2">
+        {items.map((e) => (
+          <div
+            key={e.id}
+            className="rounded-lg border border-[rgba(212,168,67,0.25)] bg-surface p-3"
+          >
+            <div className="flex items-start gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-ink text-[0.84rem] leading-tight">{e.name}</div>
+                <div className="mt-0.5 text-[0.72rem] text-ink3 line-clamp-1">{e.desc}</div>
+              </div>
+              <button
+                className="size-10 shrink-0 flex items-center justify-center rounded-md transition-all duration-100 hover:bg-gold-dim -mr-1 -mt-1"
+                onClick={() => onToggleBookmark(e.id)}
+                title="Remove bookmark"
+              >
+                <Bookmark size={20} className="transition-all duration-100" fill="var(--gold)" stroke="var(--gold)" />
+              </button>
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.72rem] text-ink2">
+              <span className="whitespace-nowrap">{e.date} · {fmtTime(e.time)}</span>
+              <span className="text-border">|</span>
+              <span className="whitespace-nowrap">{e.venue}</span>
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="inline-block px-1.5 py-0.5 rounded-md text-[0.6rem] font-semibold bg-surface3 text-ink2 whitespace-nowrap tracking-[0.02em]">
+                {e.zone}
+              </span>
+              <span className={roundTagClasses(e.rt)}>{e.rt}</span>
+              <span className="font-semibold tabular-nums text-[0.78rem] text-ink">
+                {fmtPrice(e.pLo, e.pHi)}
+              </span>
+              <span className="ml-auto">
+                <ScorePill
+                  agg={e.agg}
+                  rSig={e.rSig}
+                  rExp={e.rExp}
+                  rStar={e.rStar}
+                  rUniq={e.rUniq}
+                  rDem={e.rDem}
+                />
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ─── Desktop table ─── */}
+      <div className="hidden md:block overflow-x-auto border border-[rgba(212,168,67,0.25)] rounded-lg bg-surface">
         <table className="w-full border-collapse text-[0.78rem]">
           <thead className="sticky top-0 z-2">
             <tr>

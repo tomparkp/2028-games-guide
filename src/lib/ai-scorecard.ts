@@ -1,5 +1,6 @@
 import { SPORT_KNOWLEDGE } from '@/data/sport-knowledge'
-import type { Contender, Session } from '@/types/session'
+import { getRelatedNewsForSession } from '@/lib/related-news'
+import type { Contender, RelatedNews, Session } from '@/types/session'
 
 type ScoreKey = 'rSig' | 'rExp' | 'rStar' | 'rUniq' | 'rDem'
 
@@ -16,6 +17,7 @@ export interface SessionInsights {
   dimensions: ScorecardDimension[]
   potentialContendersIntro?: string
   potentialContenders: Contender[]
+  relatedNews: RelatedNews[]
 }
 
 const MARQUEE_SPORTS = new Set([
@@ -260,6 +262,7 @@ export function getSessionInsights(session: Session): SessionInsights {
   const summary = session.blurb ?? buildFallbackSummary(session)
   const potentialContendersIntro = session.potentialContendersIntro
   const potentialContenders = session.potentialContenders ?? getFallbackPotentialContenders(session)
+  const relatedNews = getRelatedNewsForSession(session)
 
   const sortedDimensions = [...dimensions].sort((a, b) => b.score - a.score)
   const topLabel = sortedDimensions[0]?.label ?? 'The session'
@@ -282,5 +285,6 @@ export function getSessionInsights(session: Session): SessionInsights {
     dimensions,
     potentialContendersIntro,
     potentialContenders,
+    relatedNews,
   }
 }

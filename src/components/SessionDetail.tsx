@@ -1,12 +1,20 @@
 import { Drawer } from '@base-ui/react/drawer'
-import { Bookmark, ChevronsRight, ExternalLink, MapPin, UserRound, X } from 'lucide-react'
+import {
+  Bookmark,
+  ChevronsRight,
+  ExternalLink,
+  MapPin,
+  Newspaper,
+  UserRound,
+  X,
+} from 'lucide-react'
 import { type PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from 'react'
 
 import { getSessionInsights } from '@/lib/ai-scorecard'
 import { cn } from '@/lib/cn'
 import { fmtPrice, fmtTime } from '@/lib/format'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
-import type { Contender, ContentSource, Session } from '@/types/session'
+import type { Contender, RelatedNews, Session } from '@/types/session'
 
 const DEFAULT_WIDTH = 480
 const MIN_WIDTH = 360
@@ -35,6 +43,40 @@ const ringColors: Record<ScoreKey, { border: string; score: string }> = {
   rStar: { border: 'border-l-[#97928a]', score: 'text-ink2' },
   rUniq: { border: 'border-l-[#009f3d]', score: 'text-[#009f3d]' },
   rDem: { border: 'border-l-[#df0024]', score: 'text-[#df0024]' },
+}
+
+const newsDateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+})
+
+interface RelatedNewsItem {
+  id: string
+  title: string
+  sourceName: string
+  sourceUrl: string
+  date?: string
+  summary?: string
+  tags?: string[]
+}
+
+function formatNewsDate(publishedDate: string) {
+  const [year, month, day] = publishedDate.split('-').map(Number)
+  if (!year || !month || !day) return publishedDate
+  return newsDateFormatter.format(new Date(year, month - 1, day))
+}
+
+function fromCuratedNews(item: RelatedNews): RelatedNewsItem {
+  return {
+    id: `curated-${item.id}`,
+    title: item.title,
+    summary: item.summary,
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
+    date: formatNewsDate(item.publishedDate),
+    tags: item.tags,
+  }
 }
 
 function PotentialContendersSection({
@@ -73,62 +115,57 @@ function PotentialContendersSection({
   )
 }
 
-function getSourceHost(url: string) {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '')
-  } catch {
-    return url
-  }
-}
-
-function getSourceDate(source: ContentSource) {
-  if (source.lastUpdated) return `Updated ${source.lastUpdated}`
-  return source.date
-}
-
-function SourcesSection({ sources }: { sources: ContentSource[] }) {
-  const visibleSources = sources.slice(0, 6)
-  const extraCount = sources.length - visibleSources.length
-
+function RelatedNewsSection({ items }: { items: RelatedNewsItem[] }) {
   return (
     <div className="grid gap-2.5">
-      {visibleSources.map((source) => {
-        const sourceDate = getSourceDate(source)
-
-        return (
-          <a
-            key={source.url}
-            href={source.url}
-            target="_blank"
-            rel="noreferrer"
-            className="group border-border bg-surface2 hover:bg-surface3 grid gap-1 rounded-md border px-3 py-2.5 transition-colors"
-          >
-            <span className="flex items-start justify-between gap-3">
-              <span className="text-ink min-w-0 text-[0.78rem] leading-snug font-semibold">
-                {source.title}
+      {items.map((item) => (
+        <a
+          key={item.id}
+          href={item.sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="group border-border bg-surface2 hover:bg-surface3 grid gap-2 rounded-md border px-3 py-2.5 transition-colors"
+        >
+          <span className="flex items-start gap-3">
+            <span className="bg-surface3 text-accent mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md">
+              <Newspaper size={14} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="flex items-start justify-between gap-3">
+                <span className="text-ink min-w-0 text-[0.78rem] leading-snug font-semibold">
+                  {item.title}
+                </span>
+                <ExternalLink
+                  size={13}
+                  className="text-ink3 group-hover:text-accent mt-0.5 shrink-0 transition-colors"
+                />
               </span>
-              <ExternalLink
-                size={13}
-                className="text-ink3 group-hover:text-accent mt-0.5 shrink-0 transition-colors"
-              />
-            </span>
-            <span className="text-ink3 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[0.68rem] font-medium">
-              <span>{getSourceHost(source.url)}</span>
-              {sourceDate && (
-                <>
-                  <span className="text-border2">·</span>
-                  <span>{sourceDate}</span>
-                </>
+              {item.summary && (
+                <span className="text-ink3 mt-1 block text-[0.72rem] leading-snug">
+                  {item.summary}
+                </span>
               )}
+              <span className="text-ink3 mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.68rem] font-medium">
+                <span>{item.sourceName}</span>
+                {item.date && (
+                  <>
+                    <span className="text-border2">·</span>
+                    <span>{item.date}</span>
+                  </>
+                )}
+                {item.tags?.map((tag) => (
+                  <span
+                    key={tag}
+                    className="bg-surface3 text-ink3 rounded-md px-1.5 py-0.5 text-[0.58rem] font-semibold tracking-normal normal-case"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </span>
             </span>
-          </a>
-        )
-      })}
-      {extraCount > 0 && (
-        <p className="text-ink3 text-[0.7rem] font-medium">
-          {extraCount} more {extraCount === 1 ? 'source' : 'sources'} saved in the session data.
-        </p>
-      )}
+          </span>
+        </a>
+      ))}
     </div>
   )
 }
@@ -156,7 +193,10 @@ export function SessionDetail({
   const isOpen = !!session
 
   const insights = useMemo(() => (displayed ? getSessionInsights(displayed) : null), [displayed])
-  const contentSources = displayed?.contentMeta?.sources ?? []
+  const relatedNewsItems = useMemo(() => {
+    if (!insights) return []
+    return insights.relatedNews.map(fromCuratedNews)
+  }, [insights])
 
   // Escape key dismissal (desktop only — Drawer handles it natively on mobile)
   useEffect(() => {
@@ -343,14 +383,14 @@ export function SessionDetail({
           </div>
         )}
 
-        {/* Sources */}
-        {contentSources.length > 0 && (
+        {/* ── Related News ── */}
+        {relatedNewsItems.length > 0 && (
           <div className="px-5 pt-2 pb-5 max-md:px-4">
             <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
-              Sources
+              Related News
             </h3>
             <div className="mt-3">
-              <SourcesSection sources={contentSources} />
+              <RelatedNewsSection items={relatedNewsItems} />
             </div>
           </div>
         )}

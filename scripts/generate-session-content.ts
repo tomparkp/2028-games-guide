@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -21,6 +21,7 @@ const DATA_PATH = resolve(ROOT, 'src/data/sessions.json')
 const BATCH_SIZE = 15
 const ANTHROPIC_DEFAULT_MODEL = 'claude-sonnet-4-20250514'
 const PERPLEXITY_DEFAULT_MODEL = 'sonar-pro'
+const PROMPT_VERSION = 2
 const MAX_RETRIES = 3
 const RETRY_DELAY_MS = 5000
 
@@ -37,6 +38,19 @@ interface GeneratedContent {
     generatedAt: string
     sources?: ContentSource[]
   }
+}
+
+interface CheckpointFile {
+  meta: {
+    provider: Provider
+    model: string
+    promptVersion: number
+    sportFilter?: string
+    forceAll: boolean
+  }
+  generatedAt: string
+  updatedAt: string
+  results: Record<string, GeneratedContent>
 }
 
 interface PerplexitySearchResult {
@@ -185,6 +199,82 @@ function getArgValue(name: string): string | undefined {
   const prefix = `${name}=`
   const arg = process.argv.find((a) => a.startsWith(prefix))
   return arg ? arg.slice(prefix.length) : undefined
+}
+
+function getCheckpointPath(
+  provider: Provider,
+  model: string,
+  sportFilter: string | undefined,
+  forceAll: boolean,
+) {
+  const safeModel = model.replace(/[^a-zA-Z0-9._-]+/g, '-')
+  const safeSport = sportFilter?.replace(/[^a-zA-Z0-9._-]+/g, '-') ?? 'all'
+  const mode = forceAll ? 'force' : 'missing'
+
+  return resolve(
+    ROOT,
+    '.cache',
+    'generate-session-content',
+    `v${PROMPT_VERSION}-${provider}-${safeModel}-${safeSport}-${mode}.json`,
+  )
+}
+
+function createCheckpoint(
+  provider: Provider,
+  model: string,
+  sportFilter: string | undefined,
+  forceAll: boolean,
+): CheckpointFile {
+  const now = new Date().toISOString()
+  return {
+    meta: {
+      provider,
+      model,
+      promptVersion: PROMPT_VERSION,
+      sportFilter,
+      forceAll,
+    },
+    generatedAt: now,
+    updatedAt: now,
+    results: {},
+  }
+}
+
+function loadCheckpoint(
+  path: string,
+  provider: Provider,
+  model: string,
+  sportFilter: string | undefined,
+  forceAll: boolean,
+): CheckpointFile {
+  const expected = { provider, model, promptVersion: PROMPT_VERSION, sportFilter, forceAll }
+  if (!existsSync(path)) {
+    return createCheckpoint(provider, model, sportFilter, forceAll)
+  }
+
+  const checkpoint = JSON.parse(readFileSync(path, 'utf8')) as CheckpointFile
+  const sameRun =
+    checkpoint.meta.provider === expected.provider &&
+    checkpoint.meta.model === expected.model &&
+    checkpoint.meta.promptVersion === expected.promptVersion &&
+    checkpoint.meta.sportFilter === expected.sportFilter &&
+    checkpoint.meta.forceAll === expected.forceAll
+
+  if (!sameRun) {
+    throw new Error(
+      `Checkpoint metadata mismatch in ${path}. Use --checkpoint with a different path.`,
+    )
+  }
+
+  return checkpoint
+}
+
+function writeCheckpoint(path: string, checkpoint: CheckpointFile) {
+  mkdirSync(dirname(path), { recursive: true })
+  checkpoint.updatedAt = new Date().toISOString()
+  const tempPath = `${path}.tmp`
+  writeFileSync(tempPath, `${JSON.stringify(checkpoint, null, 2)}\n`)
+  renameSync(tempPath, path)
 }
 
 function parseProvider(value: string | undefined): Provider {
@@ -371,6 +461,8 @@ async function main() {
   const forceAll = process.argv.includes('--force')
   const dryRun = process.argv.includes('--dry-run')
   const sportFilter = getArgValue('--sport')
+  const checkpointPath =
+    getArgValue('--checkpoint') ?? getCheckpointPath(provider, model, sportFilter, forceAll)
   const apiKey =
     provider === 'anthropic' ? process.env.ANTHROPIC_API_KEY : process.env.PERPLEXITY_API_KEY
 
@@ -384,8 +476,14 @@ async function main() {
 
   console.log(`Reading ${DATA_PATH}`)
   console.log(`Provider: ${provider} (${model})`)
+  if (!dryRun) console.log(`Checkpoint: ${checkpointPath}`)
   const sessions = JSON.parse(readFileSync(DATA_PATH, 'utf8')) as Session[]
   console.log(`Loaded ${sessions.length} sessions`)
+  const checkpoint = loadCheckpoint(checkpointPath, provider, model, sportFilter, forceAll)
+  const totalCheckpointedCount = Object.keys(checkpoint.results).length
+  if (totalCheckpointedCount > 0) {
+    console.log(`Loaded ${totalCheckpointedCount} checkpointed result(s)`)
+  }
 
   const sessionMap = new Map(sessions.map((s) => [s.id, s]))
   const needsContent = sessions.filter((s) => {
@@ -393,68 +491,89 @@ async function main() {
     if (forceAll) return true
     return !s.blurb
   })
+  const pendingContent = needsContent.filter((s) => !checkpoint.results[s.id])
+  const checkpointedNeededCount = needsContent.length - pendingContent.length
 
   console.log(`${needsContent.length} sessions need content generation`)
+  if (checkpointedNeededCount > 0) {
+    console.log(`${checkpointedNeededCount} session(s) already in checkpoint`)
+  }
   if (needsContent.length === 0) {
     console.log('Nothing to do.')
     return
   }
 
-  const sportGroups = groupBySport(needsContent)
+  const sportGroups = groupBySport(pendingContent)
   const sports = [...sportGroups.keys()].sort()
-  let totalGenerated = 0
+  let totalGenerated = checkpointedNeededCount
   let totalFailed = 0
 
-  for (const sport of sports) {
-    const sportSessions = sportGroups.get(sport)!
-    const batches =
-      provider === 'anthropic' ? chunk(sportSessions, BATCH_SIZE) : sportSessions.map((s) => [s])
-    console.log(`\n${sport}: ${sportSessions.length} sessions in ${batches.length} batch(es)`)
+  if (pendingContent.length > 0) {
+    for (const sport of sports) {
+      const sportSessions = sportGroups.get(sport)!
+      const batches =
+        provider === 'anthropic' ? chunk(sportSessions, BATCH_SIZE) : sportSessions.map((s) => [s])
+      console.log(`\n${sport}: ${sportSessions.length} sessions in ${batches.length} batch(es)`)
 
-    for (let i = 0; i < batches.length; i++) {
-      const batch = batches[i]
-      console.log(`  Batch ${i + 1}/${batches.length} (${batch.length} sessions)...`)
+      for (let i = 0; i < batches.length; i++) {
+        const batch = batches[i]
+        console.log(`  Batch ${i + 1}/${batches.length} (${batch.length} sessions)...`)
 
-      if (dryRun) {
-        console.log(`  [dry-run] Would generate content for: ${batch.map((s) => s.id).join(', ')}`)
-        continue
-      }
+        if (dryRun) {
+          console.log(
+            `  [dry-run] Would generate content for: ${batch.map((s) => s.id).join(', ')}`,
+          )
+          continue
+        }
 
-      const results =
-        provider === 'anthropic'
-          ? await generateAnthropicBatch(anthropicClient!, batch, sport, model)
-          : await generatePerplexitySession(apiKey!, batch[0]!, sport, model)
+        const results =
+          provider === 'anthropic'
+            ? await generateAnthropicBatch(anthropicClient!, batch, sport, model)
+            : await generatePerplexitySession(apiKey!, batch[0]!, sport, model)
 
-      for (const result of results) {
-        const session = sessionMap.get(result.id)
-        if (session) {
-          session.blurb = result.blurb
-          session.potentialContendersIntro = result.potentialContendersIntro
-          session.potentialContenders = result.potentialContenders
-          session.contentMeta = result.contentMeta ?? {
-            provider,
-            model,
-            generatedAt: new Date().toISOString(),
+        for (const result of results) {
+          if (sessionMap.has(result.id)) {
+            checkpoint.results[result.id] = result
+            totalGenerated++
+          } else {
+            console.warn(`  Warning: generated content for unknown session ${result.id}`)
           }
-          totalGenerated++
-        } else {
-          console.warn(`  Warning: generated content for unknown session ${result.id}`)
+        }
+
+        if (results.length > 0) {
+          writeCheckpoint(checkpointPath, checkpoint)
+          console.log(`  Checkpointed ${Object.keys(checkpoint.results).length} result(s)`)
+        }
+
+        const missing = batch.filter((s) => !results.find((r) => r.id === s.id))
+        if (missing.length > 0) {
+          console.warn(`  Warning: missing results for ${missing.map((s) => s.id).join(', ')}`)
+          totalFailed += missing.length
+        }
+
+        if (i < batches.length - 1) {
+          await new Promise((r) => setTimeout(r, 1000))
         }
       }
-
-      const missing = batch.filter((s) => !results.find((r) => r.id === s.id))
-      if (missing.length > 0) {
-        console.warn(`  Warning: missing results for ${missing.map((s) => s.id).join(', ')}`)
-        totalFailed += missing.length
-      }
-
-      if (i < batches.length - 1) {
-        await new Promise((r) => setTimeout(r, 1000))
-      }
     }
+  } else if (!dryRun) {
+    console.log('All needed sessions already exist in checkpoint')
   }
 
   if (!dryRun) {
+    for (const result of Object.values(checkpoint.results)) {
+      const session = sessionMap.get(result.id)
+      if (!session) continue
+      session.blurb = result.blurb
+      session.potentialContendersIntro = result.potentialContendersIntro
+      session.potentialContenders = result.potentialContenders
+      session.contentMeta = result.contentMeta ?? {
+        provider,
+        model,
+        generatedAt: new Date().toISOString(),
+      }
+    }
+
     const output = JSON.stringify(sessions, null, 2)
     writeFileSync(DATA_PATH, output)
     console.log(`\nWrote ${sessions.length} sessions to ${DATA_PATH}`)

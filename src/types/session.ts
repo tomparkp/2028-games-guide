@@ -29,6 +29,18 @@ export interface SessionContent {
   contentMeta?: ContentMeta
 }
 
+export interface RelatedNews {
+  id: string
+  title: string
+  summary: string
+  sourceName: string
+  sourceUrl: string
+  publishedDate: string
+  tags: string[]
+  roundTypes?: RoundType[]
+  eventKeywords?: string[]
+}
+
 export interface Session extends SessionContent {
   id: string
   sport: string

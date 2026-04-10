@@ -1,4 +1,4 @@
-import type { Contender } from '@/types/session'
+import type { Contender, RelatedNews } from '@/types/session'
 
 import data from './sport-knowledge.json'
 
@@ -7,6 +7,7 @@ export interface SportKnowledge {
   venueNotes: Record<string, string>
   eventHighlights: Record<string, string>
   potentialContenders: Contender[]
+  relatedNews?: RelatedNews[]
 }
 
 export interface SportKnowledgeMeta {

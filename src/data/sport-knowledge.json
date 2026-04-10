@@ -381,6 +381,18 @@
         "country": "CAN",
         "note": "Canadian NBA scoring champion. Canada is building a golden generation"
       }
+    ],
+    "relatedNews": [
+      {
+        "id": "basketball-lebron-james-la28-2025-11-18",
+        "title": "LeBron James says he does not plan to play at LA28",
+        "summary": "James said on Mind the Game that he expects to watch the 2028 Olympics rather than participate, pointing to Team USA moving on from the Paris 2024 veteran core.",
+        "sourceName": "Sportsnet",
+        "sourceUrl": "https://www.sportsnet.ca/nba/article/lebron-wont-play-for-team-usa-in-2028-olympics-curry-unlikley-to-participate/",
+        "publishedDate": "2025-11-18",
+        "tags": ["men", "team-usa", "roster", "lebron-james"],
+        "eventKeywords": ["Men's"]
+      }
     ]
   },
   "Football (Soccer)": {

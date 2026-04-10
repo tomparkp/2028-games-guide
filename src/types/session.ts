@@ -4,7 +4,32 @@ export interface Contender {
   note: string
 }
 
-export interface Session {
+export interface ContentSource {
+  title: string
+  url: string
+  date?: string
+  lastUpdated?: string
+  snippet?: string
+  source?: string
+}
+
+export type ContentProvider = 'anthropic' | 'perplexity'
+
+export interface ContentMeta {
+  provider: ContentProvider
+  model: string
+  generatedAt: string
+  sources?: ContentSource[]
+}
+
+export interface SessionContent {
+  blurb?: string
+  potentialContendersIntro?: string
+  potentialContenders?: Contender[]
+  contentMeta?: ContentMeta
+}
+
+export interface Session extends SessionContent {
   id: string
   sport: string
   name: string
@@ -24,9 +49,9 @@ export interface Session {
   rUniq: number
   rDem: number
   agg: number
-  blurb?: string
-  potentialContenders?: Contender[]
 }
+
+export type SessionWithContent = Session & SessionContent
 
 export type RoundType = 'Final' | 'Semi' | 'QF' | 'Prelim' | 'Bronze' | 'Ceremony' | 'N/A'
 

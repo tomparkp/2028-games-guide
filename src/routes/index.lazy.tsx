@@ -1,21 +1,20 @@
 import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { Bookmark, LoaderCircle } from 'lucide-react'
-import { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import { LoaderCircle } from 'lucide-react'
+import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 
 import { BookmarkPanel } from '@/components/BookmarkPanel'
 import { FilterBar } from '@/components/FilterBar'
 import { SessionDetail } from '@/components/SessionDetail'
 import { SessionTable } from '@/components/SessionTable'
 import { useBookmarks } from '@/hooks/useBookmarks'
-import { cn } from '@/lib/cn'
 import { sessionDetailQueryOptions, sessionsInfiniteQueryOptions } from '@/lib/session-query'
 import {
   routeSearchToFilters,
   routeSearchToSort,
   type SessionRouteSearch,
 } from '@/lib/session-search'
-import type { Filters, SortColumn } from '@/types/session'
+import type { Filters, GroupBy, SortColumn } from '@/types/session'
 
 export const Route = createLazyFileRoute('/')({ component: SessionPicker })
 
@@ -24,28 +23,7 @@ function SessionPicker() {
   const navigate = useNavigate({ from: '/' })
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
   const [bookmarkPanelOpen, setBookmarkPanelOpen] = useState(false)
-  const [searchValue, setSearchValue] = useState(search.search)
-  const deferredSearch = useDeferredValue(searchValue)
   const { bookmarks, toggle, clearAll, isBookmarked } = useBookmarks()
-
-  useEffect(() => {
-    setSearchValue(search.search)
-  }, [search.search])
-
-  useEffect(() => {
-    if (deferredSearch === search.search) return
-
-    startTransition(() => {
-      void navigate({
-        search: (prev) => ({
-          ...prev,
-          search: deferredSearch,
-        }),
-        resetScroll: false,
-        replace: true,
-      })
-    })
-  }, [deferredSearch, navigate, search.search])
 
   const sessionsQuery = useSuspenseInfiniteQuery(sessionsInfiniteQueryOptions(search))
   const pages = sessionsQuery.data.pages
@@ -53,6 +31,7 @@ function SessionPicker() {
   const sessions = useMemo(() => pages.flatMap((page) => page.items), [pages])
   const filters = useMemo(() => routeSearchToFilters(search), [search])
   const sort = useMemo(() => routeSearchToSort(search), [search])
+  const groupBy = search.groupBy
   const selectedSessionId = search.session ?? null
   const sessionById = useMemo(
     () => new Map(sessions.map((session) => [session.id, session])),
@@ -132,6 +111,13 @@ function SessionPicker() {
     })
   }
 
+  function handleGroupByChange(nextGroupBy: GroupBy) {
+    updateSearch({
+      ...search,
+      groupBy: nextGroupBy,
+    })
+  }
+
   function handleSort(col: SortColumn) {
     updateSearch({
       ...search,
@@ -167,34 +153,15 @@ function SessionPicker() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={handleOpenBookmarks}
-        className={cn(
-          'absolute top-4 left-5 z-20 flex h-9 items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 text-[0.8rem] font-medium text-ink2 transition-all duration-150 hover:border-gold hover:bg-surface2 hover:text-gold max-md:top-3 max-md:left-3',
-          bookmarks.size > 0 && 'border-gold text-gold',
-        )}
-      >
-        <Bookmark
-          size={15}
-          fill={bookmarks.size > 0 ? 'var(--gold)' : 'none'}
-          stroke={bookmarks.size > 0 ? 'var(--gold)' : 'currentColor'}
-        />
-        Saved
-        {bookmarks.size > 0 ? (
-          <span className="bg-gold text-bg flex size-[18px] items-center justify-center rounded-full text-[0.6rem] font-bold">
-            {bookmarks.size}
-          </span>
-        ) : null}
-      </button>
-
       <FilterBar
         filters={filters}
-        searchValue={searchValue}
-        onSearchChange={setSearchValue}
-        onFilterChange={handleFilterChange}
+        onChange={handleFilterChange}
+        groupBy={groupBy}
+        onGroupByChange={handleGroupByChange}
         sports={firstPage.sports}
         zones={firstPage.zones}
+        bookmarkCount={bookmarks.size}
+        onOpenBookmarks={handleOpenBookmarks}
       />
 
       <div className="mx-auto max-w-[1400px] px-4 pt-2 pb-15">

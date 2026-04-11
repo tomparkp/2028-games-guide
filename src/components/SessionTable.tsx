@@ -1,5 +1,15 @@
+import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import { Bookmark } from 'lucide-react'
-import { memo, type KeyboardEvent, useMemo } from 'react'
+import {
+  memo,
+  type CSSProperties,
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { cn } from '@/lib/cn'
@@ -8,6 +18,7 @@ import { roundTagClasses } from '@/lib/tw'
 import type { GroupBy, Session, SortColumn, SortState } from '@/types/session'
 
 import { ScorePill } from './ScorePill'
+import { buildSessionTableItems, groupLabel } from './session-table-items'
 
 export interface SessionTableProps {
   sessions: Session[]
@@ -20,12 +31,26 @@ export interface SessionTableProps {
   onSelectSessionId: (sessionId: string) => void
 }
 
-type SessionItem =
-  | { type: 'group'; label: string; count: number }
-  | { type: 'session'; session: Session }
+const headerCellBase =
+  'flex min-w-0 items-center border-b border-border bg-surface2 px-2.5 py-2 text-left text-[0.62rem] font-semibold whitespace-nowrap tracking-[0.08em] uppercase text-ink3'
 
-const thBase =
-  'text-left px-2.5 py-2 bg-surface2 font-semibold text-[0.62rem] uppercase tracking-[0.08em] text-ink3 border-b border-border whitespace-nowrap cursor-pointer select-none transition-colors duration-100 hover:text-gold'
+const sortHeaderBase =
+  'w-full cursor-pointer select-none justify-start border-0 transition-colors duration-100 hover:text-gold'
+
+const desktopGridColumns =
+  'minmax(0, 3fr) minmax(108px, 1fr) minmax(190px, 1.5fr) minmax(76px, 0.75fr) minmax(92px, 0.8fr) minmax(84px, 0.8fr) minmax(96px, 0.85fr) 36px'
+
+const desktopGridStyle = { gridTemplateColumns: desktopGridColumns } satisfies CSSProperties
+const initialVirtualRect = { width: 1280, height: 900 }
+const groupEstimate = 36
+const desktopRowEstimate = 52
+const mobileCardEstimate = 128
+const desktopOverscan = 15
+const mobileOverscan = 6
+const rowCellBase = 'min-w-0'
+const rowCellInnerBase =
+  "relative h-full px-2.5 py-[7px] before:pointer-events-none before:absolute before:inset-x-0 before:top-px before:bottom-px before:content-['']"
+const rowCellContentBase = 'relative z-10'
 
 const SortHeader = memo(function SortHeader({
   label,
@@ -42,47 +67,22 @@ const SortHeader = memo(function SortHeader({
 }) {
   const active = sort.col === col
   return (
-    <th data-col={col} onClick={() => onSort(col)} title={title} className={thBase}>
+    <button
+      type="button"
+      data-col={col}
+      onClick={() => onSort(col)}
+      title={title}
+      className={cn(headerCellBase, sortHeaderBase)}
+    >
       {label}
       {active && (
         <span className="text-[0.55rem] text-gold ml-0.5">
           {sort.dir === 'asc' ? '\u25B2' : '\u25BC'}
         </span>
       )}
-    </th>
+    </button>
   )
 })
-
-function groupLabel(key: GroupBy): string {
-  if (key === 'sport') return 'Sport'
-  if (key === 'rt') return 'Round'
-  if (key === 'date') return 'Date'
-  return 'Zone'
-}
-
-function getGroupValue(session: Session, key: GroupBy): string {
-  if (key === 'sport') return session.sport || 'Other'
-  if (key === 'rt') return session.rt
-  if (key === 'zone') return session.zone
-  if (key === 'date') return session.date
-  return ''
-}
-
-function groupSessions(sessions: Session[], key: GroupBy): { label: string; sessions: Session[] }[] {
-  if (!key) return [{ label: '', sessions }]
-
-  const groups = new Map<string, { sortKey: string; sessions: Session[] }>()
-  for (const session of sessions) {
-    const value = getGroupValue(session, key)
-    const entry = groups.get(value)
-    if (entry) entry.sessions.push(session)
-    else groups.set(value, { sortKey: key === 'date' ? session.dk : value, sessions: [session] })
-  }
-
-  return Array.from(groups.entries())
-    .sort((a, b) => a[1].sortKey.localeCompare(b[1].sortKey))
-    .map(([label, { sessions: items }]) => ({ label, sessions: items }))
-}
 
 /* ─── Mobile card ─── */
 
@@ -115,7 +115,7 @@ const SessionCard = memo(function SessionCard({
       onClick={() => onSelectId(session.id)}
       onKeyDown={handleKeyDown}
       className={cn(
-        'rounded-lg border border-border bg-surface p-3 transition-colors duration-100 active:bg-surface2',
+        'rounded-lg border border-border bg-surface bg-clip-padding p-3 active:bg-surface2',
         selected && 'border-gold bg-gold-dim',
       )}
     >
@@ -191,24 +191,22 @@ const SessionRow = memo(function SessionRow({
   bookmarked: boolean
   onToggleBookmark: (id: string) => void
 }) {
-  function handleRowKeyDown(event: KeyboardEvent<HTMLTableRowElement>) {
+  function handleRowKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       onSelectId(session.id)
     }
   }
 
-  const cellBase = cn(
-    'px-2.5 py-[7px] border-b border-border align-top transition-colors duration-100',
-    selected ? 'bg-gold-dim' : 'group-hover:bg-surface2',
+  const cellInnerBase = cn(
+    rowCellInnerBase,
+    selected ? 'before:bg-gold-dim' : 'group-hover:before:bg-surface2',
   )
 
   return (
-    <tr
-      className={cn(
-        'group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-gold',
-        selected && 'bg-gold-dim',
-      )}
+    <div
+      className="group relative grid w-full cursor-pointer text-[0.78rem] after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-border"
+      style={desktopGridStyle}
       data-session-item
       onClick={() => onSelectId(session.id)}
       onKeyDown={handleRowKeyDown}
@@ -216,8 +214,9 @@ const SessionRow = memo(function SessionRow({
       role="button"
       aria-pressed={selected}
     >
-      <td className={cellBase}>
-        <div className="min-w-0">
+      <div className={rowCellBase}>
+        <div className={cellInnerBase}>
+          <div className={cn(rowCellContentBase, 'min-w-0')}>
           <span className="block font-semibold text-ink whitespace-nowrap text-[0.78rem]">
             {session.name}
           </span>
@@ -227,55 +226,82 @@ const SessionRow = memo(function SessionRow({
           >
             {session.desc}
           </span>
+          </div>
         </div>
-      </td>
-      <td className={cn(cellBase, 'whitespace-nowrap')}>
-        {session.date}
-        <br />
-        <span className="text-[0.68rem] text-ink3">{fmtTime(session.time)}</span>
-      </td>
-      <td className={cellBase}>{session.venue}</td>
-      <td className={cellBase}>
-        <span className="inline-block px-1.5 py-0.5 rounded-md text-[0.6rem] font-semibold bg-surface3 text-ink2 whitespace-nowrap tracking-[0.02em]">
-          {session.zone}
-        </span>
-      </td>
-      <td className={cn(cellBase, 'font-semibold whitespace-nowrap tabular-nums')}>
-        {fmtPrice(session.pLo, session.pHi)}
-      </td>
-      <td className={cellBase}>
-        <span className={roundTagClasses(session.rt)}>{session.rt}</span>
-      </td>
-      <td className={cn(cellBase, 'text-center')}>
-        <ScorePill
-          agg={session.agg}
-          rSig={session.rSig}
-          rExp={session.rExp}
-          rStar={session.rStar}
-          rUniq={session.rUniq}
-          rDem={session.rDem}
-        />
-      </td>
-      <td className={cn(cellBase, 'text-center')}>
-        <button
-          type="button"
-          className="size-7 border-none bg-transparent cursor-pointer p-0.5 rounded-md transition-all duration-100 flex items-center justify-center hover:bg-gold-dim [&:hover_.bm-off]:stroke-gold"
-          onClick={(event) => {
-            event.stopPropagation()
-            onToggleBookmark(session.id)
-          }}
-          title={bookmarked ? 'Remove from saved' : 'Save'}
-          aria-label={bookmarked ? `Remove ${session.name} from saved` : `Save ${session.name}`}
-        >
-          <Bookmark
-            size={20}
-            className={cn('transition-all duration-100', bookmarked ? 'bm-on' : 'bm-off')}
-            fill={bookmarked ? 'var(--gold)' : 'none'}
-            stroke={bookmarked ? 'var(--gold)' : 'var(--ink3)'}
-          />
-        </button>
-      </td>
-    </tr>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'whitespace-nowrap')}>
+          <div className={rowCellContentBase}>
+            {session.date}
+            <br />
+            <span className="text-[0.68rem] text-ink3">{fmtTime(session.time)}</span>
+          </div>
+        </div>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'whitespace-nowrap')}>
+          <div className={rowCellContentBase}>{session.venue}</div>
+        </div>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'flex items-start')}>
+          <div className={rowCellContentBase}>
+            <span className="inline-block px-1.5 py-0.5 rounded-md text-[0.6rem] font-semibold bg-surface3 text-ink2 whitespace-nowrap tracking-[0.02em]">
+              {session.zone}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'font-semibold whitespace-nowrap tabular-nums')}>
+          <div className={rowCellContentBase}>{fmtPrice(session.pLo, session.pHi)}</div>
+        </div>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'flex items-start')}>
+          <div className={rowCellContentBase}>
+            <span className={roundTagClasses(session.rt)}>{session.rt}</span>
+          </div>
+        </div>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'flex items-start justify-center')}>
+          <div className={rowCellContentBase}>
+            <ScorePill
+              agg={session.agg}
+              rSig={session.rSig}
+              rExp={session.rExp}
+              rStar={session.rStar}
+              rUniq={session.rUniq}
+              rDem={session.rDem}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={rowCellBase}>
+        <div className={cn(cellInnerBase, 'flex items-start justify-center')}>
+          <div className={rowCellContentBase}>
+            <button
+              type="button"
+              className="size-7 border-none bg-transparent cursor-pointer p-0.5 rounded-md transition-all duration-100 flex items-center justify-center hover:bg-gold-dim [&:hover_.bm-off]:stroke-gold"
+              onClick={(event) => {
+                event.stopPropagation()
+                onToggleBookmark(session.id)
+              }}
+              title={bookmarked ? 'Remove from saved' : 'Save'}
+              aria-label={bookmarked ? `Remove ${session.name} from saved` : `Save ${session.name}`}
+            >
+              <Bookmark
+                size={20}
+                className={cn('transition-all duration-100', bookmarked ? 'bm-on' : 'bm-off')}
+                fill={bookmarked ? 'var(--gold)' : 'none'}
+                stroke={bookmarked ? 'var(--gold)' : 'var(--ink3)'}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }, areSessionEntryPropsEqual)
 
@@ -335,25 +361,77 @@ export function SessionTable({
   onSelectSessionId,
 }: SessionTableProps) {
   const isMobile = useMediaQuery('(max-width: 539px)')
-  const items = useMemo<SessionItem[]>(() => {
-    const groups = groupSessions(sessions, groupBy)
-    return groups.flatMap((group) => {
-      if (!groupBy) return group.sessions.map((session) => ({ type: 'session' as const, session }))
-      return [
-        { type: 'group' as const, label: group.label, count: group.sessions.length },
-        ...group.sessions.map((session) => ({ type: 'session' as const, session })),
-      ]
+  const shouldMeasureItems = isMobile
+  const listRef = useRef<HTMLDivElement>(null)
+  const [scrollMargin, setScrollMargin] = useState(0)
+  const items = useMemo(() => buildSessionTableItems(sessions, groupBy), [sessions, groupBy])
+
+  const updateScrollMargin = useCallback(() => {
+    if (!listRef.current || typeof window === 'undefined') return
+
+    const next = listRef.current.getBoundingClientRect().top + window.scrollY
+    setScrollMargin((prev) => (Math.abs(prev - next) < 1 ? prev : next))
+  }, [])
+
+  const virtualizer = useWindowVirtualizer({
+    count: items.length,
+    estimateSize: (index) => {
+      const item = items[index]
+      if (!item) return isMobile ? mobileCardEstimate : desktopRowEstimate
+      if (item.type === 'group') return groupEstimate
+      return isMobile ? mobileCardEstimate : desktopRowEstimate
+    },
+    getItemKey: (index) => items[index]?.key ?? index,
+    overscan: isMobile ? mobileOverscan : desktopOverscan,
+    initialRect: initialVirtualRect,
+    scrollMargin,
+  })
+
+  useEffect(() => {
+    updateScrollMargin()
+
+    if (typeof window === 'undefined') return
+
+    const frame = window.requestAnimationFrame(() => {
+      updateScrollMargin()
+      if (shouldMeasureItems) {
+        virtualizer.measure()
+      }
     })
-  }, [sessions, groupBy])
+
+    function handleResize() {
+      updateScrollMargin()
+      if (shouldMeasureItems) {
+        virtualizer.measure()
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [
+    groupBy,
+    isMobile,
+    items.length,
+    sessions.length,
+    shouldMeasureItems,
+    updateScrollMargin,
+    virtualizer,
+  ])
+
+  const virtualItems = virtualizer.getVirtualItems()
+  const totalSize = virtualizer.getTotalSize()
 
   const tableHeader = (
-    <tr>
+    <div className="grid w-full" style={desktopGridStyle}>
       <SortHeader label="Event" col="name" sort={sort} onSort={onSort} />
       <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
       <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
-      <th className={thBase}>Zone</th>
+      <div className={headerCellBase}>Zone</div>
       <SortHeader label="Price" col="pLo" sort={sort} onSort={onSort} />
-      <th className={thBase}>Round</th>
+      <div className={headerCellBase}>Round</div>
       <SortHeader
         label="AI Rating"
         col="agg"
@@ -361,79 +439,102 @@ export function SessionTable({
         onSort={onSort}
         title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
       />
-      <th className={cn(thBase, 'w-9')}></th>
-    </tr>
+      <div className={headerCellBase} />
+    </div>
   )
+
+  function getVirtualItemStyle(start: number): CSSProperties {
+    const offset = Math.round(start - scrollMargin)
+
+    return {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      transform: `translateY(${offset}px)`,
+    }
+  }
 
   return (
     isMobile ? (
-      <div className="space-y-2">
+      <div ref={listRef}>
         {sessions.length === 0 ? (
           <div className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
             No sessions match your filters
           </div>
         ) : (
-          items.map((item) =>
-            item.type === 'group' ? (
-              <GroupBanner key={`group-${item.label}`} groupBy={groupBy} label={item.label} count={item.count} />
-            ) : (
-              <SessionCard
-                key={item.session.id}
-                session={item.session}
-                selected={selectedSessionId === item.session.id}
-                onSelectId={onSelectSessionId}
-                bookmarked={isBookmarked(item.session.id)}
-                onToggleBookmark={onToggleBookmark}
-              />
-            ),
-          )
+          <div className="relative" style={{ height: totalSize }}>
+            {virtualItems.map((virtualItem) => {
+              const item = items[virtualItem.index]
+              if (!item) return null
+
+              return (
+                <div
+                  key={item.key}
+                  ref={shouldMeasureItems ? virtualizer.measureElement : undefined}
+                  data-index={virtualItem.index}
+                  style={getVirtualItemStyle(virtualItem.start)}
+                >
+                  <div className="pb-2 last:pb-0">
+                    {item.type === 'group' ? (
+                      <GroupBanner groupBy={groupBy} label={item.label} count={item.count} />
+                    ) : (
+                      <SessionCard
+                        session={item.session}
+                        selected={selectedSessionId === item.session.id}
+                        onSelectId={onSelectSessionId}
+                        bookmarked={isBookmarked(item.session.id)}
+                        onToggleBookmark={onToggleBookmark}
+                      />
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         )}
       </div>
     ) : (
-      <div className="overflow-x-auto overflow-y-hidden rounded-lg border border-border bg-surface">
-        <table className="w-full border-collapse text-[0.78rem]">
-          <thead>{tableHeader}</thead>
-          <tbody>
-            {sessions.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="text-center py-12 px-4 text-ink3 text-[0.85rem] font-light">
-                  No sessions match your filters
-                </td>
-              </tr>
-            ) : (
-              items.map((item) => {
-                if (item.type === 'group') {
-                  return (
-                    <tr key={`group-${item.label}`}>
-                      <td
-                        colSpan={8}
-                        className="bg-surface2 text-[0.72rem] font-semibold text-ink2 px-2.5 py-1.5 border-b border-border"
-                      >
-                        <span className="text-ink3 font-normal uppercase text-[0.6rem] tracking-[0.06em] mr-1">
-                          {groupLabel(groupBy)}:
-                        </span>{' '}
-                        {item.label}
-                        <span className="ml-1.5 text-[0.58rem] font-bold text-bg bg-ink3 px-[5px] py-px rounded-lg align-middle">
-                          {item.count}
-                        </span>
-                      </td>
-                    </tr>
-                  )
-                }
+      <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+        <div className="min-w-[940px]">
+          {tableHeader}
+          {sessions.length === 0 ? (
+            <div
+              ref={listRef}
+              className="text-center px-4 py-12 text-[0.85rem] font-light text-ink3"
+            >
+              No sessions match your filters
+            </div>
+          ) : (
+            <div ref={listRef} className="relative" style={{ height: totalSize }}>
+              {virtualItems.map((virtualItem) => {
+                const item = items[virtualItem.index]
+                if (!item) return null
+
                 return (
-                  <SessionRow
-                    key={item.session.id}
-                    session={item.session}
-                    selected={selectedSessionId === item.session.id}
-                    onSelectId={onSelectSessionId}
-                    bookmarked={isBookmarked(item.session.id)}
-                    onToggleBookmark={onToggleBookmark}
-                  />
+                  <div
+                    key={item.key}
+                    ref={shouldMeasureItems ? virtualizer.measureElement : undefined}
+                    data-index={virtualItem.index}
+                    style={getVirtualItemStyle(virtualItem.start)}
+                  >
+                    {item.type === 'group' ? (
+                      <GroupBanner groupBy={groupBy} label={item.label} count={item.count} />
+                    ) : (
+                      <SessionRow
+                        session={item.session}
+                        selected={selectedSessionId === item.session.id}
+                        onSelectId={onSelectSessionId}
+                        bookmarked={isBookmarked(item.session.id)}
+                        onToggleBookmark={onToggleBookmark}
+                      />
+                    )}
+                  </div>
                 )
-              })
-            )}
-          </tbody>
-        </table>
+              })}
+            </div>
+          )}
+        </div>
       </div>
     )
   )

@@ -33,12 +33,15 @@ const defaultFilters: Filters = {
 
 function SessionPicker() {
   const { sessions, sports, zones } = Route.useLoaderData()
-  const { session: selectedSessionId } = Route.useSearch()
+  const { session: routeSelectedSessionId } = Route.useSearch()
   const navigate = useNavigate({ from: '/' })
   const [filters, setFilters] = useState<Filters>(defaultFilters)
   const [sort, setSort] = useState<SortState>({ col: 'agg', dir: 'desc' })
   const [groupBy, setGroupBy] = useState<GroupBy>('')
   const [bookmarkPanelOpen, setBookmarkPanelOpen] = useState(false)
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
+    routeSelectedSessionId ?? null,
+  )
   const { bookmarks, toggle, clearAll, isBookmarked } = useBookmarks()
   const insightsCacheRef = useRef<Map<string, SessionInsights>>(new Map())
 
@@ -61,9 +64,14 @@ function SessionPicker() {
     [getCachedInsights, selectedSession],
   )
 
+  useEffect(() => {
+    setSelectedSessionId(routeSelectedSessionId ?? null)
+  }, [routeSelectedSessionId])
+
   const handleSelectSessionId = useCallback(
     (sessionId: string) => {
       setBookmarkPanelOpen(false)
+      setSelectedSessionId((prev) => (prev === sessionId ? null : sessionId))
       startTransition(() => {
         void navigate({
           search: (prev) => ({
@@ -78,12 +86,14 @@ function SessionPicker() {
   )
 
   const handleCloseSession = useCallback(() => {
+    setSelectedSessionId(null)
     startTransition(() => {
       void navigate({ search: (prev) => ({ ...prev, session: undefined }), resetScroll: false })
     })
   }, [navigate])
 
   const handleOpenBookmarks = useCallback(() => {
+    setSelectedSessionId(null)
     startTransition(() => {
       void navigate({ search: (prev) => ({ ...prev, session: undefined }), resetScroll: false })
     })
@@ -174,7 +184,7 @@ function SessionPicker() {
           isBookmarked={isBookmarked}
           onToggleBookmark={toggle}
           groupBy={groupBy}
-          selectedSessionId={selectedSession?.id ?? null}
+          selectedSessionId={selectedSessionId}
           onSelectSessionId={handleSelectSessionId}
         />
 

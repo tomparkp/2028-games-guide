@@ -41,7 +41,7 @@ export interface RelatedNews {
   eventKeywords?: string[]
 }
 
-export interface Session extends SessionContent {
+export interface Session {
   id: string
   sport: string
   name: string
@@ -63,7 +63,7 @@ export interface Session extends SessionContent {
   agg: number
 }
 
-export type SessionWithContent = Session & SessionContent
+export interface SessionWithContent extends Session, SessionContent {}
 
 export type RoundType = 'Final' | 'Semi' | 'QF' | 'Prelim' | 'Bronze' | 'Ceremony' | 'N/A'
 
@@ -78,9 +78,10 @@ export interface SortState {
 export type GroupBy = '' | 'sport' | 'rt' | 'zone' | 'date'
 
 export interface Filters {
-  sport: string[]
-  round: string[]
-  zone: string[]
+  search: string
+  sport: string
+  round: string
+  zone: string
   score: string
   price: string
 }

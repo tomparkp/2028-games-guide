@@ -1,6 +1,6 @@
 import { SPORT_KNOWLEDGE } from '@/data/sport-knowledge'
 import { getRelatedNewsForSession } from '@/lib/related-news'
-import type { Contender, RelatedNews, Session } from '@/types/session'
+import type { Contender, RelatedNews, SessionWithContent } from '@/types/session'
 
 type ScoreKey = 'rSig' | 'rExp' | 'rStar' | 'rUniq' | 'rDem'
 
@@ -58,7 +58,7 @@ function hasMultipleEvents(desc: string) {
   return /;\s|,\s|\b\d+\s+Games?\b|\b\d+\s+Matches?\b/i.test(desc)
 }
 
-function isMedalStage(session: Session) {
+function isMedalStage(session: SessionWithContent) {
   return (
     session.rt === 'Final' || session.rt === 'Bronze' || /\bfinal\b|\bmedal\b/i.test(session.desc)
   )
@@ -73,7 +73,7 @@ function getVenueNote(sport: string, venue: string): string | undefined {
   return k?.venueNotes[venue]
 }
 
-function getSignificanceExplanation(session: Session) {
+function getSignificanceExplanation(session: SessionWithContent) {
   if (session.rt === 'Ceremony') {
     return 'Opening and closing ceremonies are the emotional bookends of the entire Games — there is no bigger stage.'
   }
@@ -94,7 +94,7 @@ function getSignificanceExplanation(session: Session) {
   return `An early-round session — lower stakes, but a chance to see world-class ${session.sport} athletes compete before the field thins out.`
 }
 
-function getExperienceExplanation(session: Session) {
+function getExperienceExplanation(session: SessionWithContent) {
   const venueNote = getVenueNote(session.sport, session.venue)
   const parts: string[] = []
 
@@ -117,7 +117,7 @@ function getExperienceExplanation(session: Session) {
   return `This session ${parts.join(', ')}.`
 }
 
-function getStarPowerExplanation(session: Session) {
+function getStarPowerExplanation(session: SessionWithContent) {
   const k = getKnowledge(session.sport)
   if (session.rt === 'Ceremony') {
     return 'Ceremonies concentrate the biggest names from every sport — flag-bearers, performers, and global icons all in one place.'
@@ -136,7 +136,7 @@ function getStarPowerExplanation(session: Session) {
   return `${session.sport} may not have household-name star power, but Olympic-level athletes in any sport are impressive to see in person.`
 }
 
-function getUniquenessExplanation(session: Session) {
+function getUniquenessExplanation(session: SessionWithContent) {
   if (session.rt === 'Ceremony') {
     return 'There is exactly one opening ceremony and one closing ceremony per Olympics. You literally cannot replicate this experience.'
   }
@@ -157,7 +157,7 @@ function getUniquenessExplanation(session: Session) {
   return 'A standard-format session without a unique venue or sport-novelty hook — but every Olympic event is a once-every-four-years opportunity.'
 }
 
-function getDemandExplanation(session: Session) {
+function getDemandExplanation(session: SessionWithContent) {
   if (session.rt === 'Ceremony') {
     return 'Ceremony tickets are the hardest to get at any Olympics. Expect intense demand and premium pricing.'
   }
@@ -176,7 +176,7 @@ function getDemandExplanation(session: Session) {
   return 'Moderate demand makes this a potential value pick — a live Olympic experience without the fight for top-tier seats.'
 }
 
-function buildFallbackSummary(session: Session): string {
+function buildFallbackSummary(session: SessionWithContent): string {
   const k = getKnowledge(session.sport)
 
   if (session.rt === 'Ceremony') {
@@ -212,7 +212,7 @@ function buildFallbackSummary(session: Session): string {
   return `${session.sport} at ${session.venue}. Every session at the Olympics is a live, world-class competition — even the early rounds deliver moments you won't forget.`
 }
 
-function getFallbackPotentialContenders(session: Session): Contender[] {
+function getFallbackPotentialContenders(session: SessionWithContent): Contender[] {
   const k = getKnowledge(session.sport)
   if (!k || k.potentialContenders.length === 0) return []
 
@@ -225,7 +225,7 @@ function getFallbackPotentialContenders(session: Session): Contender[] {
   return k.potentialContenders.slice(0, 3)
 }
 
-export function getSessionInsights(session: Session): SessionInsights {
+export function getSessionInsights(session: SessionWithContent): SessionInsights {
   const dimensions: ScorecardDimension[] = [
     {
       key: 'rSig',

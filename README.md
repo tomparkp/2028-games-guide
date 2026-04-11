@@ -17,7 +17,7 @@ This ended up being hugely helpful for me when buying tickets, so I hope it help
 
 ## Special Thanks
 
-- [u/type_rex_](https://www.reddit.com/r/olympics/comments/1sc3a21/la28_google_doc_session_codes_current_prices_and/) — for the session table Google Sheet.
+- [u/type*rex*](https://www.reddit.com/r/olympics/comments/1sc3a21/la28_google_doc_session_codes_current_prices_and/) — for the session table Google Sheet.
 - [u/polygon06](https://www.reddit.com/r/olympics/comments/1scjk1s/interactive_la28_schedule_explorer/) — whose schedule explorer inspired me to share this project.
 
 ## AI Ratings Methodology
@@ -28,7 +28,6 @@ Each session carries **precomputed scores** from a rule-based system in `[src/li
 
 Every dimension is scored on a 1–10 scale. The **aggregate** is a weighted average of the five (shown in the UI to one decimal place).
 
-
 | Dimension        | Weight | What it reflects                                                                                                                                                                  |
 | ---------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Significance** | 30%    | How much the session matters in an Olympic context: round type (e.g. gold medal vs preliminary), sport popularity tier, and whether multiple finals/medals happen in one session. |
@@ -36,7 +35,6 @@ Every dimension is scored on a 1–10 scale. The **aggregate** is a weighted ave
 | **Star power**   | 15%    | Base draw of the sport for globally recognized athletes, adjusted by round (later rounds score higher; early rounds lower).                                                       |
 | **Uniqueness**   | 15%    | Rarity of the opportunity: bonuses for new/returning sports on the program, iconic venue pairings (for meaningful rounds), ceremonies.                                            |
 | **Demand**       | 15%    | How hot tickets are likely to be: sport-level demand, round, published price ceiling as a signal, plus boosts for standout “cultural moment” combinations.                        |
-
 
 ## Contributing
 

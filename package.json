@@ -1,7 +1,6 @@
 {
   "name": "la28",
   "private": true,
-  "packageManager": "pnpm@10.33.0",
   "type": "module",
   "scripts": {
     "clean": "rm -rf node_modules dist dist-ssr .nitro .tanstack .wrangler .output .vinxi .vite coverage .turbo __unconfig*",
@@ -23,6 +22,7 @@
   "dependencies": {
     "@base-ui/react": "^1.3.0",
     "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-query": "5.96.2",
     "@tanstack/react-router": "1.168.10",
     "@tanstack/react-router-ssr-query": "1.166.10",
     "@tanstack/react-start": "1.167.16",
@@ -61,6 +61,7 @@
     "vitest": "^3.0.5",
     "wrangler": "^4.81.0"
   },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",

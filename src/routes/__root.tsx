@@ -1,18 +1,20 @@
+import type { QueryClient } from '@tanstack/react-query'
 import {
   HeadContent,
   Link,
   Scripts,
-  createRootRoute,
+  createRootRouteWithContext,
   type ErrorComponentProps,
 } from '@tanstack/react-router'
 
 import { Nav } from '../components/Nav'
+import { DEFAULT_FILTERS } from '../lib/session-search'
 
 import appCss from '../styles.css?url'
 
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('la28_unofficial_session_picker_theme');if(stored==='light'){document.documentElement.setAttribute('data-theme','light')}else if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}})();`
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -50,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <Nav />
         {children}
-        <footer className="py-6 text-center text-xs text-ink3">
+        <footer className="text-ink3 py-6 text-center text-xs">
           Made with love and electricity in Los Angeles. ☀️
         </footer>
         <Scripts />
@@ -62,14 +64,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 function ErrorMessage({ heading, body }: { heading: string; body: string }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-24 text-center">
-      <h2 className="font-display text-[2rem] font-normal -tracking-[0.03em] leading-[1.1] mb-3">
+      <h2 className="font-display mb-3 text-[2rem] leading-[1.1] font-normal -tracking-[0.03em]">
         {heading}
       </h2>
-      <p className="text-ink3 text-sm mb-6 max-w-[420px]">{body}</p>
+      <p className="text-ink3 mb-6 max-w-[420px] text-sm">{body}</p>
       <Link
         to="/"
-        search={{ session: undefined }}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface2 px-4 py-2 text-sm text-ink2 transition-colors hover:border-gold hover:text-gold"
+        search={{ ...DEFAULT_FILTERS, sortCol: 'agg', sortDir: 'desc' }}
+        className="border-border bg-surface2 text-ink2 hover:border-gold hover:text-gold inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm transition-colors"
       >
         Back to home
       </Link>

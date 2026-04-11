@@ -2,8 +2,14 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const sessionsPath = resolve(import.meta.dirname, "../src/data/sessions.json");
-const sessions = JSON.parse(readFileSync(sessionsPath, "utf-8"));
-const sessionMap = new Map(sessions.map((s: any) => [s.id, s]));
+
+interface SessionRecord {
+  id: string;
+  rt: string;
+}
+
+const sessions = JSON.parse(readFileSync(sessionsPath, "utf-8")) as SessionRecord[];
+const sessionMap = new Map(sessions.map((s) => [s.id, s]));
 
 interface Fix {
   id: string;

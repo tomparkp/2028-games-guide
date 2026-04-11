@@ -68,6 +68,7 @@ function ErrorMessage({ heading, body }: { heading: string; body: string }) {
       <p className="text-ink3 text-sm mb-6 max-w-[420px]">{body}</p>
       <Link
         to="/"
+        search={{ session: undefined }}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface2 px-4 py-2 text-sm text-ink2 transition-colors hover:border-gold hover:text-gold"
       >
         Back to home

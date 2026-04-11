@@ -29,15 +29,16 @@ function makeSession(overrides: Partial<Session> = {}): Session {
 }
 
 const defaultFilters: Filters = {
-  sport: [],
-  round: [],
-  zone: [],
+  search: '',
+  sport: '',
+  round: '',
+  zone: '',
   score: '',
   price: '',
 }
 
 describe('filterSessions', () => {
-  it('matches multiple categorical filter values as unions', () => {
+  it('filters by sport', () => {
     const sessions = [
       makeSession(),
       makeSession({
@@ -47,22 +48,32 @@ describe('filterSessions', () => {
         zone: 'Beach',
         rt: 'Semi',
       }),
+    ]
+
+    const filtered = filterSessions(sessions, {
+      ...defaultFilters,
+      sport: 'Athletics',
+    })
+
+    expect(filtered.map((session) => session.id)).toEqual(['ATH01'])
+  })
+
+  it('filters by search text', () => {
+    const sessions = [
+      makeSession(),
       makeSession({
-        id: 'GAR01',
-        sport: 'Gymnastics',
-        name: 'GAR01 Gymnastics',
-        zone: 'Valley',
-        rt: 'Prelim',
+        id: 'SWM01',
+        sport: 'Swimming',
+        name: 'SWM01 Swimming',
       }),
     ]
 
     const filtered = filterSessions(sessions, {
       ...defaultFilters,
-      sport: ['Athletics', 'Swimming'],
-      zone: ['Downtown', 'Beach'],
+      search: 'swimming',
     })
 
-    expect(filtered.map((session) => session.id)).toEqual(['ATH01', 'SWM01'])
+    expect(filtered.map((session) => session.id)).toEqual(['SWM01'])
   })
 
   it('keeps single-select price and rating filters working', () => {

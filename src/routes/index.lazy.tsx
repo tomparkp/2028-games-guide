@@ -1,157 +1,243 @@
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Bookmark, LoaderCircle } from 'lucide-react'
+import { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 
 import { BookmarkPanel } from '@/components/BookmarkPanel'
 import { FilterBar } from '@/components/FilterBar'
 import { SessionDetail } from '@/components/SessionDetail'
 import { SessionTable } from '@/components/SessionTable'
 import { useBookmarks } from '@/hooks/useBookmarks'
-import { getSessionInsights, type SessionInsights } from '@/lib/ai-scorecard'
-import { filterSessions, sortSessions } from '@/lib/filter'
-import type { Filters, GroupBy, Session, SortColumn, SortState } from '@/types/session'
+import { cn } from '@/lib/cn'
+import { sessionDetailQueryOptions, sessionsInfiniteQueryOptions } from '@/lib/session-query'
+import {
+  routeSearchToFilters,
+  routeSearchToSort,
+  type SessionRouteSearch,
+} from '@/lib/session-search'
+import type { Filters, SortColumn } from '@/types/session'
 
 export const Route = createLazyFileRoute('/')({ component: SessionPicker })
 
-const defaultFilters: Filters = {
-  sport: [],
-  round: [],
-  zone: [],
-  score: '',
-  price: '',
-}
-
 function SessionPicker() {
-  const { sessions, sports, zones } = Route.useLoaderData()
-  const { session: routeSelectedSessionId } = Route.useSearch()
+  const search = Route.useSearch()
   const navigate = useNavigate({ from: '/' })
-  const [filters, setFilters] = useState<Filters>(defaultFilters)
-  const [sort, setSort] = useState<SortState>({ col: 'agg', dir: 'desc' })
-  const [groupBy, setGroupBy] = useState<GroupBy>('')
+  const loadMoreRef = useRef<HTMLDivElement | null>(null)
   const [bookmarkPanelOpen, setBookmarkPanelOpen] = useState(false)
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
-    routeSelectedSessionId ?? null,
-  )
+  const [searchValue, setSearchValue] = useState(search.search)
+  const deferredSearch = useDeferredValue(searchValue)
   const { bookmarks, toggle, clearAll, isBookmarked } = useBookmarks()
-  const insightsCacheRef = useRef<Map<string, SessionInsights>>(new Map())
-
-  const sessionById = useMemo(() => new Map(sessions.map((session) => [session.id, session])), [sessions])
-  const selectedSession = selectedSessionId ? sessionById.get(selectedSessionId) ?? null : null
-
-  const getCachedInsights = useCallback((session: Session | null) => {
-    if (!session) return null
-
-    const cached = insightsCacheRef.current.get(session.id)
-    if (cached) return cached
-
-    const next = getSessionInsights(session)
-    insightsCacheRef.current.set(session.id, next)
-    return next
-  }, [])
-
-  const selectedInsights = useMemo(
-    () => getCachedInsights(selectedSession),
-    [getCachedInsights, selectedSession],
-  )
 
   useEffect(() => {
-    setSelectedSessionId(routeSelectedSessionId ?? null)
-  }, [routeSelectedSessionId])
+    setSearchValue(search.search)
+  }, [search.search])
 
-  const handleSelectSessionId = useCallback(
-    (sessionId: string) => {
-      setBookmarkPanelOpen(false)
-      setSelectedSessionId((prev) => (prev === sessionId ? null : sessionId))
-      startTransition(() => {
-        void navigate({
-          search: (prev) => ({
-            ...prev,
-            session: prev.session === sessionId ? undefined : sessionId,
-          }),
-          resetScroll: false,
-        })
+  useEffect(() => {
+    if (deferredSearch === search.search) return
+
+    startTransition(() => {
+      void navigate({
+        search: (prev) => ({
+          ...prev,
+          search: deferredSearch,
+        }),
+        resetScroll: false,
+        replace: true,
       })
-    },
-    [navigate],
+    })
+  }, [deferredSearch, navigate, search.search])
+
+  const sessionsQuery = useSuspenseInfiniteQuery(sessionsInfiniteQueryOptions(search))
+  const pages = sessionsQuery.data.pages
+  const firstPage = pages[0]
+  const sessions = useMemo(() => pages.flatMap((page) => page.items), [pages])
+  const filters = useMemo(() => routeSearchToFilters(search), [search])
+  const sort = useMemo(() => routeSearchToSort(search), [search])
+  const selectedSessionId = search.session ?? null
+  const sessionById = useMemo(
+    () => new Map(sessions.map((session) => [session.id, session])),
+    [sessions],
   )
+  const selectedSummary = selectedSessionId ? (sessionById.get(selectedSessionId) ?? null) : null
 
-  const handleCloseSession = useCallback(() => {
-    setSelectedSessionId(null)
-    startTransition(() => {
-      void navigate({ search: (prev) => ({ ...prev, session: undefined }), resetScroll: false })
-    })
-  }, [navigate])
+  const selectedDetailQuery = useQuery({
+    ...sessionDetailQueryOptions(selectedSessionId ?? ''),
+    enabled: !!selectedSessionId,
+  })
 
-  const handleOpenBookmarks = useCallback(() => {
-    setSelectedSessionId(null)
-    startTransition(() => {
-      void navigate({ search: (prev) => ({ ...prev, session: undefined }), resetScroll: false })
-    })
-    setBookmarkPanelOpen(true)
-  }, [navigate])
-
-  const handleCloseBookmarks = useCallback(() => {
-    setBookmarkPanelOpen(false)
-  }, [])
+  const selectedSession = selectedDetailQuery.data?.session ?? selectedSummary
+  const selectedInsights = selectedDetailQuery.data?.insights ?? null
 
   useEffect(() => {
-    if (!selectedSession && !bookmarkPanelOpen) return
+    const element = loadMoreRef.current
+    if (!element || !sessionsQuery.hasNextPage) return
 
-    function handleMouseDown(e: MouseEvent) {
-      const target = e.target as HTMLElement
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (!entry?.isIntersecting || sessionsQuery.isFetchingNextPage) return
+        void sessionsQuery.fetchNextPage()
+      },
+      { rootMargin: '300px 0px' },
+    )
+
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [
+    sessionsQuery.fetchNextPage,
+    sessionsQuery.hasNextPage,
+    sessionsQuery.isFetchingNextPage,
+    sessions.length,
+  ])
+
+  useEffect(() => {
+    if (!selectedSessionId && !bookmarkPanelOpen) return
+
+    function handleMouseDown(event: MouseEvent) {
+      const target = event.target as HTMLElement
       if (target.closest('[data-side-drawer]')) return
       if (target.closest('[data-session-item]')) return
 
-      if (selectedSession) {
-        handleCloseSession()
+      if (selectedSessionId) {
+        startTransition(() => {
+          void navigate({
+            search: (prev) => ({ ...prev, session: undefined }),
+            resetScroll: false,
+          })
+        })
       }
 
       if (bookmarkPanelOpen) {
-        handleCloseBookmarks()
+        setBookmarkPanelOpen(false)
       }
     }
 
     document.addEventListener('mousedown', handleMouseDown)
     return () => document.removeEventListener('mousedown', handleMouseDown)
-  }, [bookmarkPanelOpen, handleCloseBookmarks, handleCloseSession, selectedSession])
+  }, [bookmarkPanelOpen, navigate, selectedSessionId])
 
-  const filtered = useMemo(() => filterSessions(sessions, filters), [sessions, filters])
-  const sorted = useMemo(() => sortSessions(filtered, sort), [filtered, sort])
+  function updateSearch(nextSearch: SessionRouteSearch) {
+    startTransition(() => {
+      void navigate({
+        search: nextSearch,
+        resetScroll: false,
+      })
+    })
+  }
+
+  function handleFilterChange(nextFilters: Filters) {
+    updateSearch({
+      ...search,
+      ...nextFilters,
+    })
+  }
 
   function handleSort(col: SortColumn) {
-    setSort((prev) => ({
-      col,
-      dir: prev.col === col && prev.dir === 'desc' ? 'asc' : 'desc',
-    }))
+    updateSearch({
+      ...search,
+      sortCol: col,
+      sortDir: search.sortCol === col && search.sortDir === 'desc' ? 'asc' : 'desc',
+    })
   }
+
+  function handleSelectSessionId(sessionId: string) {
+    setBookmarkPanelOpen(false)
+    updateSearch({
+      ...search,
+      session: search.session === sessionId ? undefined : sessionId,
+    })
+  }
+
+  function handleCloseSession() {
+    updateSearch({
+      ...search,
+      session: undefined,
+    })
+  }
+
+  function handleOpenBookmarks() {
+    updateSearch({
+      ...search,
+      session: undefined,
+    })
+    setBookmarkPanelOpen(true)
+  }
+
+  const bookmarkIds = useMemo(() => [...bookmarks], [bookmarks])
 
   return (
     <>
+      <button
+        type="button"
+        onClick={handleOpenBookmarks}
+        className={cn(
+          'absolute top-4 left-5 z-20 flex h-9 items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 text-[0.8rem] font-medium text-ink2 transition-all duration-150 hover:border-gold hover:bg-surface2 hover:text-gold max-md:top-3 max-md:left-3',
+          bookmarks.size > 0 && 'border-gold text-gold',
+        )}
+      >
+        <Bookmark
+          size={15}
+          fill={bookmarks.size > 0 ? 'var(--gold)' : 'none'}
+          stroke={bookmarks.size > 0 ? 'var(--gold)' : 'currentColor'}
+        />
+        Saved
+        {bookmarks.size > 0 ? (
+          <span className="bg-gold text-bg flex size-[18px] items-center justify-center rounded-full text-[0.6rem] font-bold">
+            {bookmarks.size}
+          </span>
+        ) : null}
+      </button>
+
       <FilterBar
         filters={filters}
-        onChange={setFilters}
-        groupBy={groupBy}
-        onGroupByChange={setGroupBy}
-        sports={sports}
-        zones={zones}
-        bookmarkCount={bookmarks.size}
-        onOpenBookmarks={handleOpenBookmarks}
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        onFilterChange={handleFilterChange}
+        sports={firstPage.sports}
+        zones={firstPage.zones}
       />
 
       <div className="mx-auto max-w-[1400px] px-4 pt-2 pb-15">
+        <div className="text-ink3 mb-3 flex items-center justify-between gap-3 text-[0.72rem]">
+          <span>
+            Showing {sessions.length} of {firstPage.total} sessions
+          </span>
+          {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
+            <span className="inline-flex items-center gap-1.5">
+              <LoaderCircle size={12} className="animate-spin" />
+              Updating results...
+            </span>
+          ) : null}
+        </div>
+
         <SessionTable
-          sessions={sorted}
+          sessions={sessions}
           sort={sort}
           onSort={handleSort}
           isBookmarked={isBookmarked}
           onToggleBookmark={toggle}
-          groupBy={groupBy}
           selectedSessionId={selectedSessionId}
           onSelectSessionId={handleSelectSessionId}
         />
 
+        <div ref={loadMoreRef} className="flex min-h-16 items-center justify-center">
+          {sessionsQuery.isFetchingNextPage ? (
+            <div className="text-ink3 inline-flex items-center gap-2 text-[0.8rem]">
+              <LoaderCircle size={16} className="animate-spin" />
+              Loading more sessions...
+            </div>
+          ) : sessionsQuery.hasNextPage ? (
+            <span className="text-ink3 text-[0.75rem]">Scroll to load more</span>
+          ) : firstPage.total > 0 ? (
+            <span className="text-ink3 text-[0.75rem]">All matching sessions loaded</span>
+          ) : null}
+        </div>
+
         <SessionDetail
+          open={!!selectedSessionId}
           session={selectedSession}
           insights={selectedInsights}
+          isLoading={selectedDetailQuery.isPending}
           onClose={handleCloseSession}
           isBookmarked={isBookmarked}
           onToggleBookmark={toggle}
@@ -159,9 +245,8 @@ function SessionPicker() {
 
         <BookmarkPanel
           open={bookmarkPanelOpen}
-          onClose={handleCloseBookmarks}
-          sessions={sessions}
-          bookmarks={bookmarks}
+          onClose={() => setBookmarkPanelOpen(false)}
+          bookmarkIds={bookmarkIds}
           onToggleBookmark={toggle}
           onClearAll={clearAll}
           onSelectSessionId={handleSelectSessionId}

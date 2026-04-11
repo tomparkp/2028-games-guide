@@ -2,17 +2,18 @@ import {
   Bookmark,
   ChevronsRight,
   ExternalLink,
+  LoaderCircle,
   MapPin,
   Newspaper,
   UserRound,
   X,
 } from 'lucide-react'
-import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 
+import type { SessionInsights } from '@/lib/ai-scorecard'
 import { cn } from '@/lib/cn'
 import { fmtPrice, fmtTime } from '@/lib/format'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
-import type { SessionInsights } from '@/lib/ai-scorecard'
 import type { Contender, RelatedNews, Session } from '@/types/session'
 
 import { SideDrawer } from './SideDrawer'
@@ -78,19 +79,19 @@ function PotentialContendersSection({
         </p>
       )}
       <div className="grid gap-2.5">
-        {potentialContenders.map((c) => (
-          <div key={`${c.name}-${c.country}`} className="flex items-start gap-3">
+        {potentialContenders.map((contender) => (
+          <div key={`${contender.name}-${contender.country}`} className="flex items-start gap-3">
             <span className="bg-surface3 text-ink3 mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full">
               <UserRound size={14} />
             </span>
             <div className="min-w-0">
               <div className="flex items-baseline gap-2">
-                <span className="text-ink text-[0.84rem] font-semibold">{c.name}</span>
+                <span className="text-ink text-[0.84rem] font-semibold">{contender.name}</span>
                 <span className="text-accent text-[0.6rem] font-bold tracking-[0.06em] uppercase">
-                  {c.country}
+                  {contender.country}
                 </span>
               </div>
-              <p className="text-ink3 mt-0.5 text-[0.76rem] leading-snug">{c.note}</p>
+              <p className="text-ink3 mt-0.5 text-[0.76rem] leading-snug">{contender.note}</p>
             </div>
           </div>
         ))}
@@ -154,225 +155,259 @@ function RelatedNewsSection({ items }: { items: RelatedNewsItem[] }) {
   )
 }
 
+function LoadingBlock({ session, onClose }: { session: Session | null; onClose: () => void }) {
+  return (
+    <>
+      <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
+        <div className="mb-3 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close panel"
+            className="text-ink3 hover:bg-surface2 hover:text-ink flex size-10 items-center justify-center rounded-md transition-colors md:size-9"
+          >
+            <ChevronsRight size={18} className="hidden md:block" />
+            <X size={20} className="md:hidden" />
+          </button>
+          <div className="text-ink3 flex size-10 items-center justify-center rounded-md md:size-9">
+            <LoaderCircle size={18} className="animate-spin" />
+          </div>
+        </div>
+
+        {session ? (
+          <>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className={roundTagClasses(session.rt)}>{session.rt}</span>
+              {session.sport && (
+                <span className="bg-surface2 text-ink3 rounded-lg px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.06em] uppercase">
+                  {session.sport}
+                </span>
+              )}
+            </div>
+
+            <div className="mt-3 flex items-start justify-between gap-3">
+              <h2 className="font-display text-ink text-[1.35rem] leading-tight font-semibold">
+                {session.name}
+              </h2>
+              <span
+                className={cn(
+                  ratingClasses(session.agg),
+                  'shrink-0 text-[1rem] px-2.5 py-1 min-w-[42px] rounded-xl',
+                )}
+              >
+                {session.agg.toFixed(1)}
+              </span>
+            </div>
+            <p className="text-ink2 mt-1 text-[0.82rem] leading-relaxed">{session.desc}</p>
+
+            <div className="text-ink3 mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.76rem]">
+              <span>{session.date}</span>
+              <span className="text-border2">·</span>
+              <span>{fmtTime(session.time)}</span>
+              <span className="text-border2">·</span>
+              <span className="inline-flex items-center gap-1">
+                <MapPin size={12} className="shrink-0" />
+                {session.venue}
+              </span>
+            </div>
+
+            <div className="text-ink mt-2 text-[0.9rem] font-semibold tabular-nums">
+              {fmtPrice(session.pLo, session.pHi)}
+            </div>
+          </>
+        ) : null}
+      </div>
+
+      <div className="px-5 pt-2 pb-5 max-md:px-4">
+        <div className="bg-surface2 border-border text-ink3 flex items-center gap-2 rounded-lg border px-3.5 py-3 text-[0.74rem]">
+          <LoaderCircle size={14} className="animate-spin" />
+          Loading analysis...
+        </div>
+      </div>
+    </>
+  )
+}
+
 export function SessionDetail({
+  open,
   session,
   insights,
+  isLoading,
   onClose,
   isBookmarked,
   onToggleBookmark,
 }: {
+  open: boolean
   session: Session | null
   insights: SessionInsights | null
+  isLoading: boolean
   onClose: () => void
   isBookmarked?: (id: string) => boolean
   onToggleBookmark?: (id: string) => void
 }) {
-  const lastSessionRef = useRef<Session | null>(null)
-  const lastInsightsRef = useRef<SessionInsights | null>(null)
-  if (session) lastSessionRef.current = session
-  if (insights) lastInsightsRef.current = insights
-
-  const displayedSession = session ?? lastSessionRef.current
-  const displayedInsights = insights ?? lastInsightsRef.current
-
-  const isOpen = !!session
-  const [showSecondarySections, setShowSecondarySections] = useState(false)
-
-  useEffect(() => {
-    if (!session) {
-      setShowSecondarySections(false)
-      return
-    }
-
-    setShowSecondarySections(false)
-    startTransition(() => {
-      setShowSecondarySections(true)
-    })
-  }, [session?.id])
-
   const summaryParagraphs = useMemo(
-    () => (displayedInsights ? displayedInsights.summary.split('\n\n') : []),
-    [displayedInsights],
+    () => (insights ? insights.summary.split('\n\n') : []),
+    [insights],
   )
-  const relatedNewsItems = useMemo(() => {
-    if (!showSecondarySections || !displayedInsights) return []
-    return displayedInsights.relatedNews.map(fromCuratedNews)
-  }, [displayedInsights, showSecondarySections])
+  const relatedNewsItems = useMemo(
+    () => (insights ? insights.relatedNews.map(fromCuratedNews) : []),
+    [insights],
+  )
 
-  const panelContent =
-    displayedSession && displayedInsights ? (
-      <>
-        {/* ── Header zone ── */}
-        <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
-          {/* Toolbar row */}
-          <div className="mb-3 flex items-center justify-between">
+  const panelContent = !open ? null : !isLoading && insights && session ? (
+    <>
+      <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
+        <div className="mb-3 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close panel"
+            className="text-ink3 hover:bg-surface2 hover:text-ink flex size-10 items-center justify-center rounded-md transition-colors md:size-9"
+          >
+            <ChevronsRight size={18} className="hidden md:block" />
+            <X size={20} className="md:hidden" />
+          </button>
+
+          {onToggleBookmark && isBookmarked ? (
             <button
               type="button"
-              onClick={onClose}
-              aria-label="Close panel"
-              className="text-ink3 hover:bg-surface2 hover:text-ink flex size-10 items-center justify-center rounded-md transition-colors md:size-9"
+              onClick={() => onToggleBookmark(session.id)}
+              title={isBookmarked(session.id) ? 'Remove from saved' : 'Save session'}
+              aria-label={
+                isBookmarked(session.id)
+                  ? `Remove ${session.name} from saved`
+                  : `Save ${session.name}`
+              }
+              className="hover:bg-gold-dim flex size-10 items-center justify-center rounded-md transition-all duration-100 md:size-9"
             >
-              <ChevronsRight size={18} className="hidden md:block" />
-              <X size={20} className="md:hidden" />
+              <Bookmark
+                size={20}
+                className="transition-all duration-100"
+                fill={isBookmarked(session.id) ? 'var(--gold)' : 'none'}
+                stroke={isBookmarked(session.id) ? 'var(--gold)' : 'var(--ink3)'}
+              />
             </button>
-
-            {onToggleBookmark && isBookmarked && (
-              <button
-                type="button"
-                onClick={() => onToggleBookmark(displayedSession.id)}
-                title={isBookmarked(displayedSession.id) ? 'Remove from saved' : 'Save session'}
-                aria-label={
-                  isBookmarked(displayedSession.id)
-                    ? `Remove ${displayedSession.name} from saved`
-                    : `Save ${displayedSession.name}`
-                }
-                className="hover:bg-gold-dim flex size-10 items-center justify-center rounded-md transition-all duration-100 md:size-9"
-              >
-                <Bookmark
-                  size={20}
-                  className="transition-all duration-100"
-                  fill={isBookmarked(displayedSession.id) ? 'var(--gold)' : 'none'}
-                  stroke={isBookmarked(displayedSession.id) ? 'var(--gold)' : 'var(--ink3)'}
-                />
-              </button>
-            )}
-          </div>
-
-          {/* Tags row */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className={roundTagClasses(displayedSession.rt)}>{displayedSession.rt}</span>
-            {displayedSession.sport && (
-              <span className="bg-surface2 text-ink3 rounded-lg px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.06em] uppercase">
-                {displayedSession.sport}
-              </span>
-            )}
-          </div>
-
-          {/* Title + rating */}
-          <div className="mt-3 flex items-start justify-between gap-3">
-            <h2 className="font-display text-ink text-[1.35rem] leading-tight font-semibold">
-              {displayedSession.name}
-            </h2>
-            <span
-              className={cn(
-                ratingClasses(displayedSession.agg),
-                'shrink-0 text-[1rem] px-2.5 py-1 min-w-[42px] rounded-xl',
-              )}
-            >
-              {displayedSession.agg.toFixed(1)}
-            </span>
-          </div>
-          <p className="text-ink2 mt-1 text-[0.82rem] leading-relaxed">{displayedSession.desc}</p>
-
-          {/* Metadata row */}
-          <div className="text-ink3 mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.76rem]">
-            <span>{displayedSession.date}</span>
-            <span className="text-border2">·</span>
-            <span>{fmtTime(displayedSession.time)}</span>
-            <span className="text-border2">·</span>
-            <span className="inline-flex items-center gap-1">
-              <MapPin size={12} className="shrink-0" />
-              {displayedSession.venue}
-            </span>
-          </div>
-
-          {/* Price */}
-          <div className="text-ink mt-2 text-[0.9rem] font-semibold tabular-nums">
-            {fmtPrice(displayedSession.pLo, displayedSession.pHi)}
-          </div>
+          ) : null}
         </div>
 
-        {/* ── Blurb ── */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className={roundTagClasses(session.rt)}>{session.rt}</span>
+          {session.sport && (
+            <span className="bg-surface2 text-ink3 rounded-lg px-2 py-0.5 text-[0.62rem] font-semibold tracking-[0.06em] uppercase">
+              {session.sport}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-3 flex items-start justify-between gap-3">
+          <h2 className="font-display text-ink text-[1.35rem] leading-tight font-semibold">
+            {session.name}
+          </h2>
+          <span
+            className={cn(
+              ratingClasses(session.agg),
+              'shrink-0 text-[1rem] px-2.5 py-1 min-w-[42px] rounded-xl',
+            )}
+          >
+            {session.agg.toFixed(1)}
+          </span>
+        </div>
+        <p className="text-ink2 mt-1 text-[0.82rem] leading-relaxed">{session.desc}</p>
+
+        <div className="text-ink3 mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.76rem]">
+          <span>{session.date}</span>
+          <span className="text-border2">·</span>
+          <span>{fmtTime(session.time)}</span>
+          <span className="text-border2">·</span>
+          <span className="inline-flex items-center gap-1">
+            <MapPin size={12} className="shrink-0" />
+            {session.venue}
+          </span>
+        </div>
+
+        <div className="text-ink mt-2 text-[0.9rem] font-semibold tabular-nums">
+          {fmtPrice(session.pLo, session.pHi)}
+        </div>
+      </div>
+
+      <div className="px-5 pt-2 pb-5 max-md:px-4">
+        <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
+          Summary
+        </h3>
+        <div className="text-ink mt-2 space-y-3 text-[0.86rem] leading-relaxed font-medium">
+          {summaryParagraphs.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-5 pt-2 pb-5 max-md:px-4">
+        <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
+          Scorecard
+        </h3>
+
+        <div className="mt-3 grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
+          {insights.dimensions.map((dimension) => {
+            const colors = ringColors[dimension.key as ScoreKey]
+            return (
+              <div
+                key={dimension.key}
+                className={cn(
+                  'rounded-lg border border-border bg-surface2 border-l-[3px] px-3.5 py-3',
+                  colors?.border,
+                )}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-ink text-[0.78rem] font-semibold">{dimension.label}</span>
+                  <span className={cn('text-[0.9rem] font-bold tabular-nums', colors?.score)}>
+                    {dimension.score.toFixed(1)}
+                  </span>
+                </div>
+                <p className="text-ink3 mt-1.5 text-[0.72rem] leading-normal">
+                  {dimension.explanation}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {insights.potentialContenders.length > 0 ? (
         <div className="px-5 pt-2 pb-5 max-md:px-4">
           <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
-            Summary
+            Potential Contenders
           </h3>
-          <div className="text-ink mt-2 space-y-3 text-[0.86rem] leading-relaxed font-medium">
-            {summaryParagraphs.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
+          <div className="mt-3">
+            <PotentialContendersSection
+              potentialContenders={insights.potentialContenders}
+              potentialContendersIntro={insights.potentialContendersIntro}
+            />
           </div>
         </div>
+      ) : null}
 
-        {showSecondarySections ? (
-          <>
-            {/* ── Scorecard dimensions ── */}
-            <div className="px-5 pt-2 pb-5 max-md:px-4">
-              <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
-                Scorecard
-              </h3>
-
-              <div className="mt-3 grid grid-cols-2 gap-2.5 max-sm:grid-cols-1">
-                {displayedInsights.dimensions.map((dim) => {
-                  const colors = ringColors[dim.key as ScoreKey]
-                  return (
-                    <div
-                      key={dim.key}
-                      className={cn(
-                        'rounded-lg border border-border bg-surface2 border-l-[3px] px-3.5 py-3',
-                        colors?.border,
-                      )}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-ink text-[0.78rem] font-semibold">{dim.label}</span>
-                        <span className={cn('text-[0.9rem] font-bold tabular-nums', colors?.score)}>
-                          {dim.score.toFixed(1)}
-                        </span>
-                      </div>
-                      <p className="text-ink3 mt-1.5 text-[0.72rem] leading-normal">
-                        {dim.explanation}
-                      </p>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* ── Potential Contenders ── */}
-            {displayedInsights.potentialContenders.length > 0 && (
-              <div className="px-5 pt-2 pb-5 max-md:px-4">
-                <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
-                  Potential Contenders
-                </h3>
-                <div className="mt-3">
-                  <PotentialContendersSection
-                    potentialContenders={displayedInsights.potentialContenders}
-                    potentialContendersIntro={displayedInsights.potentialContendersIntro}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ── Related News ── */}
-            {relatedNewsItems.length > 0 && (
-              <div className="px-5 pt-2 pb-5 max-md:px-4">
-                <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
-                  Related News
-                </h3>
-                <div className="mt-3">
-                  <RelatedNewsSection items={relatedNewsItems} />
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="px-5 pt-2 pb-5 max-md:px-4" aria-hidden>
-            <div className="bg-surface2 border-border rounded-lg border px-3.5 py-3 text-[0.74rem] text-ink3">
-              Loading analysis...
-            </div>
+      {relatedNewsItems.length > 0 ? (
+        <div className="px-5 pt-2 pb-5 max-md:px-4">
+          <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
+            Related News
+          </h3>
+          <div className="mt-3">
+            <RelatedNewsSection items={relatedNewsItems} />
           </div>
-        )}
+        </div>
+      ) : null}
 
-        {/* Bottom breathing room */}
-        <div className="h-6 shrink-0" />
-      </>
-    ) : null
+      <div className="h-6 shrink-0" />
+    </>
+  ) : (
+    <LoadingBlock session={session} onClose={onClose} />
+  )
 
   return (
     <SideDrawer
-      open={isOpen}
+      open={open}
       onClose={onClose}
-      aria-label={displayedSession?.name ?? 'Session details'}
+      aria-label={session?.name ?? 'Session details'}
       defaultWidth={DEFAULT_WIDTH}
     >
       {panelContent}

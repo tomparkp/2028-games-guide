@@ -1,8 +1,10 @@
-import { Bookmark, ChevronsRight, Download, Trash2, X } from 'lucide-react'
-import { memo, type KeyboardEvent, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Bookmark, ChevronsRight, Download, LoaderCircle, Trash2, X } from 'lucide-react'
+import { memo } from 'react'
 
 import { exportBookmarksCSV } from '@/lib/csv'
 import { fmtPrice } from '@/lib/format'
+import { bookmarkedSessionsQueryOptions } from '@/lib/session-query'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
 import type { Session } from '@/types/session'
 
@@ -13,8 +15,7 @@ const DEFAULT_WIDTH = 520
 interface BookmarkPanelProps {
   open: boolean
   onClose: () => void
-  sessions: Session[]
-  bookmarks: Set<string>
+  bookmarkIds: string[]
   onToggleBookmark: (id: string) => void
   onClearAll: () => void
   onSelectSessionId: (sessionId: string) => void
@@ -29,20 +30,18 @@ const BookmarkCard = memo(function BookmarkCard({
   onRemove: (id: string) => void
   onSelectId: (id: string) => void
 }) {
-  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      onSelectId(session.id)
-    }
-  }
-
   return (
     <article
       className="group border-border bg-surface2 hover:border-gold/30 cursor-pointer rounded-lg border px-3.5 py-3 transition-colors"
       onClick={() => onSelectId(session.id)}
       role="button"
       tabIndex={0}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onSelectId(session.id)
+        }
+      }}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
@@ -57,8 +56,8 @@ const BookmarkCard = memo(function BookmarkCard({
         <button
           type="button"
           className="hover:bg-red/10 flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent p-0.5 transition-all duration-100"
-          onClick={(e) => {
-            e.stopPropagation()
+          onClick={(event) => {
+            event.stopPropagation()
             onRemove(session.id)
           }}
           title="Remove from saved"
@@ -90,19 +89,18 @@ const BookmarkCard = memo(function BookmarkCard({
 export const BookmarkPanel = memo(function BookmarkPanel({
   open,
   onClose,
-  sessions,
-  bookmarks,
+  bookmarkIds,
   onToggleBookmark,
   onClearAll,
   onSelectSessionId,
 }: BookmarkPanelProps) {
-  const items = useMemo(
-    () =>
-      sessions
-        .filter((s) => bookmarks.has(s.id))
-        .sort((a, b) => a.dk.localeCompare(b.dk) || a.name.localeCompare(b.name)),
-    [sessions, bookmarks],
-  )
+  const bookmarksQuery = useQuery({
+    ...bookmarkedSessionsQueryOptions(bookmarkIds),
+    enabled: open && bookmarkIds.length > 0,
+  })
+
+  const items = bookmarksQuery.data ?? []
+  const loading = bookmarksQuery.isPending
 
   return (
     <SideDrawer
@@ -123,14 +121,19 @@ export const BookmarkPanel = memo(function BookmarkPanel({
             <X size={20} className="md:hidden" />
           </button>
           <div className="ml-auto flex gap-1.5">
-            {items.length > 0 && (
+            {bookmarkIds.length > 0 && (
               <>
                 <button
                   type="button"
-                  className="border-border bg-surface2 text-ink2 hover:border-gold hover:text-gold flex cursor-pointer items-center gap-1.5 rounded-md border px-2.5 py-1 text-[0.68rem] font-semibold transition-all duration-150"
+                  className="border-border bg-surface2 text-ink2 hover:border-gold hover:text-gold flex cursor-pointer items-center gap-1.5 rounded-md border px-2.5 py-1 text-[0.68rem] font-semibold transition-all duration-150 disabled:cursor-wait disabled:opacity-60"
                   onClick={() => exportBookmarksCSV(items)}
+                  disabled={loading || items.length === 0}
                 >
-                  <Download size={12} />
+                  {loading ? (
+                    <LoaderCircle size={12} className="animate-spin" />
+                  ) : (
+                    <Download size={12} />
+                  )}
                   Export CSV
                 </button>
                 <button
@@ -149,20 +152,25 @@ export const BookmarkPanel = memo(function BookmarkPanel({
         <h2 className="text-ink flex items-center gap-2.5 text-[1.25rem] leading-tight font-semibold">
           <Bookmark size={20} fill="var(--gold)" stroke="var(--gold)" />
           Saved
-          {items.length > 0 && (
+          {bookmarkIds.length > 0 && (
             <span className="bg-gold text-bg inline-flex h-5 min-w-5 items-center justify-center rounded-[10px] px-1.5 font-sans text-[0.6rem] font-bold">
-              {items.length}
+              {bookmarkIds.length}
             </span>
           )}
         </h2>
 
-        {items.length === 0 ? (
+        {bookmarkIds.length === 0 ? (
           <div className="mt-12 text-center">
             <Bookmark size={32} className="text-ink3/40 mx-auto" />
             <p className="text-ink3 mt-3 text-[0.85rem] font-light">No sessions saved yet</p>
             <p className="text-ink3/70 mt-1 text-[0.72rem] font-light">
               Click the save icon on any session to add it here
             </p>
+          </div>
+        ) : loading ? (
+          <div className="text-ink3 mt-10 flex items-center justify-center gap-2 text-[0.8rem]">
+            <LoaderCircle size={16} className="animate-spin" />
+            Loading saved sessions...
           </div>
         ) : (
           <div className="mt-4 space-y-2">

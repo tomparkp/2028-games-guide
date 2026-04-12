@@ -3,13 +3,11 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from '
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import Anthropic from '@anthropic-ai/sdk'
-
 import type { SportKnowledge } from '../src/data/sport-knowledge.js'
 import type {
   Contender,
-  ContentProvider,
   ContentSource,
+  RelatedNews,
   Session,
   SessionContent,
 } from '../src/types/session.js'
@@ -25,22 +23,20 @@ const SPORT_KNOWLEDGE = sportEntries as Record<string, SportKnowledge>
 const SESSIONS_PATH = resolve(ROOT, 'src/data/sessions.json')
 const CONTENT_PATH = resolve(ROOT, 'src/data/session-content.json')
 
-const BATCH_SIZE = 15
-const ANTHROPIC_DEFAULT_MODEL = 'claude-sonnet-4-20250514'
 const PERPLEXITY_DEFAULT_MODEL = 'sonar-pro'
-const PROMPT_VERSION = 3
+const PROMPT_VERSION = 9
 const MAX_RETRIES = 3
 const RETRY_DELAY_MS = 5000
-
-type Provider = ContentProvider
+const MAX_NEWS_ITEMS = 10
 
 interface GeneratedContent {
   id: string
   blurb: string
   potentialContendersIntro?: string
   potentialContenders: Contender[]
+  relatedNews: RelatedNews[]
   contentMeta?: {
-    provider: Provider
+    provider: 'perplexity'
     model: string
     generatedAt: string
     sources?: ContentSource[]
@@ -49,7 +45,6 @@ interface GeneratedContent {
 
 interface CheckpointFile {
   meta: {
-    provider: Provider
     model: string
     promptVersion: number
     sportFilter?: string
@@ -81,7 +76,7 @@ interface PerplexityResponse {
 const PERPLEXITY_RESPONSE_SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['id', 'blurb', 'potentialContendersIntro', 'potentialContenders'],
+  required: ['id', 'blurb', 'potentialContendersIntro', 'potentialContenders', 'relatedNews'],
   properties: {
     id: { type: 'string' },
     blurb: { type: 'string' },
@@ -99,49 +94,70 @@ const PERPLEXITY_RESPONSE_SCHEMA = {
         },
       },
     },
+    relatedNews: {
+      type: 'array',
+      maxItems: MAX_NEWS_ITEMS,
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['title', 'summary', 'sourceName', 'sourceUrl', 'publishedDate', 'tags'],
+        properties: {
+          title: { type: 'string' },
+          summary: { type: 'string' },
+          sourceName: { type: 'string' },
+          sourceUrl: { type: 'string' },
+          publishedDate: { type: 'string' },
+          tags: {
+            type: 'array',
+            items: { type: 'string' },
+          },
+        },
+      },
+    },
   },
 }
 
-const SYSTEM_PROMPT = `You are a sports journalist writing for an informational LA 2028 Olympics session guide. Your tone is:
-- Factual and informative — lead with what the session contains, which events or rounds, and what's at stake
-- Specific — reference event formats, venue details, and relevant Olympic history where accurate
-- Engaging — use clear sports-writing energy, vivid but factual phrasing, and a sense of why the session could be fun to watch live
-- Balanced — describe the event and likely fields without over-promising outcomes; use "projected" or "likely contender" when uncertain
-- Concise — 2-4 clear sentences per blurb, no filler or excessive superlatives
+const SYSTEM_PROMPT = `You are writing session blurbs for an LA 2028 Olympics ticket-buying guide. Readers are deciding whether to attend; give them a flavorful picture of what the session actually is and why it could be worth watching.
 
-IMPORTANT CONTEXT: The LA 2028 Games are still over two years away. Official rosters have NOT been announced for any country. Athletes listed as potential contenders are projections based on recent results (primarily Paris 2024). Always frame potential contenders as "projected" or "likely" rather than confirmed participants. If an athlete has not confirmed whether they will compete in LA28, say so plainly in the athlete-focused fields; for example, "Simone Biles has not confirmed whether she will compete in LA28."
+Ground truth: the Games are still ahead. Venues, event formats, Olympic history, and prior results (Paris 2024, World Championships, etc.) are confirmed facts. LA28 rosters, participation, and medal outcomes are not. Your writing should be clear about which is which — state confirmed things plainly; flag speculation as speculation with words like "projected," "likely," "expected," or "if [athlete] competes."
 
-You will receive a batch of Olympic sessions grouped by sport, along with background knowledge about the sport, venue, and athletes.
+You will receive a batch of sessions grouped by sport, with background on the sport, venue, and athletes.
 
-For each session, produce:
-1. A "blurb" — two short paragraphs separated by a blank line. Use 2-4 total sentences across both paragraphs. The first paragraph should explain what this session covers, how the event works, and what's at stake. The second paragraph should describe the live experience or why the session could be compelling to watch. Focus on the nature of the competition itself: e.g. "The 100m dash is a marquee event to crown the fastest man alive." Vary the framing based on the round type:
-   - Finals/medal sessions: explain which medals are decided, why the event matters, and the competitive format
-   - Semifinals/QFs: note the elimination stakes, bracket/qualification pressure, and how the session narrows the field
-   - Prelims: describe the format, note that it's an opportunity to see the sport at an accessible price point, and highlight the breadth of competition
-   - Ceremonies: describe the event (opening/closing) and what attendees can expect
+Produce four fields per session:
 
-2. A "potentialContendersIntro" — 1-2 athlete/country-focused sentences to display above the contenders list. Discuss the projected athlete/team/country field, but be explicit that LA28 participation is not confirmed. If there are no useful contenders for this session, return an empty string.
+1. **blurb** — two short paragraphs (blank line between), 2-4 sentences total. A flavorful description of the session: what it contains, how the event works, what's at stake, and anything noteworthy about the venue or the sport's live character. You may mention athletes, teams, or countries when it makes the writing better — just qualify participation honestly (e.g. "Shohei Ohtani could headline the tournament if MLB releases its players"). Lean into concrete specifics: venue geography, sightlines, crowd atmosphere, sport-specific rituals, historical context, marquee storylines. Vary the opening and framing across sessions in a batch. Match the round type — finals carry medal stakes, prelims are an accessible entry point, ceremonies are their own thing.
 
-3. "potentialContenders" — an array of 2-5 athletes/teams projected to appear in THIS specific session, with a one-line factual note (e.g., their Paris result, world ranking, or key achievement). For prelim rounds, pick a mix of established names and emerging competitors. For finals, focus on likely medal contenders. If the session doesn't lend itself to specific potential contenders (e.g., ceremonies), return an empty array.
+2. **potentialContendersIntro** — 1-2 sentences introducing the projected field. Mix confirmed facts (who won Paris, who's the reigning world champion) with speculation about LA28 (clearly flagged). Empty string if the session has no meaningful contender context.
 
-CRITICAL RULES:
-- Never use generic phrases like "high significance rating" or "the AI score leans positive"
-- Never reference ratings, scores, or algorithmic analysis
-- Do not mention current or prospective athlete names or countries in the blurb. Keep athlete/country discussion in "potentialContendersIntro" and "potentialContenders".
-- Historical athlete references are allowed in the blurb only when they explain the event's history or nature, not future LA28 participation.
-- Every blurb must mention something SPECIFIC — event format, a venue fact, a round/stakes detail, or a competition detail
-- Avoid wall-of-text blurbs. Prefer two compact paragraphs over one dense paragraph, especially for sessions with many events.
-- Do not make the writing clinical or flat. Add personality through concrete sports language and live-experience details, while staying factual.
-- Vary your sentence structures across sessions — don't start every blurb the same way
-- For preliminary rounds, don't be dismissive — find a genuine angle (format, price, emerging athletes)
-- "potentialContendersIntro" must use projected/likely language and must not imply confirmed rosters
-- Potential contender "note" should be a single factual sentence — focus on their most relevant recent achievement, not hype
-- Do NOT overuse superlatives (e.g., "the greatest," "the most iconic," "pure drama"). State facts and let readers draw their own conclusions
-- Do NOT speculate about athletes competing if there's known doubt about their participation (injury, retirement, age)
+3. **potentialContenders** — 2-5 athletes or teams likely to appear in THIS session. The "note" for each can be factual (a Paris 2024 result, a world ranking, a career achievement) or speculative (a projection, a storyline worth watching) — make it obvious which it is.
+   - **Speculation is welcome — just label it.** If you don't know for certain who will be in a session, make informed guesses based on recent form, world rankings, or typical qualifying patterns, and phrase them with hedging words like "could appear," "projected to compete," "likely contender," "speculatively," "expected based on recent form." The goal is to be useful to the reader, not to refuse. What you must NOT do is state speculation as fact.
+   - Only return an empty array when there is genuinely no plausible field to name — e.g. ceremonies, or a session so generic (a mass prelim of 80+ unknown qualifiers) that listing names would be meaningless. For any session that includes a final, semifinal, or marquee event, list contenders even if participation is uncertain.
+   - For multi-event sessions, focus your contenders on the 1-2 highest-profile events (finals first, then semis, then notable prelims). Note in the intro which event the contenders are for.
+   - Don't mix teams and individual athletes within the same session's list — pick one granularity per session.
+   - For team sports: use teams for prelims/early rounds. For marquee sessions (finals, semis, rivalry matchups), use specific athletes (with country indicating their team) — qualify participation honestly (e.g. "Shohei Ohtani, if MLB releases its players").
+   - For individual sports: use specific athletes throughout.
 
-Return valid JSON matching the requested response shape with "id", "blurb", "potentialContendersIntro", and "potentialContenders" fields.`
+4. **relatedNews** — an array of 0 to ${MAX_NEWS_ITEMS} recent news items (prefer the last 18 months) that are directly relevant to THIS specific session. Pull only from your web search results — do not fabricate URLs, outlet names, dates, or titles. If the best items you can find aren't clearly relevant to the session's sport, event, gender division, or round, return an empty array rather than padding. For each item provide:
+   - **title** — the article headline as published.
+   - **summary** — one factual sentence explaining why it's relevant to this session.
+   - **sourceName** — the publication or outlet (e.g. "ESPN", "Reuters", "The Athletic").
+   - **sourceUrl** — the canonical URL from your search results.
+   - **publishedDate** — ISO date (YYYY-MM-DD). Use the article's published date.
+   - **tags** — 1-4 short kebab-case tags (e.g. "roster", "injury", "qualification", "venue", "schedule", plus an athlete or team slug when obvious).
+   Prioritize LA28-specific news (qualification, rosters, venues, schedule), then recent performance news about probable contenders. Skip generic sport news that doesn't tie to the session.
 
-function buildBatchPrompt(sessions: Session[], sport: string): string {
+Rules:
+- Don't reference ratings, scores, algorithmic analysis, or internal metadata.
+- Don't overuse superlatives ("the greatest," "pure drama") — let the facts carry it.
+- Avoid absolute bombast. Don't claim something IS "the single greatest," "the most iconic," "the best ever," etc. If you want to reach for that register, hedge: "could become one of the greatest games ever played," "among the most storied venues in the sport." Make room for the reader to agree or disagree.
+- Don't state LA28 participation as confirmed when it isn't. If an athlete has publicly cast doubt (injury, retirement, age), acknowledge it rather than ignoring it.
+- Same for relatedNews — empty is fine when nothing fits.
+- Don't refuse out of caution. Speculation is allowed everywhere in this output as long as it's clearly flagged as speculation. "Projected," "could appear," "likely contender," "speculatively," "if they qualify" are your friends. What's forbidden is stating uncertain things as fact — not making educated guesses.
+- Vary sentence structure and angles across the batch — don't start every blurb the same way.
+
+Return valid JSON with "id", "blurb", "potentialContendersIntro", "potentialContenders", and "relatedNews" fields.`
+
+function buildSessionPrompt(session: Session, sport: string): string {
   const knowledge = SPORT_KNOWLEDGE[sport]
 
   let prompt = `## Sport: ${sport}\n\n`
@@ -176,33 +192,20 @@ function buildBatchPrompt(sessions: Session[], sport: string): string {
     }
   }
 
-  prompt += `### Sessions to Write (${sessions.length} total)\n\n`
+  prompt += `### Session\n`
+  prompt += `- **ID**: ${session.id}\n`
+  prompt += `- **Name**: ${session.name}\n`
+  prompt += `- **Description**: ${session.desc}\n`
+  prompt += `- **Round**: ${session.rt}\n`
+  prompt += `- **Venue**: ${session.venue}\n`
+  prompt += `- **Date/Time**: ${session.date}, ${session.time}\n`
+  prompt += `- **Price Range**: $${session.pLo}–$${session.pHi}\n\n`
 
-  for (const s of sessions) {
-    prompt += `- **ID**: ${s.id}\n`
-    prompt += `  - **Name**: ${s.name}\n`
-    prompt += `  - **Description**: ${s.desc}\n`
-    prompt += `  - **Round**: ${s.rt}\n`
-    prompt += `  - **Venue**: ${s.venue}\n`
-    prompt += `  - **Date/Time**: ${s.date}, ${s.time}\n`
-    prompt += `  - **Price Range**: $${s.pLo}–$${s.pHi}\n\n`
-  }
+  prompt += `Use current web search results to verify facts that may have changed, especially LA28 venues, session schedules, qualification status, injuries, retirements, and current athlete form. Prefer official LA28, IOC/Olympics.com, international federation, team, and reputable sports-news sources. If current sources conflict with the background context above, prioritize the current cited source.\n\n`
 
-  prompt += `Return a JSON array of ${sessions.length} objects, one for each session ID above. Format:\n`
-  prompt +=
-    '```json\n[\n  {\n    "id": "...",\n    "blurb": "...",\n    "potentialContendersIntro": "...",\n    "potentialContenders": [{"name": "...", "country": "...", "note": "..."}]\n  }\n]\n```'
+  prompt += `Return a single JSON object matching the required schema. Do not include markdown fences.`
 
   return prompt
-}
-
-function buildPerplexityPrompt(session: Session, sport: string): string {
-  const basePrompt = buildBatchPrompt([session], sport)
-
-  return `${basePrompt}
-
-Use current web search results to verify facts that may have changed, especially LA28 venues, session schedules, qualification status, injuries, retirements, and current athlete form. Prefer official LA28, IOC/Olympics.com, international federation, team, and reputable sports-news sources. If current sources conflict with the background context above, prioritize the current cited source.
-
-Return a single JSON object, not an array. Do not include markdown fences.`
 }
 
 function getArgValue(name: string): string | undefined {
@@ -211,12 +214,7 @@ function getArgValue(name: string): string | undefined {
   return arg ? arg.slice(prefix.length) : undefined
 }
 
-function getCheckpointPath(
-  provider: Provider,
-  model: string,
-  sportFilter: string | undefined,
-  forceAll: boolean,
-) {
+function getCheckpointPath(model: string, sportFilter: string | undefined, forceAll: boolean) {
   const safeModel = model.replace(/[^a-zA-Z0-9._-]+/g, '-')
   const safeSport = sportFilter?.replace(/[^a-zA-Z0-9._-]+/g, '-') ?? 'all'
   const mode = forceAll ? 'force' : 'missing'
@@ -225,25 +223,18 @@ function getCheckpointPath(
     ROOT,
     '.cache',
     'generate-session-content',
-    `v${PROMPT_VERSION}-${provider}-${safeModel}-${safeSport}-${mode}.json`,
+    `v${PROMPT_VERSION}-perplexity-${safeModel}-${safeSport}-${mode}.json`,
   )
 }
 
 function createCheckpoint(
-  provider: Provider,
   model: string,
   sportFilter: string | undefined,
   forceAll: boolean,
 ): CheckpointFile {
   const now = new Date().toISOString()
   return {
-    meta: {
-      provider,
-      model,
-      promptVersion: PROMPT_VERSION,
-      sportFilter,
-      forceAll,
-    },
+    meta: { model, promptVersion: PROMPT_VERSION, sportFilter, forceAll },
     generatedAt: now,
     updatedAt: now,
     results: {},
@@ -252,23 +243,20 @@ function createCheckpoint(
 
 function loadCheckpoint(
   path: string,
-  provider: Provider,
   model: string,
   sportFilter: string | undefined,
   forceAll: boolean,
 ): CheckpointFile {
-  const expected = { provider, model, promptVersion: PROMPT_VERSION, sportFilter, forceAll }
   if (!existsSync(path)) {
-    return createCheckpoint(provider, model, sportFilter, forceAll)
+    return createCheckpoint(model, sportFilter, forceAll)
   }
 
   const checkpoint = JSON.parse(readFileSync(path, 'utf8')) as CheckpointFile
   const sameRun =
-    checkpoint.meta.provider === expected.provider &&
-    checkpoint.meta.model === expected.model &&
-    checkpoint.meta.promptVersion === expected.promptVersion &&
-    checkpoint.meta.sportFilter === expected.sportFilter &&
-    checkpoint.meta.forceAll === expected.forceAll
+    checkpoint.meta.model === model &&
+    checkpoint.meta.promptVersion === PROMPT_VERSION &&
+    checkpoint.meta.sportFilter === sportFilter &&
+    checkpoint.meta.forceAll === forceAll
 
   if (!sameRun) {
     throw new Error(
@@ -287,12 +275,6 @@ function writeCheckpoint(path: string, checkpoint: CheckpointFile) {
   renameSync(tempPath, path)
 }
 
-function parseProvider(value: string | undefined): Provider {
-  if (!value) return 'anthropic'
-  if (value === 'anthropic' || value === 'perplexity') return value
-  throw new Error(`Invalid --provider=${value}. Expected "anthropic" or "perplexity".`)
-}
-
 function validateGeneratedContent(item: GeneratedContent): GeneratedContent {
   if (!item.id || !item.blurb) {
     throw new Error(`Invalid item: missing id or blurb in ${JSON.stringify(item).slice(0, 100)}`)
@@ -303,7 +285,53 @@ function validateGeneratedContent(item: GeneratedContent): GeneratedContent {
   if (!Array.isArray(item.potentialContenders)) {
     throw new Error(`Invalid item: potentialContenders must be an array for ${item.id}`)
   }
+  if (!Array.isArray(item.relatedNews)) {
+    throw new Error(`Invalid item: relatedNews must be an array for ${item.id}`)
+  }
   return item
+}
+
+function normalizeRelatedNews(items: unknown, sessionId: string): RelatedNews[] {
+  if (!Array.isArray(items)) return []
+  const seen = new Set<string>()
+  const out: RelatedNews[] = []
+  let index = 0
+  for (const raw of items) {
+    if (!raw || typeof raw !== 'object') continue
+    const item = raw as Record<string, unknown>
+    const title = typeof item.title === 'string' ? item.title.trim() : ''
+    const summary = typeof item.summary === 'string' ? item.summary.trim() : ''
+    const sourceName = typeof item.sourceName === 'string' ? item.sourceName.trim() : ''
+    const sourceUrl = typeof item.sourceUrl === 'string' ? item.sourceUrl.trim() : ''
+    const publishedDate = typeof item.publishedDate === 'string' ? item.publishedDate.trim() : ''
+    const tags = Array.isArray(item.tags)
+      ? item.tags.filter((t): t is string => typeof t === 'string' && t.trim().length > 0)
+      : []
+
+    if (!title || !sourceUrl || !publishedDate) continue
+    try {
+      new URL(sourceUrl)
+    } catch {
+      continue
+    }
+
+    const key = sourceUrl.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+
+    out.push({
+      id: `${sessionId}-n${index}`,
+      title,
+      summary,
+      sourceName: sourceName || new URL(sourceUrl).hostname,
+      sourceUrl,
+      publishedDate,
+      tags,
+    })
+    index += 1
+    if (out.length >= MAX_NEWS_ITEMS) break
+  }
+  return out
 }
 
 function normalizePerplexitySources(
@@ -330,57 +358,13 @@ function normalizePerplexitySources(
   return sources
 }
 
-async function generateAnthropicBatch(
-  client: Anthropic,
-  sessions: Session[],
-  sport: string,
-  model: string,
-): Promise<GeneratedContent[]> {
-  const prompt = buildBatchPrompt(sessions, sport)
-
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      const response = await client.messages.create({
-        model,
-        max_tokens: 8192,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: prompt }],
-      })
-
-      const text = response.content[0].type === 'text' ? response.content[0].text : ''
-
-      const jsonMatch = text.match(/\[[\s\S]*\]/)
-      if (!jsonMatch) {
-        throw new Error('No JSON array found in response')
-      }
-
-      const parsed = JSON.parse(jsonMatch[0]) as GeneratedContent[]
-
-      for (const item of parsed) {
-        validateGeneratedContent(item)
-      }
-
-      return parsed
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err)
-      console.error(`  Attempt ${attempt}/${MAX_RETRIES} failed: ${msg}`)
-      if (attempt < MAX_RETRIES) {
-        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS * attempt))
-      }
-    }
-  }
-
-  console.error(`  FAILED after ${MAX_RETRIES} attempts for ${sport} batch. Skipping.`)
-  return []
-}
-
 async function generatePerplexitySession(
   apiKey: string,
   session: Session,
   sport: string,
   model: string,
-): Promise<GeneratedContent[]> {
-  const prompt = buildPerplexityPrompt(session, sport)
+): Promise<GeneratedContent | null> {
+  const prompt = buildSessionPrompt(session, sport)
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -396,7 +380,7 @@ async function generatePerplexitySession(
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: prompt },
           ],
-          max_tokens: 2048,
+          max_tokens: 4096,
           temperature: 0.2,
           response_format: {
             type: 'json_schema',
@@ -421,7 +405,9 @@ async function generatePerplexitySession(
         throw new Error('No Perplexity message content returned')
       }
 
-      const item = validateGeneratedContent(JSON.parse(text) as GeneratedContent)
+      const parsed = JSON.parse(text) as GeneratedContent
+      const item = validateGeneratedContent(parsed)
+      item.relatedNews = normalizeRelatedNews(item.relatedNews, session.id)
       const sources = normalizePerplexitySources(body.search_results)
 
       item.contentMeta = {
@@ -431,7 +417,7 @@ async function generatePerplexitySession(
         ...(sources.length > 0 ? { sources } : {}),
       }
 
-      return [item]
+      return item
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       console.error(`  Attempt ${attempt}/${MAX_RETRIES} failed for ${session.id}: ${msg}`)
@@ -442,7 +428,7 @@ async function generatePerplexitySession(
   }
 
   console.error(`  FAILED after ${MAX_RETRIES} attempts for ${session.id}. Skipping.`)
-  return []
+  return null
 }
 
 function groupBySport(sessions: Session[]): Map<string, Session[]> {
@@ -455,38 +441,23 @@ function groupBySport(sessions: Session[]): Map<string, Session[]> {
   return groups
 }
 
-function chunk<T>(arr: T[], size: number): T[][] {
-  const chunks: T[][] = []
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size))
-  }
-  return chunks
-}
-
 async function main() {
-  const provider = parseProvider(getArgValue('--provider'))
-  const model =
-    getArgValue('--model') ??
-    (provider === 'anthropic' ? ANTHROPIC_DEFAULT_MODEL : PERPLEXITY_DEFAULT_MODEL)
+  const model = getArgValue('--model') ?? PERPLEXITY_DEFAULT_MODEL
   const forceAll = process.argv.includes('--force')
   const dryRun = process.argv.includes('--dry-run')
   const sportFilter = getArgValue('--sport')
   const checkpointPath =
-    getArgValue('--checkpoint') ?? getCheckpointPath(provider, model, sportFilter, forceAll)
-  const apiKey =
-    provider === 'anthropic' ? process.env.ANTHROPIC_API_KEY : process.env.PERPLEXITY_API_KEY
+    getArgValue('--checkpoint') ?? getCheckpointPath(model, sportFilter, forceAll)
+  const apiKey = process.env.PERPLEXITY_API_KEY
 
   if (!apiKey && !dryRun) {
-    const envName = provider === 'anthropic' ? 'ANTHROPIC_API_KEY' : 'PERPLEXITY_API_KEY'
-    console.error(`Error: ${envName} environment variable is required for provider "${provider}"`)
+    console.error('Error: PERPLEXITY_API_KEY environment variable is required')
     process.exit(1)
   }
 
-  const anthropicClient = provider === 'anthropic' && apiKey ? new Anthropic({ apiKey }) : null
-
   console.log(`Reading ${SESSIONS_PATH}`)
   console.log(`Reading ${CONTENT_PATH}`)
-  console.log(`Provider: ${provider} (${model})`)
+  console.log(`Provider: perplexity (${model})`)
   if (!dryRun) console.log(`Checkpoint: ${checkpointPath}`)
   const rawSessions = JSON.parse(readFileSync(SESSIONS_PATH, 'utf8')) as Session[]
   const sessionContent = JSON.parse(readFileSync(CONTENT_PATH, 'utf8')) as Record<
@@ -498,7 +469,7 @@ async function main() {
     ...sessionContent[session.id],
   }))
   console.log(`Loaded ${sessions.length} sessions`)
-  const checkpoint = loadCheckpoint(checkpointPath, provider, model, sportFilter, forceAll)
+  const checkpoint = loadCheckpoint(checkpointPath, model, sportFilter, forceAll)
   const totalCheckpointedCount = Object.keys(checkpoint.results).length
   if (totalCheckpointedCount > 0) {
     console.log(`Loaded ${totalCheckpointedCount} checkpointed result(s)`)
@@ -530,47 +501,34 @@ async function main() {
   if (pendingContent.length > 0) {
     for (const sport of sports) {
       const sportSessions = sportGroups.get(sport)!
-      const batches =
-        provider === 'anthropic' ? chunk(sportSessions, BATCH_SIZE) : sportSessions.map((s) => [s])
-      console.log(`\n${sport}: ${sportSessions.length} sessions in ${batches.length} batch(es)`)
+      console.log(`\n${sport}: ${sportSessions.length} session(s)`)
 
-      for (let i = 0; i < batches.length; i++) {
-        const batch = batches[i]
-        console.log(`  Batch ${i + 1}/${batches.length} (${batch.length} sessions)...`)
+      for (let i = 0; i < sportSessions.length; i++) {
+        const session = sportSessions[i]
+        console.log(`  [${i + 1}/${sportSessions.length}] ${session.id} ${session.name}`)
 
         if (dryRun) {
-          console.log(
-            `  [dry-run] Would generate content for: ${batch.map((s) => s.id).join(', ')}`,
-          )
+          console.log(`  [dry-run] Would generate content for ${session.id}`)
           continue
         }
 
-        const results =
-          provider === 'anthropic'
-            ? await generateAnthropicBatch(anthropicClient!, batch, sport, model)
-            : await generatePerplexitySession(apiKey!, batch[0]!, sport, model)
-
-        for (const result of results) {
+        const result = await generatePerplexitySession(apiKey!, session, sport, model)
+        if (result) {
           if (sessionMap.has(result.id)) {
             checkpoint.results[result.id] = result
             totalGenerated++
+            writeCheckpoint(checkpointPath, checkpoint)
+            console.log(
+              `  Checkpointed ${Object.keys(checkpoint.results).length} result(s); news: ${result.relatedNews.length}`,
+            )
           } else {
             console.warn(`  Warning: generated content for unknown session ${result.id}`)
           }
+        } else {
+          totalFailed += 1
         }
 
-        if (results.length > 0) {
-          writeCheckpoint(checkpointPath, checkpoint)
-          console.log(`  Checkpointed ${Object.keys(checkpoint.results).length} result(s)`)
-        }
-
-        const missing = batch.filter((s) => !results.find((r) => r.id === s.id))
-        if (missing.length > 0) {
-          console.warn(`  Warning: missing results for ${missing.map((s) => s.id).join(', ')}`)
-          totalFailed += missing.length
-        }
-
-        if (i < batches.length - 1) {
+        if (i < sportSessions.length - 1) {
           await new Promise((r) => setTimeout(r, 1000))
         }
       }
@@ -589,8 +547,9 @@ async function main() {
         blurb: result.blurb,
         potentialContendersIntro: result.potentialContendersIntro,
         potentialContenders: result.potentialContenders,
+        relatedNews: result.relatedNews,
         contentMeta: result.contentMeta ?? {
-          provider,
+          provider: 'perplexity',
           model,
           generatedAt: new Date().toISOString(),
         },

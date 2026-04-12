@@ -18,7 +18,7 @@ import type { Contender, RelatedNews, Session } from '@/types/session'
 
 import { SideDrawer } from './SideDrawer'
 
-const DEFAULT_WIDTH = 480
+const DEFAULT_WIDTH = 520
 
 type ScoreKey = 'rSig' | 'rExp' | 'rStar' | 'rUniq' | 'rDem'
 
@@ -328,6 +328,16 @@ export function SessionDetail({
         <div className="text-ink mt-2 text-[0.9rem] font-semibold tabular-nums">
           {fmtPrice(session.pLo, session.pHi)}
         </div>
+      </div>
+
+      <div className="px-5 pt-2 pb-5 max-md:px-4">
+        <h3 className="text-ink3 text-[0.68rem] font-semibold tracking-[0.08em] uppercase">
+          Disclaimer
+        </h3>
+        <p className="text-ink3 mt-2 text-[0.82rem] leading-snug italic">
+          The content below is AI-generated and may contain inaccuracies — double-check relevant
+          information with official sources.
+        </p>
       </div>
 
       <div className="px-5 pt-2 pb-5 max-md:px-4">

@@ -1,7 +1,7 @@
 import { SPORT_KNOWLEDGE } from '@/data/sport-knowledge'
-import type { RelatedNews, Session } from '@/types/session'
+import type { RelatedNews, Session, SessionWithContent } from '@/types/session'
 
-export const RELATED_NEWS_LIMIT = 4
+export const RELATED_NEWS_LIMIT = 10
 
 const REGEX_SPECIAL_CHARS = /[.*+?^${}()|[\]\\]/g
 
@@ -39,6 +39,27 @@ export function resolveRelatedNewsForSession(
     .slice(0, limit)
 }
 
-export function getRelatedNewsForSession(session: Session): RelatedNews[] {
-  return resolveRelatedNewsForSession(session, SPORT_KNOWLEDGE[session.sport]?.relatedNews ?? [])
+function dedupeByUrl(items: RelatedNews[]): RelatedNews[] {
+  const seen = new Set<string>()
+  const result: RelatedNews[] = []
+  for (const item of items) {
+    const key = item.sourceUrl.trim().toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    result.push(item)
+  }
+  return result
+}
+
+export function getRelatedNewsForSession(session: SessionWithContent): RelatedNews[] {
+  const curated = resolveRelatedNewsForSession(
+    session,
+    SPORT_KNOWLEDGE[session.sport]?.relatedNews ?? [],
+    RELATED_NEWS_LIMIT,
+  )
+  const generated = session.relatedNews ?? []
+
+  return dedupeByUrl([...curated, ...generated])
+    .sort((a, b) => Date.parse(b.publishedDate) - Date.parse(a.publishedDate))
+    .slice(0, RELATED_NEWS_LIMIT)
 }

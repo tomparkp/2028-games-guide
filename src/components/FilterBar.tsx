@@ -101,15 +101,15 @@ function FilterCombobox({
       items={options}
       modal={false}
       itemToStringLabel={(item: FilterOption) => item.label}
-      value={options.find((o) => o.value === value) ?? null}
-      onValueChange={(nextValue) => onChange(nextValue?.value ?? '')}
+      value={(value || null) as unknown as FilterOption | null}
+      onValueChange={(nextValue) => onChange(typeof nextValue === 'string' ? nextValue : '')}
     >
       <Combobox.Trigger className={cn(selectCls, active && activeCls, selectTriggerCls)}>
         <span className={selectValueCls}>
           <Combobox.Value>
-            {(selectedValue: FilterOption | null) => {
+            {(selectedValue: string | null) => {
               if (!selectedValue) return <span className="text-ink3">{placeholder}</span>
-              return selectedValue.label
+              return options.find((o) => o.value === selectedValue)?.label ?? selectedValue
             }}
           </Combobox.Value>
         </span>

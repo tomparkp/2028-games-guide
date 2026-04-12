@@ -37,6 +37,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
     "@cloudflare/vite-plugin": "^1.31.1",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "0.6.0",
@@ -52,6 +53,7 @@
     "jsdom": "^28.1.0",
     "oxfmt": "^0.44.0",
     "oxlint": "^1.59.0",
+    "p-limit": "^7.3.0",
     "sharp": "^0.34.5",
     "to-ico": "^1.1.5",
     "tsx": "^4.21.0",

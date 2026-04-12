@@ -10,6 +10,7 @@
     "build": "WRANGLER_LOG_PATH=.wrangler/logs vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "rate-sessions": "tsx scripts/rate-sessions.ts",
     "generate-content": "tsx scripts/generate-session-content.ts",
     "lint": "oxlint",

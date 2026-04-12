@@ -14,31 +14,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4
-        id: release
         with:
           release-type: node
-
-      - if: ${{ steps.release.outputs.pr }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
-      - if: ${{ steps.release.outputs.pr }}
-        uses: pnpm/action-setup@v4
-      - if: ${{ steps.release.outputs.pr }}
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: pnpm
-      - if: ${{ steps.release.outputs.pr }}
-        run: pnpm install --frozen-lockfile
-      - if: ${{ steps.release.outputs.pr }}
-        run: pnpm format
-      - if: ${{ steps.release.outputs.pr }}
-        name: Commit formatted release files
-        run: |
-          if ! git diff --quiet; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -am "chore: format release files"
-            git push
-          fi

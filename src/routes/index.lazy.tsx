@@ -11,6 +11,7 @@ import { SessionTable } from '@/components/SessionTable'
 import { useBookmarks } from '@/hooks/useBookmarks'
 import { sessionDetailQueryOptions, sessionsInfiniteQueryOptions } from '@/lib/session-query'
 import {
+  DEFAULT_FILTERS,
   routeSearchToFilters,
   routeSearchToSort,
   type SessionRouteSearch,
@@ -112,6 +113,13 @@ function SessionPicker() {
     })
   }
 
+  function handleClearFilters() {
+    updateSearch({
+      ...search,
+      ...DEFAULT_FILTERS,
+    })
+  }
+
   function handleSort(col: SortColumn) {
     updateSearch({
       ...search,
@@ -150,6 +158,7 @@ function SessionPicker() {
       <FilterBar
         filters={filters}
         onChange={handleFilterChange}
+        onClear={handleClearFilters}
         sports={firstPage.sports}
         zones={firstPage.zones}
         bookmarkCount={bookmarks.size}
@@ -157,17 +166,14 @@ function SessionPicker() {
       />
 
       <div className="mx-auto max-w-[1400px] px-4 pt-2 pb-15">
-        <div className="text-ink3 mb-3 flex items-center justify-between gap-3 text-[0.72rem]">
-          <span>
-            Showing {sessions.length} of {firstPage.total} sessions
-          </span>
-          {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
+        {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
+          <div className="text-ink3 mb-3 flex items-center justify-end gap-3 text-[0.72rem]">
             <span className="inline-flex items-center gap-1.5">
               <LoaderCircle size={12} className="animate-spin" />
               Updating results...
             </span>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
         <SessionTable
           sessions={sessions}

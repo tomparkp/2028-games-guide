@@ -16,7 +16,7 @@ import {
   routeSearchToSort,
   type SessionRouteSearch,
 } from '@/lib/session-search'
-import type { Filters, SortColumn } from '@/types/session'
+import type { Filters, SortColumn, SortDirection } from '@/types/session'
 
 export const Route = createLazyFileRoute('/')({ component: SessionPicker })
 
@@ -128,6 +128,14 @@ function SessionPicker() {
     })
   }
 
+  function handleSortChange(col: SortColumn, dir: SortDirection) {
+    updateSearch({
+      ...search,
+      sortCol: col,
+      sortDir: dir,
+    })
+  }
+
   function handleSelectSessionId(sessionId: string) {
     setBookmarkPanelOpen(false)
     updateSearch({
@@ -163,6 +171,8 @@ function SessionPicker() {
         zones={firstPage.zones}
         bookmarkCount={bookmarks.size}
         onOpenBookmarks={handleOpenBookmarks}
+        sort={sort}
+        onSortChange={handleSortChange}
       />
 
       <div className="mx-auto max-w-[1400px] px-4 pt-2 pb-15">

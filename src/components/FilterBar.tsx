@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { roundTypes } from '@/data/sessions'
 import { useStickyFilterBorder } from '@/hooks/useStickyFilterBorder'
 import { cn } from '@/lib/cn'
-import type { Filters } from '@/types/session'
+import type { Filters, SortColumn, SortDirection, SortState } from '@/types/session'
 
 interface FilterBarProps {
   filters: Filters
@@ -17,7 +17,20 @@ interface FilterBarProps {
   zones: string[]
   bookmarkCount: number
   onOpenBookmarks: () => void
+  sort: SortState
+  onSortChange: (col: SortColumn, dir: SortDirection) => void
 }
+
+const sortOptions: { value: string; label: string; col: SortColumn; dir: SortDirection }[] = [
+  { value: 'agg:desc', label: 'Rating (High → Low)', col: 'agg', dir: 'desc' },
+  { value: 'agg:asc', label: 'Rating (Low → High)', col: 'agg', dir: 'asc' },
+  { value: 'date:asc', label: 'Date (Earliest)', col: 'date', dir: 'asc' },
+  { value: 'date:desc', label: 'Date (Latest)', col: 'date', dir: 'desc' },
+  { value: 'name:asc', label: 'Event (A → Z)', col: 'name', dir: 'asc' },
+  { value: 'name:desc', label: 'Event (Z → A)', col: 'name', dir: 'desc' },
+  { value: 'venue:asc', label: 'Venue (A → Z)', col: 'venue', dir: 'asc' },
+  { value: 'venue:desc', label: 'Venue (Z → A)', col: 'venue', dir: 'desc' },
+]
 
 const inputBase =
   'bg-surface2 border border-border rounded-md text-ink text-[0.74rem] font-[system-ui] outline-none transition-[border-color] duration-150 px-2 py-1.5 focus:border-gold'
@@ -202,6 +215,56 @@ function FilterSelect({ value, label, placeholder, options, active, onChange }: 
   )
 }
 
+interface SortSelectProps {
+  sort: SortState
+  onSortChange: (col: SortColumn, dir: SortDirection) => void
+}
+
+function SortSelect({ sort, onSortChange }: SortSelectProps) {
+  const value = `${sort.col}:${sort.dir}`
+  return (
+    <Select.Root
+      items={sortOptions}
+      modal={false}
+      value={value}
+      onValueChange={(nextValue) => {
+        const match = sortOptions.find((o) => o.value === nextValue)
+        if (match) onSortChange(match.col, match.dir)
+      }}
+    >
+      <Select.Trigger className={cn(selectCls, selectTriggerCls, 'min-w-0')}>
+        <span className="text-ink3 shrink-0">Sort:</span>
+        <Select.Value className={selectValueCls}>
+          {(val: string | null) =>
+            sortOptions.find((o) => o.value === val)?.label ?? sortOptions[0].label
+          }
+        </Select.Value>
+        <Select.Icon className="text-ink3">
+          <ChevronDown size={14} />
+        </Select.Icon>
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner
+          alignItemWithTrigger={false}
+          sideOffset={4}
+          className={selectPositionerCls}
+        >
+          <Select.Popup className={selectPopupCls}>
+            <Select.List className={selectListCls}>
+              {sortOptions.map((item) => (
+                <Select.Item key={item.value} value={item.value} className={selectItemCls}>
+                  <Select.ItemIndicator className="text-gold col-start-1">✓</Select.ItemIndicator>
+                  <Select.ItemText className="col-start-2">{item.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  )
+}
+
 export function FilterBar({
   filters,
   onChange,
@@ -210,6 +273,8 @@ export function FilterBar({
   zones,
   bookmarkCount,
   onOpenBookmarks,
+  sort,
+  onSortChange,
 }: FilterBarProps) {
   const { sentinelRef, stuck } = useStickyFilterBorder()
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -321,6 +386,7 @@ export function FilterBar({
         >
           <div className="flex items-center gap-1.5">
             {savedButton}
+            <SortSelect sort={sort} onSortChange={onSortChange} />
             <Collapsible.Trigger
               className={cn(actionBtnCls, (filtersOpen || activeCount > 0) && actionActiveCls)}
             >

@@ -31,9 +31,12 @@ function TermsPage() {
           <p>
             Session information displayed on this site is scraped from public materials and may be
             inaccurate, incomplete, or out of date. AI-generated ratings and summaries are
-            subjective. <strong>Always verify schedules, venues, and ticketing against official
-            sources before making plans or purchases.</strong> The site is provided &ldquo;as
-            is,&rdquo; without warranty of any kind.
+            subjective.{' '}
+            <strong>
+              Always verify schedules, venues, and ticketing against official sources before making
+              plans or purchases.
+            </strong>{' '}
+            The site is provided &ldquo;as is,&rdquo; without warranty of any kind.
           </p>
         </section>
 

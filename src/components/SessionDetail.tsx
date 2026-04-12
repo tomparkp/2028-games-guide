@@ -8,7 +8,7 @@ import {
   UserRound,
   X,
 } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import type { SessionInsights } from '@/lib/ai-scorecard'
 import { cn } from '@/lib/cn'
@@ -16,6 +16,7 @@ import { fmtPrice, fmtTime } from '@/lib/format'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
 import type { Contender, RelatedNews, Session } from '@/types/session'
 
+import { ReportIssueDialog } from './ReportIssueDialog'
 import { SideDrawer } from './SideDrawer'
 
 const DEFAULT_WIDTH = 520
@@ -72,7 +73,7 @@ function PotentialContendersSection({
   potentialContendersIntro?: string
 }) {
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-3">
       {potentialContendersIntro && (
         <p className="text-ink2 text-[0.8rem] leading-relaxed font-medium">
           {potentialContendersIntro}
@@ -245,6 +246,8 @@ export function SessionDetail({
   isBookmarked?: (id: string) => boolean
   onToggleBookmark?: (id: string) => void
 }) {
+  const [reportSubject, setReportSubject] = useState<{ id: string; name: string } | null>(null)
+
   const summaryParagraphs = useMemo(
     () => (insights ? insights.summary.split('\n\n') : []),
     [insights],
@@ -338,6 +341,19 @@ export function SessionDetail({
           The content below is AI-generated and may contain inaccuracies — double-check relevant
           information with official sources.
         </p>
+        <div className="mt-2 text-[0.78rem]">
+          <button
+            type="button"
+            onClick={() => {
+              const subject = { id: session.id, name: session.name }
+              onClose()
+              setTimeout(() => setReportSubject(subject), 200)
+            }}
+            className="text-ink3 hover:text-ink underline decoration-dotted underline-offset-2 transition-colors"
+          >
+            Report an issue
+          </button>
+        </div>
       </div>
 
       <div className="px-5 pt-2 pb-5 max-md:px-4">
@@ -414,13 +430,23 @@ export function SessionDetail({
   )
 
   return (
-    <SideDrawer
-      open={open}
-      onClose={onClose}
-      aria-label={session?.name ?? 'Session details'}
-      defaultWidth={DEFAULT_WIDTH}
-    >
-      {panelContent}
-    </SideDrawer>
+    <>
+      <SideDrawer
+        open={open}
+        onClose={onClose}
+        aria-label={session?.name ?? 'Session details'}
+        defaultWidth={DEFAULT_WIDTH}
+      >
+        {panelContent}
+      </SideDrawer>
+      <ReportIssueDialog
+        open={reportSubject !== null}
+        onOpenChange={(next) => {
+          if (!next) setReportSubject(null)
+        }}
+        sessionId={reportSubject?.id}
+        sessionName={reportSubject?.name}
+      />
+    </>
   )
 }

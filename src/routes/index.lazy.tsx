@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, X } from 'lucide-react'
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 
 import { BookmarkPanel } from '@/components/BookmarkPanel'
@@ -11,6 +11,7 @@ import { SessionTable } from '@/components/SessionTable'
 import { useBookmarks } from '@/hooks/useBookmarks'
 import { sessionDetailQueryOptions, sessionsInfiniteQueryOptions } from '@/lib/session-query'
 import {
+  DEFAULT_FILTERS,
   routeSearchToFilters,
   routeSearchToSort,
   type SessionRouteSearch,
@@ -31,6 +32,8 @@ function SessionPicker() {
   const firstPage = pages[0]
   const sessions = useMemo(() => pages.flatMap((page) => page.items), [pages])
   const filters = useMemo(() => routeSearchToFilters(search), [search])
+  const hasActiveFilters =
+    !!filters.sport || !!filters.round || !!filters.zone || !!filters.score || !!filters.price
   const sort = useMemo(() => routeSearchToSort(search), [search])
   const selectedSessionId = search.session ?? null
   const sessionById = useMemo(
@@ -112,6 +115,13 @@ function SessionPicker() {
     })
   }
 
+  function handleClearFilters() {
+    updateSearch({
+      ...search,
+      ...DEFAULT_FILTERS,
+    })
+  }
+
   function handleSort(col: SortColumn) {
     updateSearch({
       ...search,
@@ -157,17 +167,26 @@ function SessionPicker() {
       />
 
       <div className="mx-auto max-w-[1400px] px-4 pt-2 pb-15">
-        <div className="text-ink3 mb-3 flex items-center justify-between gap-3 text-[0.72rem]">
-          <span>
-            Showing {sessions.length} of {firstPage.total} sessions
-          </span>
-          {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
-            <span className="inline-flex items-center gap-1.5">
-              <LoaderCircle size={12} className="animate-spin" />
-              Updating results...
-            </span>
-          ) : null}
-        </div>
+        {hasActiveFilters || (sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage) ? (
+          <div className="text-ink3 mb-3 flex items-center justify-end gap-3 text-[0.72rem]">
+            {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
+              <span className="inline-flex items-center gap-1.5">
+                <LoaderCircle size={12} className="animate-spin" />
+                Updating results...
+              </span>
+            ) : null}
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={handleClearFilters}
+                className="text-ink2 hover:text-gold inline-flex cursor-pointer items-center gap-1 font-medium transition-colors"
+              >
+                <X size={12} />
+                Clear filters
+              </button>
+            ) : null}
+          </div>
+        ) : null}
 
         <SessionTable
           sessions={sessions}

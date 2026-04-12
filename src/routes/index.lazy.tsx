@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router'
-import { LoaderCircle, X } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 
 import { BookmarkPanel } from '@/components/BookmarkPanel'
@@ -32,8 +32,6 @@ function SessionPicker() {
   const firstPage = pages[0]
   const sessions = useMemo(() => pages.flatMap((page) => page.items), [pages])
   const filters = useMemo(() => routeSearchToFilters(search), [search])
-  const hasActiveFilters =
-    !!filters.sport || !!filters.round || !!filters.zone || !!filters.score || !!filters.price
   const sort = useMemo(() => routeSearchToSort(search), [search])
   const selectedSessionId = search.session ?? null
   const sessionById = useMemo(
@@ -160,6 +158,7 @@ function SessionPicker() {
       <FilterBar
         filters={filters}
         onChange={handleFilterChange}
+        onClear={handleClearFilters}
         sports={firstPage.sports}
         zones={firstPage.zones}
         bookmarkCount={bookmarks.size}
@@ -167,24 +166,12 @@ function SessionPicker() {
       />
 
       <div className="mx-auto max-w-[1400px] px-4 pt-2 pb-15">
-        {hasActiveFilters || (sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage) ? (
+        {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
           <div className="text-ink3 mb-3 flex items-center justify-end gap-3 text-[0.72rem]">
-            {sessionsQuery.isFetching && !sessionsQuery.isFetchingNextPage ? (
-              <span className="inline-flex items-center gap-1.5">
-                <LoaderCircle size={12} className="animate-spin" />
-                Updating results...
-              </span>
-            ) : null}
-            {hasActiveFilters ? (
-              <button
-                type="button"
-                onClick={handleClearFilters}
-                className="text-ink2 hover:text-gold inline-flex cursor-pointer items-center gap-1 font-medium transition-colors"
-              >
-                <X size={12} />
-                Clear filters
-              </button>
-            ) : null}
+            <span className="inline-flex items-center gap-1.5">
+              <LoaderCircle size={12} className="animate-spin" />
+              Updating results...
+            </span>
           </div>
         ) : null}
 

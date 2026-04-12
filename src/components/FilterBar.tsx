@@ -12,6 +12,7 @@ import type { Filters } from '@/types/session'
 interface FilterBarProps {
   filters: Filters
   onChange: (filters: Filters) => void
+  onClear: () => void
   sports: string[]
   zones: string[]
   bookmarkCount: number
@@ -204,6 +205,7 @@ function FilterSelect({ value, label, placeholder, options, active, onChange }: 
 export function FilterBar({
   filters,
   onChange,
+  onClear,
   sports,
   zones,
   bookmarkCount,
@@ -216,6 +218,17 @@ export function FilterBar({
   function update<K extends keyof Filters>(key: K, value: Filters[K]) {
     onChange({ ...filters, [key]: value })
   }
+
+  const clearButton = (
+    <button
+      type="button"
+      onClick={onClear}
+      className="text-ink2 hover:text-gold inline-flex shrink-0 cursor-pointer items-center gap-1 text-[0.74rem] font-medium transition-colors"
+    >
+      <X size={12} />
+      Clear
+    </button>
+  )
 
   const savedButton = (
     <button
@@ -294,9 +307,9 @@ export function FilterBar({
       <div className={cn('sticky top-0 z-10 bg-bg', stuck && 'border-b border-border')}>
         {/* ─── Desktop: single row ─── */}
         <div className="mx-auto hidden max-w-[1400px] items-center gap-1.5 px-4 py-2.5 min-[880px]:flex">
-          {savedButton}
-          <span className="flex-1" />
+          <span className="flex flex-1 justify-start">{savedButton}</span>
           {filterSelects}
+          <span className="flex flex-1 justify-end">{activeCount > 0 ? clearButton : null}</span>
         </div>
 
         {/* ─── Mobile: collapsible ─── */}
@@ -305,7 +318,7 @@ export function FilterBar({
           onOpenChange={setFiltersOpen}
           className="mx-auto max-w-[1400px] space-y-1.5 px-3 py-2 min-[880px]:hidden"
         >
-          <div className="flex gap-1.5">
+          <div className="flex items-center gap-1.5">
             {savedButton}
             <Collapsible.Trigger
               className={cn(actionBtnCls, (filtersOpen || activeCount > 0) && actionActiveCls)}
@@ -318,6 +331,7 @@ export function FilterBar({
                 className={cn('transition-transform duration-150', filtersOpen && 'rotate-180')}
               />
             </Collapsible.Trigger>
+            {activeCount > 0 && <span className="ml-auto">{clearButton}</span>}
           </div>
 
           <Collapsible.Panel

@@ -13,7 +13,7 @@ export interface ContentSource {
   source?: string
 }
 
-export type ContentProvider = 'anthropic' | 'perplexity'
+export type ContentProvider = 'perplexity'
 
 export interface ContentMeta {
   provider: ContentProvider
@@ -26,6 +26,7 @@ export interface SessionContent {
   blurb?: string
   potentialContendersIntro?: string
   potentialContenders?: Contender[]
+  relatedNews?: RelatedNews[]
   contentMeta?: ContentMeta
 }
 

@@ -40,7 +40,7 @@ A fresh worktree has no local data. Options:
   pnpm db:pull          # exports remote D1 and upserts into local
   ```
 
-- **If you have Anthropic/Perplexity API keys**: `pnpm generate-content` will build content from scratch against the LA28 schedule, no remote access required.
+- **If you have Anthropic/Perplexity API keys**: `pnpm generate-content` will build content from scratch against the LA28 schedule, no remote access required. Note this makes paid API calls (Perplexity grounding + Claude writing + Claude scoring for each of ~850 sessions) and costs real money — scope with `--sport="Athletics (Track & Field)"` or similar to limit spend while developing.
 
 ### Remote (production)
 

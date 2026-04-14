@@ -1,18 +1,35 @@
-name: Deploy
-
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-concurrency:
-  group: deploy-production
-  cancel-in-progress: true
+permissions:
+  contents: write
+  pull-requests: write
+
+name: Release
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  deploy:
+  release-please:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4
+        with:
+          release-type: node
+
+  deploy:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: true
     permissions:
       contents: read
       deployments: write

@@ -18,6 +18,14 @@ This file provides guidance to AI coding agents working with code in this reposi
 
 Before opening a pull request, run the CI-equivalent checks locally and fix any failures first: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, and `pnpm test`. Run them in parallel when possible. This avoids pushing commits that fail CI.
 
+### Deploying
+
+Production deploys happen automatically when Release Please cuts a release. `.github/workflows/release.yml` runs on every push to `main`; when it creates a release (release PR merged), a follow-up `deploy` job in the same workflow ships to Cloudflare. **Manual deploys are forbidden.** Do not run `wrangler deploy`, do not re-add a `deploy` script to `package.json`, and do not add a manual-trigger workflow. Shipping code means: merge feature PRs to `main` → let Release Please open its release PR → user merges that → CI deploys.
+
+### Cloudflare operations
+
+Always ask the user before using any Cloudflare MCP tools or running `wrangler` commands that touch remote resources (D1 writes against `--remote`, DB create/delete, secret changes, etc.). Local-only commands (`--local` D1, `wrangler types`, `wrangler dev`) are fine without asking.
+
 ## Architecture
 
 This is a **TanStack Start** (React 19) full-stack app with SSR, file-based routing, and Tailwind CSS v4.

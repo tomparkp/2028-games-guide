@@ -15,17 +15,58 @@ The dev server runs on port 3000.
 - `pnpm build` — Production build
 - `pnpm preview` — Preview production build
 - `pnpm test` — Run tests with Vitest
-- `pnpm rate-sessions` — Recompute rating fields in `src/data/sessions.json` (see below)
+- `pnpm rate-sessions` — Recompute rating fields in D1 (see [Database](#database))
 
-## Regenerating session ratings
+## Database
 
-After changing rating logic in `src/lib/ratings.ts` or session data in `src/data/sessions.json`, recompute stored ratings with:
+Session data lives in a Cloudflare D1 database (binding `DB`, defined in `wrangler.jsonc`). The schema is managed by Drizzle — source of truth is `src/db/schema.ts`.
+
+### Local development
+
+Dev uses Wrangler's local SQLite emulation under `.wrangler/state/`. Each worktree has its own local DB.
 
 ```bash
-pnpm rate-sessions
+pnpm db:migrate:local   # apply migrations to local D1
+pnpm db:studio          # browse/edit local DB at https://local.drizzle.studio
 ```
 
-That script runs `rateEvent()` over `src/data/sessions.json` and writes the dimension fields and aggregate back into the same file.
+A fresh worktree has no local data. Options:
+
+- **External contributors**: ask the maintainer for a seed SQL dump, then `pnpm wrangler d1 execute la28 --local --file=<dump>`. `pnpm db:pull` won't work without maintainer credentials since Cloudflare doesn't support per-database scoped access.
+- **Maintainer** (or anyone authed to the Cloudflare account owning this D1):
+
+  ```bash
+  pnpm wrangler login   # one-time per machine
+  pnpm db:pull          # exports remote D1 and upserts into local
+  ```
+
+- **If you have Anthropic/Perplexity API keys**: `pnpm generate-content` will build content from scratch against the LA28 schedule, no remote access required. Note this makes paid API calls (Perplexity grounding + Claude writing + Claude scoring for each of ~850 sessions) and costs real money — scope with `--sport="Athletics (Track & Field)"` or similar to limit spend while developing.
+
+### Remote (production)
+
+```bash
+pnpm db:migrate:remote  # apply migrations to prod D1
+```
+
+To browse/edit prod data, use the official [Cloudflare Dashboard D1 console](https://dash.cloudflare.com) (Workers & Pages → D1 → `la28` → Console). Drizzle Studio is local-only in this repo — Cloudflare doesn't support scoping API tokens to a single D1 database, so we avoid creating tokens with account-wide D1 access.
+
+### Schema changes
+
+1. Edit `src/db/schema.ts`
+2. `pnpm db:generate --name <short-description>` — generates `drizzle/<timestamp>_<name>.sql` (drop `--name` and Drizzle appends a random suffix)
+3. Review the SQL, then `pnpm db:migrate:local` to apply
+4. After merge, `pnpm db:migrate:remote` to apply to prod
+
+### Regenerating session ratings
+
+After changing rating logic in `src/lib/ratings.ts` or session content, recompute stored ratings:
+
+```bash
+pnpm rate-sessions           # writes to local D1
+pnpm rate-sessions --remote  # writes to prod D1
+```
+
+`pnpm generate-content` and `pnpm refresh <sessionId>` follow the same local-by-default, `--remote` opt-in pattern.
 
 ## Routing
 

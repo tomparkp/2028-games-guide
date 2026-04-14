@@ -20,7 +20,7 @@ Before opening a pull request, run the CI-equivalent checks locally and fix any 
 
 ### Deploying
 
-Production deploys happen automatically when Release Please cuts a release. `.github/workflows/release-please.yml` runs on every push to `main`; when it creates a release (release PR merged), a follow-up `deploy` job in the same workflow ships to Cloudflare. The separate `deploy.yml` workflow is a manual `workflow_dispatch` escape hatch. **Manual deploys are forbidden.** Do not run `wrangler deploy`, do not re-add a `deploy` script to `package.json`, and do not trigger the Deploy workflow unless the user explicitly asks. Shipping code means: merge feature PRs to `main` → let Release Please open its release PR → user merges that → CI deploys.
+Production deploys happen automatically when Release Please cuts a release. `.github/workflows/release.yml` runs on every push to `main`; when it creates a release (release PR merged), a follow-up `deploy` job in the same workflow ships to Cloudflare. The separate `deploy.yml` workflow is a manual `workflow_dispatch` escape hatch. **Manual deploys are forbidden.** Do not run `wrangler deploy`, do not re-add a `deploy` script to `package.json`, and do not trigger the Deploy workflow unless the user explicitly asks. Shipping code means: merge feature PRs to `main` → let Release Please open its release PR → user merges that → CI deploys.
 
 ### Cloudflare operations
 

@@ -18,9 +18,13 @@ This file provides guidance to AI coding agents working with code in this reposi
 
 Before opening a pull request, run the CI-equivalent checks locally and fix any failures first: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, and `pnpm test`. Run them in parallel when possible. This avoids pushing commits that fail CI.
 
+### Deploying
+
+Production deploys happen automatically when Release Please publishes a GitHub Release — the `.github/workflows/deploy.yml` workflow fires on `release: published` and ships to Cloudflare. **Manual deploys are forbidden.** Do not run `wrangler deploy`, do not re-add a `deploy` script to `package.json`, and do not trigger the Deploy workflow via `workflow_dispatch` unless the user explicitly asks. Shipping code means: merge feature PRs to `main` → let Release Please open its release PR → user merges that → CI deploys.
+
 ### Cloudflare operations
 
-Always ask the user before using any Cloudflare MCP tools or running `wrangler` commands that touch remote resources (deploys, D1 writes against `--remote`, DB create/delete, secret changes, etc.). Local-only commands (`--local` D1, `wrangler types`, `wrangler dev`) are fine without asking.
+Always ask the user before using any Cloudflare MCP tools or running `wrangler` commands that touch remote resources (D1 writes against `--remote`, DB create/delete, secret changes, etc.). Local-only commands (`--local` D1, `wrangler types`, `wrangler dev`) are fine without asking.
 
 ## Architecture
 

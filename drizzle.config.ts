@@ -5,18 +5,15 @@ import { defineConfig } from 'drizzle-kit'
 
 const D1_DIR = '.wrangler/state/v3/d1/miniflare-D1DatabaseObject'
 
+// Locate the local D1 sqlite file for Drizzle Studio. `drizzle-kit generate`
+// doesn't actually open the DB so we return a placeholder when it's missing
+// rather than blowing up.
 function findLocalD1File(): string {
-  if (!existsSync(D1_DIR)) {
-    throw new Error(
-      `${D1_DIR} not found — run \`pnpm db:migrate:local\` first to create the local D1.`,
-    )
-  }
+  if (!existsSync(D1_DIR)) return resolve(D1_DIR, 'missing.sqlite')
   const file = readdirSync(D1_DIR).find(
     (name) => name.endsWith('.sqlite') && name !== 'metadata.sqlite',
   )
-  if (!file) {
-    throw new Error(`No local D1 SQLite file found in ${D1_DIR}.`)
-  }
+  if (!file) return resolve(D1_DIR, 'missing.sqlite')
   return resolve(D1_DIR, file)
 }
 

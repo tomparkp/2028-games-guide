@@ -1,6 +1,13 @@
 import { integer, real, sqliteTable, text, index } from 'drizzle-orm/sqlite-core'
 
-import type { ContentMeta, Contender, RelatedNews, RoundType, Scorecard } from '@/types/session'
+import type {
+  ContentMeta,
+  ContentSource,
+  Contender,
+  RelatedNews,
+  RoundType,
+  Scorecard,
+} from '@/types/session'
 
 export const sessions = sqliteTable(
   'sessions',
@@ -46,5 +53,48 @@ export const sessionContent = sqliteTable('session_content', {
   contentMeta: text('content_meta', { mode: 'json' }).$type<ContentMeta>(),
 })
 
+// Raw output of the Perplexity grounding stage. `session_content` is
+// projected from this plus `session_writing` + `session_scoring`.
+export const sessionGrounding = sqliteTable('session_grounding', {
+  sessionId: text('session_id')
+    .primaryKey()
+    .references(() => sessions.id, { onDelete: 'cascade' }),
+  facts: text('facts', { mode: 'json' }).$type<string[]>(),
+  relatedNews: text('related_news', { mode: 'json' }).$type<RelatedNews[]>(),
+  sources: text('sources', { mode: 'json' }).$type<ContentSource[]>(),
+  model: text('model').notNull(),
+  promptVersion: integer('prompt_version').notNull(),
+  generatedAt: text('generated_at').notNull(),
+})
+
+// Raw output of the Anthropic writing stage (blurb + contenders).
+export const sessionWriting = sqliteTable('session_writing', {
+  sessionId: text('session_id')
+    .primaryKey()
+    .references(() => sessions.id, { onDelete: 'cascade' }),
+  blurb: text('blurb').notNull(),
+  potentialContendersIntro: text('potential_contenders_intro'),
+  potentialContenders: text('potential_contenders', { mode: 'json' }).$type<Contender[]>(),
+  model: text('model').notNull(),
+  promptVersion: integer('prompt_version').notNull(),
+  batchId: text('batch_id'),
+  generatedAt: text('generated_at').notNull(),
+})
+
+// Raw output of the Anthropic scoring stage (scorecard dimensions).
+export const sessionScoring = sqliteTable('session_scoring', {
+  sessionId: text('session_id')
+    .primaryKey()
+    .references(() => sessions.id, { onDelete: 'cascade' }),
+  scorecard: text('scorecard', { mode: 'json' }).$type<Scorecard>().notNull(),
+  model: text('model').notNull(),
+  promptVersion: integer('prompt_version').notNull(),
+  batchId: text('batch_id'),
+  generatedAt: text('generated_at').notNull(),
+})
+
 export type SessionRow = typeof sessions.$inferSelect
 export type SessionContentRow = typeof sessionContent.$inferSelect
+export type SessionGroundingRow = typeof sessionGrounding.$inferSelect
+export type SessionWritingRow = typeof sessionWriting.$inferSelect
+export type SessionScoringRow = typeof sessionScoring.$inferSelect

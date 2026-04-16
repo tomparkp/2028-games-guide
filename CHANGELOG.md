@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/tomparkp/2028-games-guide/compare/28games-v1.5.0...28games-v1.6.0) (2026-04-16)
+
+
+### Features
+
+* rename to 2028 Games Unofficial Guide ([#99](https://github.com/tomparkp/2028-games-guide/issues/99)) ([cb4ffff](https://github.com/tomparkp/2028-games-guide/commit/cb4ffffa1cdc033ac701db396be67bd649a5c123))
+
 ## [1.5.0](https://github.com/tomparkp/la28-session-picker/compare/28games-v1.4.2...28games-v1.5.0) (2026-04-16)
 
 

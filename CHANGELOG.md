@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.3](https://github.com/tomparkp/2028-games-guide/compare/28games-v1.6.2...28games-v1.6.3) (2026-04-16)
+
+
+### Bug Fixes
+
+* **scripts:** await stage upserts so status read sees committed rows ([#105](https://github.com/tomparkp/2028-games-guide/issues/105)) ([697e93c](https://github.com/tomparkp/2028-games-guide/commit/697e93c9561feb42542d9e90efad3f4734793f4a))
+* **scripts:** fan D1 HTTP batch out to single-statement POSTs ([#107](https://github.com/tomparkp/2028-games-guide/issues/107)) ([ef23688](https://github.com/tomparkp/2028-games-guide/commit/ef236886fce75e2e69f0e88e61c46b46b14726b8))
+
 ## [1.6.2](https://github.com/tomparkp/2028-games-guide/compare/28games-v1.6.1...28games-v1.6.2) (2026-04-16)
 
 

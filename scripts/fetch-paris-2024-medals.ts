@@ -1,6 +1,6 @@
 /**
  * Fetches Paris 2024 medal results from Olympedia and writes a structured
- * JSON dataset keyed by LA28 sport name. Run manually when the source data
+ * JSON dataset keyed by sport name. Run manually when the source data
  * needs a refresh; the output is committed to the repo.
  *
  * Usage: pnpm tsx scripts/fetch-paris-2024-medals.ts
@@ -19,10 +19,10 @@ const ROOT = resolve(__dirname, '..')
 const OUT_PATH = resolve(ROOT, 'src/data/paris-2024-medals.json')
 const PARIS_EDITION_ID = 63
 
-// Map LA28 sport name (as used in src/data/sessions.json & sport-knowledge.json)
+// Map sport name (as used in src/data/sessions.json & sport-knowledge.json)
 // to Olympedia discipline codes. Multiple codes = concatenate events.
 // `null` = sport was not in Paris 2024 (will be written as { _notInParis: true }).
-const LA28_TO_OLYMPEDIA: Record<string, string[] | null> = {
+const SPORT_TO_OLYMPEDIA: Record<string, string[] | null> = {
   '3x3 Basketball': ['BK3'],
   Archery: ['ARC'],
   'Artistic Gymnastics': ['GAR'],
@@ -60,7 +60,7 @@ const LA28_TO_OLYMPEDIA: Record<string, string[] | null> = {
   'Open Water Swimming': ['OWS'],
   'Rhythmic Gymnastics': ['GRY'],
   Rowing: ['ROW'],
-  'Rowing Coastal': null, // new for LA28
+  'Rowing Coastal': null, // new for 2028
   'Rugby Sevens': ['RU7'],
   'Sailing (D/S/M)': ['SAL'],
   'Sailing (W/K)': ['SAL'],
@@ -100,7 +100,7 @@ async function fetchSportPage(code: string): Promise<string> {
   for (let attempt = 1; attempt <= 5; attempt++) {
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'la28-medal-fetcher/1.0 (one-off static data fetch)',
+        'User-Agent': '28games-medal-fetcher/1.0 (one-off static data fetch)',
       },
     })
     if (res.ok) return res.text()
@@ -231,7 +231,7 @@ function toParisMedalEvent(raw: RawMedal): ParisMedalEvent {
 
 async function main() {
   const uniqueCodes = new Set<string>()
-  for (const codes of Object.values(LA28_TO_OLYMPEDIA)) {
+  for (const codes of Object.values(SPORT_TO_OLYMPEDIA)) {
     if (codes) for (const c of codes) uniqueCodes.add(c)
   }
 
@@ -250,11 +250,11 @@ async function main() {
     _meta: {
       source: `https://www.olympedia.org/editions/${PARIS_EDITION_ID}`,
       fetchedAt: new Date().toISOString(),
-      note: 'Paris 2024 medal results keyed by LA28 sport name. Used as deterministic grounding in scripts/generate-session-content.ts.',
+      note: 'Paris 2024 medal results keyed by sport name. Used as deterministic grounding in scripts/generate-session-content.ts.',
     },
   }
 
-  for (const [sport, codes] of Object.entries(LA28_TO_OLYMPEDIA)) {
+  for (const [sport, codes] of Object.entries(SPORT_TO_OLYMPEDIA)) {
     if (codes === null) {
       out[sport] = { _notInParis: true }
       continue

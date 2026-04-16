@@ -7,7 +7,7 @@ import type { RoundType } from '@/types/session'
  * Five dimensions, no value — price is visible in the table for users
  * to judge themselves.
  *
- * Significance (30%) — How important is this session in Olympic context
+ * Significance (30%) — How important is this session in the Games context
  * Experience (25%)   — How good will it be to watch live (sport + venue)
  * Star Power (15%)   — Likelihood of globally recognized athletes
  * Uniqueness (15%)   — How rare or special this opportunity is
@@ -23,7 +23,7 @@ const WEIGHTS = {
 } as const
 
 // Sport popularity tiers — affects significance and demand
-// Tier 1: Marquee Olympic sports with massive global audiences
+// Tier 1: Marquee sports with massive global audiences
 // Tier 2: Popular sports with strong followings
 // Tier 3: Niche but entertaining
 // Tier 4: Smaller audience sports

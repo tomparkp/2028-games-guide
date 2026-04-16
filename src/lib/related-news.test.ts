@@ -48,7 +48,7 @@ describe('related news matching', () => {
       makeSession({ id: 'SWM01', sport: 'Swimming', name: 'SWM01 Swimming' }),
     )
 
-    expect(basketballNews.map((item) => item.id)).toContain('basketball-lebron-james-la28-2025-11-18')
+    expect(basketballNews.map((item) => item.id)).toContain('basketball-lebron-james-2028-games-2025-11-18')
     expect(swimmingNews).toEqual([])
   })
 
@@ -95,7 +95,7 @@ describe('related news matching', () => {
     const merged = getRelatedNewsForSession(makeSession({ relatedNews: generated }))
 
     expect(merged[0]?.id).toBe('gen-1')
-    expect(merged.map((item) => item.id)).toContain('basketball-lebron-james-la28-2025-11-18')
+    expect(merged.map((item) => item.id)).toContain('basketball-lebron-james-2028-games-2025-11-18')
   })
 
   it('dedupes curated and generated items that share a source URL', () => {

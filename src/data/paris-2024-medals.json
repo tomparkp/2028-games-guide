@@ -2,7 +2,7 @@
   "_meta": {
     "source": "https://www.olympedia.org/editions/63",
     "fetchedAt": "2026-04-13T07:17:12.622Z",
-    "note": "Paris 2024 medal results keyed by LA28 sport name. Used as deterministic grounding in scripts/generate-session-content.ts."
+    "note": "Paris 2024 medal results keyed by sport name. Used as deterministic grounding in scripts/generate-session-content.ts."
   },
   "3x3 Basketball": [
     {

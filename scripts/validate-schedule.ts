@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 
 import { parseDbTargetFromArgs, readAllSessions } from './lib/db'
 
-const csvPath = resolve('/Users/Home/Downloads/LA28 SCHEDULE - Schedule By Event.csv')
+const csvPath = resolve('/Users/Home/Downloads/2028 SCHEDULE - Schedule By Event.csv')
 
 interface CsvRow {
   sessionCode: string

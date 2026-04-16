@@ -1,7 +1,7 @@
 import { Sun, Moon } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
-const STORAGE_KEY = 'la28_unofficial_session_picker_theme'
+const STORAGE_KEY = '28games_session_guide_theme'
 
 export function ThemeToggle() {
   const [dark, setDark] = useState(true)

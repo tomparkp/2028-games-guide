@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-const STORAGE_KEY = 'la28_unofficial_session_picker_bookmarks'
+const STORAGE_KEY = '28games_session_guide_bookmarks'
 
 function loadBookmarks(): Set<string> {
   if (typeof window === 'undefined') return new Set()

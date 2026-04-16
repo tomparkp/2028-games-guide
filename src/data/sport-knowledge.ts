@@ -3,7 +3,7 @@ import type { Contender, RelatedNews } from '@/types/session'
 import data from './sport-knowledge.json'
 
 export interface SportKnowledge {
-  la28Context: string
+  gamesContext: string
   venueNotes: Record<string, string>
   eventHighlights: Record<string, string>
   potentialContenders: Contender[]

@@ -22,6 +22,6 @@ export function exportBookmarksCSV(sessions: Session[]) {
 
   const a = document.createElement('a')
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
-  a.download = 'la28_bookmarks.csv'
+  a.download = '28games_bookmarks.csv'
   a.click()
 }

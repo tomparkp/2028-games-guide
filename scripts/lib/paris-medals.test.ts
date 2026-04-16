@@ -137,7 +137,7 @@ describe('matchSessionEvents — team sports (gender-only match)', () => {
 
 describe('matchSessionEvents — weight classes', () => {
   // Olympedia names Paris 2024 judo events by weight-class ("Extra-Lightweight")
-  // rather than kg. LA28 session descs use kg ("-48kg"), so weight-class
+  // rather than kg. Session descs use kg ("-48kg"), so weight-class
   // sports don't cleanly match. Documented limitation — model falls back to
   // web-search grounding for these sports.
   const judo: ParisMedalEvent[] = [

@@ -1,13 +1,13 @@
 {
   "_meta": {
     "lastVerified": "2026-04-09",
-    "notes": "Contender lists are projections based on Paris 2024 results and current form. Official LA28 rosters have not been announced. Athlete availability is subject to change due to retirement, injury, or qualifying results."
+    "notes": "Contender lists are projections based on Paris 2024 results and current form. Official 2028 Games rosters have not been announced. Athlete availability is subject to change due to retirement, injury, or qualifying results."
   },
   "Ceremony": {
-    "la28Context": "The opening ceremony at 2028 Stadium and closing ceremony at the LA Memorial Coliseum bookend two weeks of competition. LA28 is the third time Los Angeles has hosted, after 1932 and 1984.",
+    "gamesContext": "The opening ceremony at 2028 Stadium and closing ceremony at the LA Memorial Coliseum bookend two weeks of competition. 2028 marks the third time Los Angeles has hosted, after 1932 and 1984.",
     "venueNotes": {
       "2028 Stadium": "SoFi Stadium rebranded as 2028 Stadium for the Games. The newest mega-venue in LA, opened in 2020, with a translucent roof that glows at night.",
-      "LA Memorial Coliseum": "Hosted the 1932 and 1984 Olympic ceremonies. The only venue to host three Olympic Games. The cauldron from 1984 still stands."
+      "LA Memorial Coliseum": "Hosted the 1932 and 1984 Games ceremonies. The only venue to host three Summer Games. The cauldron from 1984 still stands."
     },
     "eventHighlights": {
       "Opening Ceremony": "The parade of nations, artistic performances, and lighting of the cauldron mark the official start of the Games.",
@@ -16,12 +16,12 @@
     "potentialContenders": []
   },
   "Athletics (Track & Field)": {
-    "la28Context": "Track & field returns to the LA Memorial Coliseum — the same track where Carl Lewis won four golds in 1984. The Coliseum is the spiritual home of American Olympic athletics and will host the signature sessions of the entire Games.",
+    "gamesContext": "Track & field returns to the LA Memorial Coliseum — the same track where Carl Lewis won four golds in 1984. The Coliseum is the spiritual home of American track & field and will host the signature sessions of the entire Games.",
     "venueNotes": {
-      "LA Memorial Coliseum": "The Coliseum has hosted two Olympics (1932, 1984) and will become the first venue ever to host three. Carl Lewis, Jesse Owens’s legacy, and Flo-Jo all echo through this place. 78,000+ capacity."
+      "LA Memorial Coliseum": "The Coliseum has hosted two Games (1932, 1984) and will become the first venue ever to host three. Carl Lewis, Jesse Owens’s legacy, and Flo-Jo all echo through this place. 78,000+ capacity."
     },
     "eventHighlights": {
-      "Men's 100m Final": "The flagship sprint event at any Olympics. The final typically lasts under 10 seconds.",
+      "Men's 100m Final": "The flagship sprint event at any Games. The final typically lasts under 10 seconds.",
       "Women's 100m Final": "The women's 100m has grown into one of the highest-profile events, especially with strong American sprinters on the roster.",
       "Men's 200m Final": "The 200m requires bend-running skill and raw speed. It often produces the fastest times under evening conditions.",
       "Women's 200m Final": "The women's 200m has been a strong event for American sprinters, including recent champion Gabby Thomas.",
@@ -30,20 +30,20 @@
       "Men's 400m Final": "A grueling single-lap race that rewards both speed and pain tolerance.",
       "Women's 400m Final": "Sydney McLaughlin-Levrone may attempt a 400m flat and 400m hurdles double.",
       "Men's 800m Final": "The 800m is chaos — tactical racing that explodes in the final 200m.",
-      "Men's 1500m Final": "The metric mile. Tactical, dramatic, and historically one of the greatest Olympic races.",
+      "Men's 1500m Final": "The metric mile. Tactical, dramatic, and historically one of the greatest Games races.",
       "Women's 1500m Final": "Faith Kipyegon has owned this event. She has won the last two — a third would be historic.",
       "Men's 5000m Final": "Long-distance racing that builds to a ferocious kick finish.",
       "Men's 10000m Final": "Twenty-five laps of attrition. The 10K final is an endurance chess match.",
       "Women's 10000m Final": "Sifan Hassan pulled off a legendary triple in Tokyo/Paris. She could return for more.",
-      "Mixed 4×400m Relay Final": "A brand-new Olympic relay format making its third appearance — fast, unpredictable, and electric.",
+      "Mixed 4×400m Relay Final": "A brand-new Games relay format making its third appearance — fast, unpredictable, and electric.",
       "Men's 4×100m Relay Final": "The relay final is pure adrenaline — four legs of sub-10 speed and handoff drama.",
       "Women's 4×100m Relay Final": "USA women have owned this relay. A home crowd with a loaded team could be deafening.",
-      "Men's Shot Put Final": "Ryan Crouser won back-to-back Olympic golds in Tokyo and Paris. He could attempt a third in LA.",
+      "Men's Shot Put Final": "Ryan Crouser won back-to-back Games golds in Tokyo and Paris. He could attempt a third in LA.",
       "Women's High Jump Final": "High jump finals are riveting — the bar keeps going up until one person remains.",
       "Men's Decathlon": "Two days, ten events. The decathlon winner earns the title of World’s Greatest Athlete.",
       "Women's Heptathlon": "The ultimate all-round test. Seven events over two days determine the best female athlete on earth.",
       "Men's Long Jump Final": "Miltiadis Tentoglou is the two-time defending champion. The long jump final comes down to a handful of big jumps.",
-      "Men's Pole Vault Final": "Mondo Duplantis has won the last two Olympic golds and continues to push the world record higher.",
+      "Men's Pole Vault Final": "Mondo Duplantis has won the last two Games golds and continues to push the world record higher.",
       "Women's Hammer Throw Final": "Power event with the biggest arm circles in sport. Hammer finals are a spectacle."
     },
     "potentialContenders": [
@@ -70,7 +70,7 @@
       {
         "name": "Julien Alfred",
         "country": "LCA",
-        "note": "Defending Paris 100m champion from Saint Lucia; first Olympic gold medalist in her country's history"
+        "note": "Defending Paris 100m champion from Saint Lucia; first Games gold medalist in her country's history"
       },
       {
         "name": "Sydney McLaughlin-Levrone",
@@ -90,7 +90,7 @@
       {
         "name": "Ryan Crouser",
         "country": "USA",
-        "note": "Two-time Olympic shot put gold medalist chasing an unprecedented third"
+        "note": "Two-time Games shot put gold medalist chasing an unprecedented third"
       },
       {
         "name": "Jakob Ingebrigtsen",
@@ -105,17 +105,17 @@
       {
         "name": "Faith Kipyegon",
         "country": "KEN",
-        "note": "Two-time Olympic 1500m champion going for an outright three-peat"
+        "note": "Two-time Games 1500m champion going for an outright three-peat"
       },
       {
         "name": "Gabby Thomas",
         "country": "USA",
-        "note": "Paris 200m gold, 100m bronze, double relay gold — could be the face of LA28 track"
+        "note": "Paris 200m gold, 100m bronze, double relay gold — could be the face of 2028 track"
       },
       {
         "name": "Miltiadis Tentoglou",
         "country": "GRE",
-        "note": "Back-to-back Olympic long jump champion; the calmest man on the runway"
+        "note": "Back-to-back Games long jump champion; the calmest man on the runway"
       },
       {
         "name": "Sifan Hassan",
@@ -130,13 +130,13 @@
     ]
   },
   "Athletics (Marathon)": {
-    "la28Context": "The marathon course will wind through iconic LA neighborhoods, finishing at the LA Memorial Coliseum. The marathon is the traditional closing event of the athletics program.",
+    "gamesContext": "The marathon course will wind through iconic LA neighborhoods, finishing at the LA Memorial Coliseum. The marathon is the traditional closing event of the athletics program.",
     "venueNotes": {
-      "LA Memorial Coliseum": "The marathon finish inside the Coliseum is one of the great traditions in Olympic sport."
+      "LA Memorial Coliseum": "The marathon finish inside the Coliseum is one of the great traditions in Games sport."
     },
     "eventHighlights": {
       "Men's Marathon": "The blue-ribbon road race. 26.2 miles through Los Angeles, finishing inside the Coliseum.",
-      "Women's Marathon": "The women’s marathon final is one of the most watched events of any Olympics.",
+      "Women's Marathon": "The women’s marathon final is one of the most watched events of any Games.",
       "Marathon Race Walk Mixed Relay": "New combined relay format — a marathon-distance race walk with mixed teams."
     },
     "potentialContenders": [
@@ -158,7 +158,7 @@
     ]
   },
   "Athletics (Race Walk)": {
-    "la28Context": "Race walk returns with the new marathon race walk mixed relay joining the traditional 20km events. Events take place on LA’s streets near the Coliseum.",
+    "gamesContext": "Race walk returns with the new marathon race walk mixed relay joining the traditional 20km events. Events take place on LA’s streets near the Coliseum.",
     "venueNotes": {
       "LA Memorial Coliseum": "Race walks finish on the Coliseum grounds, linking this often-overlooked discipline to the main athletics venue."
     },
@@ -170,7 +170,7 @@
       {
         "name": "Brian Daniel Pintado",
         "country": "ECU",
-        "note": "Paris 20km gold medalist; Ecuador's first Olympic race walk champion since Jefferson Perez"
+        "note": "Paris 20km gold medalist; Ecuador's first Games race walk champion since Jefferson Perez"
       },
       {
         "name": "Alvaro Martin",
@@ -190,9 +190,9 @@
     ]
   },
   "Swimming": {
-    "la28Context": "Swimming moves to the purpose-built Rose Bowl Aquatics Center in Pasadena, built adjacent to the Rose Bowl for these Games. Eight nights of finals under the stars in one of the most anticipated new venues.",
+    "gamesContext": "Swimming moves to the purpose-built Rose Bowl Aquatics Center in Pasadena, built adjacent to the Rose Bowl for these Games. Eight nights of finals under the stars in one of the most anticipated new venues.",
     "venueNotes": {
-      "Rose Bowl Aquatics Center": "Brand-new outdoor aquatics venue built for LA28, adjacent to the Rose Bowl. Every seat is close to the water. Night finals under the Pasadena sky."
+      "Rose Bowl Aquatics Center": "Brand-new outdoor aquatics venue built for the 2028 Games, adjacent to the Rose Bowl. Every seat is close to the water. Night finals under the Pasadena sky."
     },
     "eventHighlights": {
       "Men's 100m Freestyle Final": "The premier sprint event in the pool. Pan Zhanle set a world record winning this in Paris.",
@@ -201,15 +201,15 @@
       "Women's 200m IM Final": "The IM forces swimmers to master all four strokes. It’s the decathlon of swimming.",
       "Men's 100m Backstroke Final": "Backstroke sprinting is one of the purest speed events in the pool.",
       "Women's 800m Freestyle Final": "Katie Ledecky's signature event; she has dominated the distance races for over a decade.",
-      "Women's 1500m Freestyle Final": "The longest individual race in the pool. Ledecky has been the dominant force in this event since its Olympic introduction.",
-      "Men's 200m Butterfly Final": "A grueling race that has produced memorable Olympic moments, including several involving Michael Phelps.",
+      "Women's 1500m Freestyle Final": "The longest individual race in the pool. Ledecky has been the dominant force in this event since its Games introduction.",
+      "Men's 200m Butterfly Final": "A grueling race that has produced memorable Games moments, including several involving Michael Phelps.",
       "Men's 4×100m Medley Relay Final": "The final event of the swimming program — four strokes, four swimmers, maximum chaos."
     },
     "potentialContenders": [
       {
         "name": "Katie Ledecky",
         "country": "USA",
-        "note": "Most decorated female swimmer in history; likely her final Olympics on home soil"
+        "note": "Most decorated female swimmer in history; likely her final Games on home soil"
       },
       {
         "name": "Léon Marchand",
@@ -264,14 +264,14 @@
     ]
   },
   "Artistic Gymnastics": {
-    "la28Context": "Artistic gymnastics at the Intuit Dome will be among the hottest tickets of the Games. The US is the dominant force in women’s gymnastics, and competing at home elevates the stakes.",
+    "gamesContext": "Artistic gymnastics at the Intuit Dome will be among the hottest tickets of the Games. The US is the dominant force in women’s gymnastics, and competing at home elevates the stakes.",
     "venueNotes": {
       "Intuit Dome": "The LA Clippers’ brand-new arena (opened 2024) becomes the gymnastics venue. Its Halo Board wrapping the arena will create a unique atmosphere. 18,000 seats."
     },
     "eventHighlights": {
       "Women's All-Around Final": "The highest-profile event in gymnastics, crowning the best all-around female gymnast.",
       "Men's All-Around Final": "The men’s AA is six apparatus of precision. Japan and China have dominated recently.",
-      "Women's Team Final": "The US women have won every Olympic team final since 2012.",
+      "Women's Team Final": "The US women have won every Games team final since 2012.",
       "Men's Team Final": "Japan won gold in Paris; China and the US will be pushing to take it back in LA.",
       "Women's Vault Final": "Vault finals showcase explosive power and aerial skill.",
       "Women's Floor Exercise Final": "Combines tumbling, choreography, and personality — it frequently generates the most attention.",
@@ -304,7 +304,7 @@
       {
         "name": "Daiki Hashimoto",
         "country": "JPN",
-        "note": "Back-to-back men’s all-around Olympic champion. The best male gymnast of this era"
+        "note": "Back-to-back men’s all-around Games champion. The best male gymnast of this era"
       },
       {
         "name": "Zhang Boheng",
@@ -329,7 +329,7 @@
     ]
   },
   "Basketball": {
-    "la28Context": "Basketball at the Intuit Dome — the most advanced arena in the NBA — will showcase the best players on earth in a city that lives and breathes hoops. LA is home to the Lakers, Clippers, and Sparks. Basketball is in the city’s DNA.",
+    "gamesContext": "Basketball at the Intuit Dome — the most advanced arena in the NBA — will showcase the best players on earth in a city that lives and breathes hoops. LA is home to the Lakers, Clippers, and Sparks. Basketball is in the city’s DNA.",
     "venueNotes": {
       "Intuit Dome": "Brand-new NBA arena opened in 2024 for the Clippers. The Halo Board, steep seating, and intimate sightlines make it the most modern basketball venue anywhere."
     },
@@ -354,7 +354,7 @@
       {
         "name": "Nikola Jokic",
         "country": "SRB",
-        "note": "Three-time NBA MVP who led Serbia to Paris semis. Could finally win Olympic gold"
+        "note": "Three-time NBA MVP who led Serbia to Paris semis. Could finally win Games gold"
       },
       {
         "name": "Giannis Antetokounmpo",
@@ -384,9 +384,9 @@
     ],
     "relatedNews": [
       {
-        "id": "basketball-lebron-james-la28-2025-11-18",
-        "title": "LeBron James says he does not plan to play at LA28",
-        "summary": "James said on Mind the Game that he expects to watch the 2028 Olympics rather than participate, pointing to Team USA moving on from the Paris 2024 veteran core.",
+        "id": "basketball-lebron-james-2028-games-2025-11-18",
+        "title": "LeBron James says he does not plan to play at the 2028 Games",
+        "summary": "James said on Mind the Game that he expects to watch the 2028 Games rather than participate, pointing to Team USA moving on from the Paris 2024 veteran core.",
         "sourceName": "Sportsnet",
         "sourceUrl": "https://www.sportsnet.ca/nba/article/lebron-wont-play-for-team-usa-in-2028-olympics-curry-unlikley-to-participate/",
         "publishedDate": "2025-11-18",
@@ -396,17 +396,17 @@
     ]
   },
   "Football (Soccer)": {
-    "la28Context": "Olympic soccer at the Rose Bowl, 2028 Stadium, and venues across six US cities. The Rose Bowl hosted the 1994 World Cup final and 1984 Olympic soccer — it’s hallowed ground for the beautiful game. Medal rounds converge on LA.",
+    "gamesContext": "Soccer at the Rose Bowl, 2028 Stadium, and venues across six US cities. The Rose Bowl hosted the 1994 World Cup final and 1984 soccer — it’s hallowed ground for the beautiful game. Medal rounds converge on LA.",
     "venueNotes": {
-      "Rose Bowl Stadium": "Hosted the 1994 World Cup final (the most-attended WC match ever) and the 1984 Olympic soccer final. 90,888 capacity. Third Olympics.",
+      "Rose Bowl Stadium": "Hosted the 1994 World Cup final (the most-attended WC match ever) and the 1984 soccer final. 90,888 capacity. Third Games.",
       "2028 Stadium": "SoFi Stadium rebranded for the Games. 70,000+ capacity under a translucent roof. Will host key medal-round matches.",
       "Carson Stadium": "Home of the LA Galaxy. 27,000-seat venue for group stage matches."
     },
     "eventHighlights": {
-      "Women's Gold Medal Match": "The final match of the women’s tournament — USA has four Olympic golds in this event.",
+      "Women's Gold Medal Match": "The final match of the women’s tournament — USA has four Games golds in this event.",
       "Men's Gold Medal Match": "U-23 squads plus overage players. Often produces future global superstars.",
       "Women's Semifinal": "Win-or-go-home. If the USWNT makes it, the Rose Bowl will be deafening.",
-      "Men's Semifinal": "The knockout stage is where the drama lives. Upsets are common in Olympic soccer."
+      "Men's Semifinal": "The knockout stage is where the drama lives. Upsets are common in Games-level soccer."
     },
     "potentialContenders": [
       {
@@ -422,7 +422,7 @@
       {
         "name": "England Women",
         "country": "GBR",
-        "note": "2022 Euro champions playing as Great Britain at the Olympics"
+        "note": "2022 Euro champions playing as Great Britain at the Games"
       },
       {
         "name": "Brazil Women",
@@ -442,25 +442,25 @@
       {
         "name": "Spain U-23 Men",
         "country": "ESP",
-        "note": "Paris gold medalists in men’s football. Spanish tiki-taka translates beautifully to the Olympic format"
+        "note": "Paris gold medalists in men’s football. Spanish tiki-taka translates beautifully to the Games format"
       }
     ]
   },
   "Tennis": {
-    "la28Context": "Tennis returns to its temporary Olympic venue setup, likely at a premier LA facility. With the sport’s biggest names increasingly prioritizing Olympics, expect a Grand Slam-caliber field.",
+    "gamesContext": "Tennis returns to its temporary venue setup, likely at a premier LA facility. With the sport’s biggest names increasingly prioritizing Games, expect a Grand Slam-caliber field.",
     "venueNotes": {
       "Exposition Park Stadium": "Purpose-built temporary tennis venue in the shadow of the Coliseum. Seats around 10,000 for center court matches."
     },
     "eventHighlights": {
-      "Men's Singles Gold Medal Match": "Novak Djokovic finally won his Olympic gold in Paris. The torch may pass in LA.",
-      "Women's Singles Gold Medal Match": "The women’s gold has been won by a different player at every recent Olympics.",
+      "Men's Singles Gold Medal Match": "Novak Djokovic finally won his Games gold in Paris. The torch may pass in LA.",
+      "Women's Singles Gold Medal Match": "The women’s gold has been won by a different player at every recent Games.",
       "Mixed Doubles Gold Medal Match": "Mixed doubles adds a fun, unpredictable wrinkle to the tennis bracket."
     },
     "potentialContenders": [
       {
         "name": "Carlos Alcaraz",
         "country": "ESP",
-        "note": "Paris silver medalist. At 25, he’ll be in his prime and desperate for Olympic gold"
+        "note": "Paris silver medalist. At 25, he’ll be in his prime and desperate for Games gold"
       },
       {
         "name": "Jannik Sinner",
@@ -470,7 +470,7 @@
       {
         "name": "Novak Djokovic",
         "country": "SRB",
-        "note": "Defending Olympic champion; would be 41 in LA. Has not confirmed plans to compete"
+        "note": "Defending Games champion; would be 41 in LA. Has not confirmed plans to compete"
       },
       {
         "name": "Iga Swiatek",
@@ -490,18 +490,18 @@
       {
         "name": "Zheng Qinwen",
         "country": "CHN",
-        "note": "Paris gold medalist in women’s singles — China’s first Olympic tennis champion"
+        "note": "Paris gold medalist in women’s singles — China’s first Games tennis champion"
       }
     ]
   },
   "Diving": {
-    "la28Context": "Diving at the Rose Bowl Aquatics Center gives this sport a spectacular outdoor setting in Pasadena. China has historically dominated Olympic diving, but the field is deepening.",
+    "gamesContext": "Diving at the Rose Bowl Aquatics Center gives this sport a spectacular outdoor setting in Pasadena. China has historically dominated diving at the Games, but the field is deepening.",
     "venueNotes": {
       "Rose Bowl Aquatics Center": "Purpose-built venue adjacent to the Rose Bowl. Outdoor diving under the California sun, with the San Gabriel Mountains as a backdrop."
     },
     "eventHighlights": {
       "Men's 10m Platform Final": "The 10-meter platform final is the most dramatic event in diving — one splash determines gold.",
-      "Women's 10m Platform Final": "China has won this event at every Olympics since 2008.",
+      "Women's 10m Platform Final": "China has won this event at every Games since 2008.",
       "Men's 3m Springboard Final": "Springboard diving rewards rhythm and finesse over raw power.",
       "Women's 3m Springboard Final": "The springboard is where the crowd gets closest to the action.",
       "Men's Synchronized 10m Platform Final": "Two divers must match each other perfectly from 33 feet up."
@@ -530,12 +530,12 @@
     ]
   },
   "Volleyball": {
-    "la28Context": "Indoor volleyball at the Peacock Theater puts the sport in the heart of DTLA. The US men and women are both competitive, and a home crowd could push them over the top.",
+    "gamesContext": "Indoor volleyball at the Peacock Theater puts the sport in the heart of DTLA. The US men and women are both competitive, and a home crowd could push them over the top.",
     "venueNotes": {
       "Peacock Theater": "Formerly Microsoft Theater, in the LA Live complex downtown. Intimate 7,100-seat venue that will create a cauldron of noise for volleyball."
     },
     "eventHighlights": {
-      "Men's Gold Medal Match": "The volleyball final is one of the great spectacles at any Olympics — five sets of absolute chaos.",
+      "Men's Gold Medal Match": "The volleyball final is one of the great spectacles at any Games — five sets of absolute chaos.",
       "Women's Gold Medal Match": "Italy won a dramatic Paris gold. The women’s game has never been deeper."
     },
     "potentialContenders": [
@@ -567,12 +567,12 @@
     ]
   },
   "Beach Volleyball": {
-    "la28Context": "Beach volleyball on the sand at Alamitos Beach in Long Beach — the quintessential Southern California sport. Expect a massive party atmosphere with ocean views.",
+    "gamesContext": "Beach volleyball on the sand at Alamitos Beach in Long Beach — the quintessential Southern California sport. Expect a massive party atmosphere with ocean views.",
     "venueNotes": {
       "Alamitos Beach Stadium": "Purpose-built beach volleyball stadium on the sand in Long Beach. Ocean views, California sun, and a sport that was basically invented here."
     },
     "eventHighlights": {
-      "Men's Gold Medal Match": "Beach volleyball finals at sunset on LA sand. Peak Olympics.",
+      "Men's Gold Medal Match": "Beach volleyball finals at sunset on LA sand. Peak Games.",
       "Women's Gold Medal Match": "Brazil and the US have historically dominated. The atmosphere at a beach volleyball final is unmatched."
     },
     "potentialContenders": [
@@ -599,9 +599,9 @@
     ]
   },
   "Baseball": {
-    "la28Context": "Baseball returns to the Olympics for the first time since 2008. MLB and the Players Association are in discussions about releasing active players for the Games, but no agreement has been finalized. If a deal is reached, Dodger Stadium could host the sport's biggest names.",
+    "gamesContext": "Baseball returns to the Games for the first time since 2008. MLB and the Players Association are in discussions about releasing active players for the Games, but no agreement has been finalized. If a deal is reached, Dodger Stadium could host the sport's biggest names.",
     "venueNotes": {
-      "Dodger Stadium": "The third-oldest MLB ballpark. Hosted Olympic baseball as a demonstration sport in 1984. If an MLB player release deal is reached, it becomes one of the marquee Olympic venues."
+      "Dodger Stadium": "The third-oldest MLB ballpark. Hosted baseball as a demonstration sport in 1984. If an MLB player release deal is reached, it becomes one of the marquee Games venues."
     },
     "eventHighlights": {
       "Gold Medal Game": "If MLB releases players: Ohtani, Judge, Soto, Acuna — the best players on earth, at Dodger Stadium, for a gold medal.",
@@ -612,7 +612,7 @@
       {
         "name": "Shohei Ohtani",
         "country": "JPN",
-        "note": "The two-way star; if MLB reaches an agreement, playing for Japan at Dodger Stadium would be a defining LA28 moment"
+        "note": "The two-way star; if MLB reaches an agreement, playing for Japan at Dodger Stadium would be a defining 2028 Games moment"
       },
       {
         "name": "Aaron Judge",
@@ -632,17 +632,17 @@
       {
         "name": "Bryce Harper",
         "country": "USA",
-        "note": "Has been publicly campaigning to play in the Olympics. American baseball’s biggest personality"
+        "note": "Has been publicly campaigning to play in the Games. American baseball’s biggest personality"
       },
       {
         "name": "Mookie Betts",
         "country": "USA",
-        "note": "Dodger fan favorite. Playing Olympic baseball at his home stadium is a Hollywood script"
+        "note": "Dodger fan favorite. Playing baseball at his home stadium is a Hollywood script"
       },
       {
         "name": "Paul Skenes",
         "country": "USA",
-        "note": "The hardest-throwing pitcher in MLB. A 100+ mph fastball on the Olympic stage"
+        "note": "The hardest-throwing pitcher in MLB. A 100+ mph fastball on the world stage"
       },
       {
         "name": "Yoshinobu Yamamoto",
@@ -652,7 +652,7 @@
     ]
   },
   "Softball": {
-    "la28Context": "Softball returns alongside baseball, and the US women’s team has historically owned this sport. Olympic softball has been in and out of the program — LA28 is a homecoming.",
+    "gamesContext": "Softball returns alongside baseball, and the US women’s team has historically owned this sport. Games softball has been in and out of the program — 2028 is a homecoming.",
     "venueNotes": {
       "Dodger Stadium": "Softball at Dodger Stadium gives the sport the biggest stage it’s ever had. The venue crossover with baseball makes for a unique doubleheader vibe."
     },
@@ -668,7 +668,7 @@
       {
         "name": "Japan Women",
         "country": "JPN",
-        "note": "Defending Olympic champions from Tokyo. Beat the US in the gold medal game"
+        "note": "Defending Games champions from Tokyo. Beat the US in the gold medal game"
       },
       {
         "name": "Jocelyn Alo",
@@ -678,12 +678,12 @@
     ]
   },
   "Flag Football": {
-    "la28Context": "Flag football makes its Olympic debut at LA28 — and it’s happening in a country where football is religion. This is the most significant new sport addition in decades, and the NFL is all-in on making it a spectacle.",
+    "gamesContext": "Flag football makes its Games debut at the 2028 Games — and it’s happening in a country where football is religion. This is the most significant new sport addition in decades, and the NFL is all-in on making it a spectacle.",
     "venueNotes": {
-      "2028 Stadium": "Flag football at SoFi Stadium (rebranded as 2028 Stadium). NFL’s showpiece venue hosting the Olympic debut of football. 70,000+ seats."
+      "2028 Stadium": "Flag football at SoFi Stadium (rebranded as 2028 Stadium). NFL’s showpiece venue hosting the Games debut of football. 70,000+ seats."
     },
     "eventHighlights": {
-      "Gold Medal Game (Men)": "The first-ever Olympic flag football gold medal. History will be written.",
+      "Gold Medal Game (Men)": "The first-ever Games flag football gold medal. History will be written.",
       "Gold Medal Game (Women)": "The US women’s flag football team is loaded with multi-sport athletes.",
       "Pool Round": "Group stage games where the sport introduces itself to a global audience."
     },
@@ -711,24 +711,24 @@
     ]
   },
   "Cricket": {
-    "la28Context": "Cricket makes its Olympic return after a 128-year absence (last appeared in 1900). The T20 format is fast, explosive, and designed for new audiences. LA’s massive South Asian diaspora makes this a culturally significant addition.",
+    "gamesContext": "Cricket makes its Games return after a 128-year absence (last appeared in 1900). The T20 format is fast, explosive, and designed for new audiences. LA’s massive South Asian diaspora makes this a culturally significant addition.",
     "venueNotes": {
       "Fairgrounds Cricket Stadium": "Purpose-built cricket ground at the Pomona Fairplex. A temporary stadium designed to capture the T20 atmosphere — compact, loud, and intimate."
     },
     "eventHighlights": {
-      "Gold Medal Match (Men)": "The first Olympic cricket gold medal in 128 years. India, Australia, and England will be desperate to win it.",
+      "Gold Medal Match (Men)": "The first Games cricket gold medal in 128 years. India, Australia, and England will be desperate to win it.",
       "Gold Medal Match (Women)": "Women’s cricket is experiencing explosive growth. This event could be transformative for the sport."
     },
     "potentialContenders": [
       {
         "name": "India Men",
         "country": "IND",
-        "note": "A billion cricket fans will be watching. India winning Olympic gold in cricket would be the biggest story of the Games"
+        "note": "A billion cricket fans will be watching. India winning Games gold in cricket would be the biggest story of the Games"
       },
       {
         "name": "Virat Kohli",
         "country": "IND",
-        "note": "Retired from T20 internationals after the 2024 World Cup; participation in Olympics is uncertain"
+        "note": "Retired from T20 internationals after the 2024 World Cup; participation in Games is uncertain"
       },
       {
         "name": "Jasprit Bumrah",
@@ -758,12 +758,12 @@
     ]
   },
   "Lacrosse": {
-    "la28Context": "Lacrosse returns to the Olympics for the first time since 1908. The sixes format (6v6) is fast-paced, high-scoring, and built for the Olympic audience. LA’s lacrosse scene has grown exponentially.",
+    "gamesContext": "Lacrosse returns to the Games for the first time since 1908. The sixes format (6v6) is fast-paced, high-scoring, and built for the Games audience. LA’s lacrosse scene has grown exponentially.",
     "venueNotes": {
-      "2028 Stadium": "Lacrosse at SoFi Stadium gives this re-emerging Olympic sport the biggest stage it’s ever had."
+      "2028 Stadium": "Lacrosse at SoFi Stadium gives this re-emerging Games sport the biggest stage it’s ever had."
     },
     "eventHighlights": {
-      "Gold Medal Match (Men)": "The first Olympic lacrosse gold medal in 120 years. USA and Canada are overwhelming favorites.",
+      "Gold Medal Match (Men)": "The first Games lacrosse gold medal in 120 years. USA and Canada are overwhelming favorites.",
       "Gold Medal Match (Women)": "Women’s lacrosse is dominated by the US, but the field is growing fast."
     },
     "potentialContenders": [
@@ -790,12 +790,12 @@
     ]
   },
   "Squash": {
-    "la28Context": "Squash makes its long-awaited Olympic debut after decades of campaigning. A fast, physical racquet sport with a devoted global following finally gets the spotlight.",
+    "gamesContext": "Squash makes its long-awaited Games debut after decades of campaigning. A fast, physical racquet sport with a devoted global following finally gets the spotlight.",
     "venueNotes": {
       "Comcast Squash Center": "Purpose-built glass court venue in LA. Squash’s trademark glass courts let spectators watch from all angles."
     },
     "eventHighlights": {
-      "Men's Singles Gold Medal Match": "The first Olympic squash gold medal ever. History.",
+      "Men's Singles Gold Medal Match": "The first Games squash gold medal ever. History.",
       "Women's Singles Gold Medal Match": "Egypt and the US have been producing world-class women’s players."
     },
     "potentialContenders": [
@@ -827,7 +827,7 @@
     ]
   },
   "3x3 Basketball": {
-    "la28Context": "3x3 basketball is streetball meets Olympics — fast, physical, and played to 21 points. The half-court format was born in pickup culture, and LA’s outdoor courts are legendary.",
+    "gamesContext": "3x3 basketball is streetball meets Games — fast, physical, and played to 21 points. The half-court format was born in pickup culture, and LA’s outdoor courts are legendary.",
     "venueNotes": {
       "Valley Complex 3": "Outdoor 3x3 venue in the Valley zone. The open-air setting matches the streetball spirit of the format."
     },
@@ -849,7 +849,7 @@
       {
         "name": "Nauris Miezis",
         "country": "LAT",
-        "note": "Latvian 3x3 legend — the face of the sport at the Olympic level"
+        "note": "Latvian 3x3 legend — the face of the sport at the Games level"
       },
       {
         "name": "USA teams",
@@ -859,12 +859,12 @@
     ]
   },
   "Boxing - Finals": {
-    "la28Context": "Boxing finals at the intimate DTLA Arena — 3,600 seats, gold medals on the line, and you’re close enough to hear the punches land. This is the first Olympics with full gender parity in boxing: seven weight classes each for men and women.",
+    "gamesContext": "Boxing finals at the intimate DTLA Arena — 3,600 seats, gold medals on the line, and you’re close enough to hear the punches land. This is the first Games with full gender parity in boxing: seven weight classes each for men and women.",
     "venueNotes": {
       "DTLA Arena": "A compact 3,600-seat arena in downtown LA. The intimacy is the point — boxing finals in a small venue create electric, deafening atmospheres."
     },
     "eventHighlights": {
-      "Gold Medal Finals Session": "Multiple gold medal bouts in one session. The compressed energy of a tiny room with Olympic gold on the line."
+      "Gold Medal Finals Session": "Multiple gold medal bouts in one session. The compressed energy of a tiny room with Games gold on the line."
     },
     "potentialContenders": [
       {
@@ -885,7 +885,7 @@
     ]
   },
   "Boxing - Prelims": {
-    "la28Context": "Preliminary boxing rounds at the DTLA Arena — where contenders fight their way toward gold medal sessions. The early rounds are where upsets happen and underdogs emerge.",
+    "gamesContext": "Preliminary boxing rounds at the DTLA Arena — where contenders fight their way toward gold medal sessions. The early rounds are where upsets happen and underdogs emerge.",
     "venueNotes": {
       "DTLA Arena": "The 3,600-seat venue makes even preliminary rounds feel intimate. Every punch echoes."
     },
@@ -909,7 +909,7 @@
     ]
   },
   "Surfing": {
-    "la28Context": "Surfing at Trestles State Beach in San Clemente — one of the world’s most iconic waves. Unlike Tahiti’s Teahupo’o in Paris, Trestles offers a high-performance wave that rewards technical surfing. This is surfing’s spiritual home.",
+    "gamesContext": "Surfing at Trestles State Beach in San Clemente — one of the world’s most iconic waves. Unlike Tahiti’s Teahupo’o in Paris, Trestles offers a high-performance wave that rewards technical surfing. This is surfing’s spiritual home.",
     "venueNotes": {
       "Trestles State Beach": "One of the best waves in the world. Trestles has hosted World Surf League events for decades — the surf community considers it sacred ground."
     },
@@ -921,7 +921,7 @@
       {
         "name": "Caroline Marks",
         "country": "USA",
-        "note": "Defending Olympic champion from Tahiti. A Floridian who trains in California — she knows Trestles"
+        "note": "Defending Games champion from Tahiti. A Floridian who trains in California — she knows Trestles"
       },
       {
         "name": "John John Florence",
@@ -931,7 +931,7 @@
       {
         "name": "Gabriel Medina",
         "country": "BRA",
-        "note": "Brazilian icon. His Paris aerial became the photo of those Olympics"
+        "note": "Brazilian icon. His Paris aerial became the photo of those Games"
       },
       {
         "name": "Filipe Toledo",
@@ -946,9 +946,9 @@
     ]
   },
   "Skateboarding": {
-    "la28Context": "Skateboarding at Venice Beach — the birthplace of modern skateboard culture. There is no more fitting Olympic venue for this sport anywhere on earth.",
+    "gamesContext": "Skateboarding at Venice Beach — the birthplace of modern skateboard culture. There is no more fitting venue for this sport anywhere on earth.",
     "venueNotes": {
-      "Venice Beach": "The spiritual home of skateboarding. Z-Boys, Dogtown, Venice Beach — this is where the sport was born. Olympic skateboarding here is a homecoming."
+      "Venice Beach": "The spiritual home of skateboarding. Z-Boys, Dogtown, Venice Beach — this is where the sport was born. Games skateboarding here is a homecoming."
     },
     "eventHighlights": {},
     "potentialContenders": [
@@ -975,9 +975,9 @@
     ]
   },
   "Skateboarding (Street)": {
-    "la28Context": "Street skateboarding at Venice Beach — the birthplace of modern skateboard culture. Technical tricks on stairs, rails, and ledges in the most iconic skate spot on earth.",
+    "gamesContext": "Street skateboarding at Venice Beach — the birthplace of modern skateboard culture. Technical tricks on stairs, rails, and ledges in the most iconic skate spot on earth.",
     "venueNotes": {
-      "Venice Beach": "The spiritual home of skateboarding. Olympic street skating here is a pilgrimage for the sport’s community."
+      "Venice Beach": "The spiritual home of skateboarding. Games street skating here is a pilgrimage for the sport’s community."
     },
     "eventHighlights": {
       "Men's Street Final": "Technical trickery on a purpose-built street course at Venice Beach. Peak California.",
@@ -1007,7 +1007,7 @@
     ]
   },
   "Skateboarding (Park)": {
-    "la28Context": "Park skateboarding at Venice Beach — big airs, bowl transitions, and flowing runs on a purpose-built park course steps from the ocean.",
+    "gamesContext": "Park skateboarding at Venice Beach — big airs, bowl transitions, and flowing runs on a purpose-built park course steps from the ocean.",
     "venueNotes": {
       "Venice Beach": "Venice Beach’s skate culture encompasses both street and park. The bowls and pools of Dogtown are where aerial skateboarding was born."
     },
@@ -1034,18 +1034,18 @@
       {
         "name": "Keegan Palmer",
         "country": "AUS",
-        "note": "Back-to-back Olympic park gold medalist (Tokyo and Paris). Australian who will be the defending champion"
+        "note": "Back-to-back Games park gold medalist (Tokyo and Paris). Australian who will be the defending champion"
       }
     ]
   },
   "Climbing": {
-    "la28Context": "Sport climbing returns with a refined format — bouldering and lead combined, plus speed as a standalone event. The split format was a long-requested change after Tokyo.",
+    "gamesContext": "Sport climbing returns with a refined format — bouldering and lead combined, plus speed as a standalone event. The split format was a long-requested change after Tokyo.",
     "venueNotes": {
       "Long Beach Climbing Theater": "Purpose-built outdoor climbing venue in Long Beach. The climbing wall faces the crowd for maximum viewing angles."
     },
     "eventHighlights": {
       "Men's Boulder & Lead Final": "The combined event crowns the best all-around climber. Bouldering problems change every round.",
-      "Women's Boulder & Lead Final": "Janja Garnbret has owned every wall she’s touched at the Olympic level.",
+      "Women's Boulder & Lead Final": "Janja Garnbret has owned every wall she’s touched at the Games level.",
       "Men's Speed Final": "Fifteen meters. Five seconds. The fastest vertical sprint in sport.",
       "Women's Speed Final": "Speed climbing is the 100m dash of the wall — pure explosive power."
     },
@@ -1053,7 +1053,7 @@
       {
         "name": "Janja Garnbret",
         "country": "SLO",
-        "note": "The most dominant competition climber in history. Two-time Olympic champion"
+        "note": "The most dominant competition climber in history. Two-time Games champion"
       },
       {
         "name": "Toby Roberts",
@@ -1063,7 +1063,7 @@
       {
         "name": "Adam Ondra",
         "country": "CZE",
-        "note": "Retired from bouldering in 2025 but continues in lead climbing; aiming for the LA28 lead event"
+        "note": "Retired from bouldering in 2025 but continues in lead climbing; aiming for the 2028 Games lead event"
       },
       {
         "name": "Sam Watson",
@@ -1073,12 +1073,12 @@
     ]
   },
   "Golf": {
-    "la28Context": "Olympic golf at Riviera Country Club — one of the most prestigious courses in the world and a regular PGA Tour stop. The course is tucked into the Pacific Palisades canyons.",
+    "gamesContext": "Golf at Riviera Country Club — one of the most prestigious courses in the world and a regular PGA Tour stop. The course is tucked into the Pacific Palisades canyons.",
     "venueNotes": {
       "Riviera Country Club": "Home of the Genesis Invitational on the PGA Tour. Designed in 1926, it’s one of the most respected layouts in golf. The par-4 10th is iconic."
     },
     "eventHighlights": {
-      "Men's Individual Final Round": "The final 18 holes for Olympic golf gold at Riviera. Major-championship pressure with Olympic stakes.",
+      "Men's Individual Final Round": "The final 18 holes for gold at Riviera. Major-championship pressure with Games-level stakes.",
       "Women's Individual Final Round": "Lydia Ko won gold in Paris. The women’s game is loaded with talent."
     },
     "potentialContenders": [
@@ -1090,7 +1090,7 @@
       {
         "name": "Rory McIlroy",
         "country": "IRL",
-        "note": "Four-time major champion. Has been emotional about wanting Olympic gold"
+        "note": "Four-time major champion. Has been emotional about wanting Games gold"
       },
       {
         "name": "Xander Schauffele",
@@ -1105,24 +1105,24 @@
       {
         "name": "Lydia Ko",
         "country": "NZL",
-        "note": "Paris gold, Tokyo silver, Rio bronze. The Olympic GOAT of golf"
+        "note": "Paris gold, Tokyo silver, Rio bronze. The Games GOAT of golf"
       }
     ]
   },
   "Rugby Sevens": {
-    "la28Context": "Rugby sevens at Carson Stadium brings the fast-paced, festival-like sevens format to LA. Sevens matches last just 14 minutes — it’s non-stop action.",
+    "gamesContext": "Rugby sevens at Carson Stadium brings the fast-paced, festival-like sevens format to LA. Sevens matches last just 14 minutes — it’s non-stop action.",
     "venueNotes": {
       "Carson Stadium": "Home of the LA Galaxy. Compact 27,000-seat stadium perfect for the sevens atmosphere."
     },
     "eventHighlights": {
-      "Men's Gold Medal Match": "France won a dramatic men’s gold in Paris. Fiji has won two of three Olympic golds in the sport.",
+      "Men's Gold Medal Match": "France won a dramatic men’s gold in Paris. Fiji has won two of three Games golds in the sport.",
       "Women's Gold Medal Match": "New Zealand’s women are the benchmark — their sevens team is ferocious."
     },
     "potentialContenders": [
       {
         "name": "Fiji Men",
         "country": "FIJ",
-        "note": "Two-time Olympic champions (2016, 2020). Rugby sevens is Fiji’s national obsession"
+        "note": "Two-time Games champions (2016, 2020). Rugby sevens is Fiji’s national obsession"
       },
       {
         "name": "France Men",
@@ -1142,7 +1142,7 @@
     ]
   },
   "Badminton": {
-    "la28Context": "Badminton at the LA Convention Center — the fastest racquet sport in the world (shuttlecocks travel over 300 mph off the racquet). Asian nations dominate, but the sport’s global reach is growing.",
+    "gamesContext": "Badminton at the LA Convention Center — the fastest racquet sport in the world (shuttlecocks travel over 300 mph off the racquet). Asian nations dominate, but the sport’s global reach is growing.",
     "venueNotes": {
       "LA Convention Center Hall 2": "Converted convention hall for badminton. The large interior space accommodates multiple courts for simultaneous matches."
     },
@@ -1155,7 +1155,7 @@
       {
         "name": "Viktor Axelsen",
         "country": "DEN",
-        "note": "Two-time Olympic champion. The most dominant men’s singles player of this era"
+        "note": "Two-time Games champion. The most dominant men’s singles player of this era"
       },
       {
         "name": "An Se-young",
@@ -1175,7 +1175,7 @@
     ]
   },
   "Judo": {
-    "la28Context": "Judo at the LA Convention Center brings Japan’s cultural export to America’s biggest stage. France and Georgia also field world-class teams.",
+    "gamesContext": "Judo at the LA Convention Center brings Japan’s cultural export to America’s biggest stage. France and Georgia also field world-class teams.",
     "venueNotes": {
       "LA Convention Center Hall 2": "Converted convention space with multiple mats. Judo’s simultaneous matches create a buzzing atmosphere."
     },
@@ -1188,7 +1188,7 @@
       {
         "name": "Teddy Riner",
         "country": "FRA",
-        "note": "Four-time Olympic champion; has confirmed LA28 will be his final Games before retirement"
+        "note": "Four-time Games champion; has confirmed 2028 will be his final Games before retirement"
       },
       {
         "name": "Uta Abe",
@@ -1203,7 +1203,7 @@
     ]
   },
   "Fencing": {
-    "la28Context": "Fencing at the LA Convention Center — one of the original Olympic sports since 1896. The sport combines chess-level tactics with lightning reflexes.",
+    "gamesContext": "Fencing at the LA Convention Center — one of the original Games sports since 1896. The sport combines chess-level tactics with lightning reflexes.",
     "venueNotes": {
       "LA Convention Center Hall 2": "Purpose-converted venue with elevated pistes for spectator viewing. The electronic scoring system and dramatic lighting create a unique atmosphere."
     },
@@ -1221,7 +1221,7 @@
       {
         "name": "Ka Long Cheung",
         "country": "HKG",
-        "note": "Hong Kong’s foil champion from Tokyo and Paris. Back-to-back Olympic champion"
+        "note": "Hong Kong’s foil champion from Tokyo and Paris. Back-to-back Games champion"
       },
       {
         "name": "Oh Sang-uk",
@@ -1236,7 +1236,7 @@
     ]
   },
   "Taekwondo": {
-    "la28Context": "Taekwondo at the LA Convention Center — Korea’s martial art on the global Olympic stage. Head kicks score huge points and create viral highlight-reel moments.",
+    "gamesContext": "Taekwondo at the LA Convention Center — Korea’s martial art on the global stage. Head kicks score huge points and create viral highlight-reel moments.",
     "venueNotes": {
       "LA Convention Center Hall 2": "Convention center mat setup with intimate seating. Head kicks echo through the venue."
     },
@@ -1260,7 +1260,7 @@
     ]
   },
   "Wrestling": {
-    "la28Context": "Wrestling at the LA Convention Center — one of the original ancient Olympic sports. Freestyle and Greco-Roman wrestling test raw strength, technique, and heart.",
+    "gamesContext": "Wrestling at the LA Convention Center — one of the original ancient Games sports. Freestyle and Greco-Roman wrestling test raw strength, technique, and heart.",
     "venueNotes": {
       "LA Convention Center Hall 2": "The mat-level seating creates an intense, gladiatorial atmosphere for wrestling."
     },
@@ -1283,17 +1283,17 @@
       {
         "name": "Abdulrashid Sadulaev",
         "country": "UZB",
-        "note": "The Russian Tank — now competing for Uzbekistan. Two Olympic golds in freestyle"
+        "note": "The Russian Tank — now competing for Uzbekistan. Two Games golds in freestyle"
       }
     ]
   },
   "Handball": {
-    "la28Context": "Handball at the Galen Center (USC’s arena) brings one of Europe’s most popular sports to a new audience. The sport is fast, physical, and non-stop action.",
+    "gamesContext": "Handball at the Galen Center (USC’s arena) brings one of Europe’s most popular sports to a new audience. The sport is fast, physical, and non-stop action.",
     "venueNotes": {
       "Galen Center": "USC’s on-campus arena. 10,000 seats for a sport that thrives on crowd noise."
     },
     "eventHighlights": {
-      "Men's Gold Medal Match": "Denmark has won two of the last three Olympic golds. Handball finals are electric.",
+      "Men's Gold Medal Match": "Denmark has won two of the last three Games golds. Handball finals are electric.",
       "Women's Gold Medal Match": "Norway’s women are the all-time greats. France won in Paris."
     },
     "potentialContenders": [
@@ -1320,24 +1320,24 @@
     ]
   },
   "Hockey": {
-    "la28Context": "Field hockey at Carson Field. The sport is massive in India, Netherlands, Australia, and Argentina. Quick, skilled, and highly tactical.",
+    "gamesContext": "Field hockey at Carson Field. The sport is massive in India, Netherlands, Australia, and Argentina. Quick, skilled, and highly tactical.",
     "venueNotes": {
       "Carson Field": "Purpose-built hockey pitch adjacent to Carson Stadium. The blue turf surface is hockey’s signature look."
     },
     "eventHighlights": {
-      "Men's Gold Medal Match": "The Netherlands and India are perennial contenders. India’s hockey renaissance has been one of the great Olympic stories.",
-      "Women's Gold Medal Match": "The Netherlands women are the benchmark — they’ve won the last two Olympic golds."
+      "Men's Gold Medal Match": "The Netherlands and India are perennial contenders. India’s hockey renaissance has been one of the great Games stories.",
+      "Women's Gold Medal Match": "The Netherlands women are the benchmark — they’ve won the last two Games golds."
     },
     "potentialContenders": [
       {
         "name": "Netherlands Women",
         "country": "NED",
-        "note": "Three-time consecutive Olympic champions (Tokyo, Paris); won five of twelve Olympic women's hockey tournaments"
+        "note": "Three-time consecutive Games champions (Tokyo, Paris); won five of twelve Games women's hockey tournaments"
       },
       {
         "name": "India Men",
         "country": "IND",
-        "note": "Back-to-back bronze medalists. India’s hockey comeback is one of the best stories in recent Olympics"
+        "note": "Back-to-back bronze medalists. India’s hockey comeback is one of the best stories in recent Games"
       },
       {
         "name": "Netherlands Men",
@@ -1352,12 +1352,12 @@
     ]
   },
   "Water Polo": {
-    "la28Context": "Water polo at the Long Beach Aquatics Center — a physically brutal, tactically complex sport that combines swimming, wrestling, and handball. The US men’s team has a strong history.",
+    "gamesContext": "Water polo at the Long Beach Aquatics Center — a physically brutal, tactically complex sport that combines swimming, wrestling, and handball. The US men’s team has a strong history.",
     "venueNotes": {
       "Long Beach Aquatics Center": "Purpose-built aquatics venue in Long Beach for water polo. The pool-level seating puts you right at the waterline."
     },
     "eventHighlights": {
-      "Men's Gold Medal Match": "Water polo finals are some of the most physical events at the Olympics.",
+      "Men's Gold Medal Match": "Water polo finals are some of the most physical events at the Games.",
       "Women's Gold Medal Match": "Spain won women’s gold in Paris. The US women are always contenders."
     },
     "potentialContenders": [
@@ -1374,22 +1374,22 @@
       {
         "name": "USA Women",
         "country": "USA",
-        "note": "Three-time Olympic champions (2012, 2016, 2020). Always dangerous on home soil"
+        "note": "Three-time Games champions (2012, 2016, 2020). Always dangerous on home soil"
       },
       {
         "name": "Hungary Men",
         "country": "HUN",
-        "note": "The most decorated men’s water polo nation in Olympic history"
+        "note": "The most decorated men’s water polo nation in Games history"
       }
     ]
   },
   "Table Tennis": {
-    "la28Context": "Table tennis at the LA Convention Center. China’s dominance is legendary, but the sport’s global parity is slowly improving.",
+    "gamesContext": "Table tennis at the LA Convention Center. China’s dominance is legendary, but the sport’s global parity is slowly improving.",
     "venueNotes": {
       "LA Convention Center Hall 2": "Converted convention space with a single showcase court for medal matches. The acoustics amplify every rally."
     },
     "eventHighlights": {
-      "Men's Singles Gold Medal Match": "China has won nearly every Olympic gold in table tennis. Breaking through is the holy grail for every other country.",
+      "Men's Singles Gold Medal Match": "China has won nearly every Games gold in table tennis. Breaking through is the holy grail for every other country.",
       "Women's Singles Gold Medal Match": "Chen Meng, Sun Yingsha — Chinese women’s table tennis is breathtakingly deep."
     },
     "potentialContenders": [
@@ -1406,7 +1406,7 @@
       {
         "name": "Chen Meng",
         "country": "CHN",
-        "note": "Two-time Olympic gold medalist in women’s singles"
+        "note": "Two-time Games gold medalist in women’s singles"
       },
       {
         "name": "Sun Yingsha",
@@ -1421,7 +1421,7 @@
     ]
   },
   "Weightlifting": {
-    "la28Context": "Weightlifting at the DTLA Arena — raw strength on display in an intimate 3,600-seat venue. The snatch and clean & jerk are among the most explosive movements in sport.",
+    "gamesContext": "Weightlifting at the DTLA Arena — raw strength on display in an intimate 3,600-seat venue. The snatch and clean & jerk are among the most explosive movements in sport.",
     "venueNotes": {
       "DTLA Arena": "The intimate venue amplifies every grunt, every dropped bar, and every crowd reaction. Weightlifting in a small room is visceral."
     },
@@ -1433,12 +1433,12 @@
       {
         "name": "Lasha Talakhadze",
         "country": "GEO",
-        "note": "Georgian super heavyweight; won a third consecutive Olympic gold in Paris. The strongest lifter in Olympic history"
+        "note": "Georgian super heavyweight; won a third consecutive Games gold in Paris. The strongest lifter in Games history"
       },
       {
         "name": "Li Fabin",
         "country": "CHN",
-        "note": "Chinese weightlifter known for his one-legged start in the clean & jerk. Two-time Olympic gold"
+        "note": "Chinese weightlifter known for his one-legged start in the clean & jerk. Two-time Games gold"
       },
       {
         "name": "Maude Charron",
@@ -1448,13 +1448,13 @@
     ]
   },
   "Archery": {
-    "la28Context": "Archery returns to the Coliseum grounds area. South Korea dominates this sport like few countries dominate anything — but upsets happen in the individual brackets.",
+    "gamesContext": "Archery returns to the Coliseum grounds area. South Korea dominates this sport like few countries dominate anything — but upsets happen in the individual brackets.",
     "venueNotes": {
       "Exposition Park Stadium": "Temporary archery venue near the Coliseum in Exposition Park. Archers shoot from 70 meters — the targets look impossibly small."
     },
     "eventHighlights": {
       "Men's Individual Final": "One arrow at a time, under maximum pressure. Archery finals are silent, tense, and riveting.",
-      "Women's Individual Final": "South Korea’s An San is the face of Olympic archery after her Tokyo triple gold.",
+      "Women's Individual Final": "South Korea’s An San is the face of archery at the Games after her Tokyo triple gold.",
       "Mixed Team Final": "The mixed team format adds strategic complexity — two archers, alternating shots."
     },
     "potentialContenders": [
@@ -1476,12 +1476,12 @@
       {
         "name": "Brady Ellison",
         "country": "USA",
-        "note": "America’s best archer. Four Olympics and counting — a home Games medal would be a career capstone"
+        "note": "America’s best archer. Four Games and counting — a home Games medal would be a career capstone"
       }
     ]
   },
   "Canoe Slalom": {
-    "la28Context": "Canoe slalom at the Fairgrounds course — athletes navigate whitewater gates in kayaks and canoes. The new kayak cross format adds head-to-head racing.",
+    "gamesContext": "Canoe slalom at the Fairgrounds course — athletes navigate whitewater gates in kayaks and canoes. The new kayak cross format adds head-to-head racing.",
     "venueNotes": {
       "Long Beach Aquatics Center": "Temporary whitewater course built for the Games. Man-made rapids that test boat control under pressure."
     },
@@ -1503,19 +1503,19 @@
     ]
   },
   "Canoe Sprint": {
-    "la28Context": "Canoe sprint on the Long Beach marine course — flat-water racing that rewards explosive power and paddle technique.",
+    "gamesContext": "Canoe sprint on the Long Beach marine course — flat-water racing that rewards explosive power and paddle technique.",
     "venueNotes": {
       "Long Beach Aquatics Center": "Flat-water course set up in Long Beach harbor. Sprint kayak and canoe races from 200m to 1000m."
     },
     "eventHighlights": {
       "Men's K1 1000m Final": "The blue-ribbon flat-water sprint. One kilometer of all-out paddling.",
-      "Women's C2 500m Final": "Women’s canoe sprint was only added to the Olympics in Tokyo 2020."
+      "Women's C2 500m Final": "Women’s canoe sprint was only added to the Games in Tokyo 2020."
     },
     "potentialContenders": [
       {
         "name": "Lisa Carrington",
         "country": "NZL",
-        "note": "New Zealand’s most decorated Olympian. Five career Olympic golds in canoe sprint"
+        "note": "New Zealand’s most decorated Olympian. Five career Games golds in canoe sprint"
       },
       {
         "name": "Balint Kopasz",
@@ -1525,9 +1525,9 @@
     ]
   },
   "Cycling Road (Road Race)": {
-    "la28Context": "The Olympic road race will wind through iconic LA landscapes — expect a course that tests climbers and sprinters through the city’s diverse terrain.",
+    "gamesContext": "The Games road race will wind through iconic LA landscapes — expect a course that tests climbers and sprinters through the city’s diverse terrain.",
     "venueNotes": {
-      "LA Memorial Coliseum": "The road race likely finishes near the Coliseum, connecting cycling to the main Olympic hub."
+      "LA Memorial Coliseum": "The road race likely finishes near the Coliseum, connecting cycling to the main Games hub."
     },
     "eventHighlights": {
       "Men's Road Race": "A one-day classic through LA. The men’s road race is unpredictable and always dramatic.",
@@ -1557,9 +1557,9 @@
     ]
   },
   "Cycling Road (Time Trial)": {
-    "la28Context": "The individual time trial — the race of truth. No drafting, no tactics, just raw power against the clock through an LA course.",
+    "gamesContext": "The individual time trial — the race of truth. No drafting, no tactics, just raw power against the clock through an LA course.",
     "venueNotes": {
-      "LA Memorial Coliseum": "Time trial course starts and finishes near the Olympic hub. A test of pure power on LA roads."
+      "LA Memorial Coliseum": "Time trial course starts and finishes near the Games hub. A test of pure power on LA roads."
     },
     "eventHighlights": {
       "Men's Time Trial": "The race of truth. Alone against the clock, aero positions, maximum watts.",
@@ -1584,9 +1584,9 @@
     ]
   },
   "Cycling Track": {
-    "la28Context": "Track cycling at the Carson Velodrome — banked wooden ovals, speeds over 70 km/h, and some of the most dramatic racing in the Olympics. The velodrome is purpose-built for these Games.",
+    "gamesContext": "Track cycling at the Carson Velodrome — banked wooden ovals, speeds over 70 km/h, and some of the most dramatic racing in the Games. The velodrome is purpose-built for these Games.",
     "venueNotes": {
-      "Carson Velodrome": "Brand-new indoor velodrome built for LA28. Wooden track, steep banking, and a capacity designed for maximum crowd noise."
+      "Carson Velodrome": "Brand-new indoor velodrome built for the 2028 Games. Wooden track, steep banking, and a capacity designed for maximum crowd noise."
     },
     "eventHighlights": {
       "Men's Sprint Final": "Two riders, three laps, cat-and-mouse tactics at 70 km/h. The sprint final is hypnotic.",
@@ -1612,12 +1612,12 @@
     ]
   },
   "BMX Freestyle": {
-    "la28Context": "BMX freestyle at Venice Beach — park-style BMX tricks in the spiritual home of action sports. Tailwhips, backflips, and 360s with an ocean backdrop.",
+    "gamesContext": "BMX freestyle at Venice Beach — park-style BMX tricks in the spiritual home of action sports. Tailwhips, backflips, and 360s with an ocean backdrop.",
     "venueNotes": {
       "Venice Beach": "BMX freestyle at Venice Beach pairs perfectly with the action-sports culture of the boardwalk."
     },
     "eventHighlights": {
-      "Men's Freestyle Park Final": "Sixty seconds to throw your biggest tricks on a BMX in front of an Olympic crowd.",
+      "Men's Freestyle Park Final": "Sixty seconds to throw your biggest tricks on a BMX in front of an Games crowd.",
       "Women's Freestyle Park Final": "The women’s field has exploded in depth since the sport debuted in Tokyo."
     },
     "potentialContenders": [
@@ -1639,7 +1639,7 @@
     ]
   },
   "BMX Racing": {
-    "la28Context": "BMX racing at Carson — eight riders, 40 seconds of chaos, jumps, berms, and full-contact racing. The gate drops and anything can happen.",
+    "gamesContext": "BMX racing at Carson — eight riders, 40 seconds of chaos, jumps, berms, and full-contact racing. The gate drops and anything can happen.",
     "venueNotes": {
       "Carson Field": "BMX racing track at the Carson complex. The purpose-built course features massive jumps and technical rhythm sections."
     },
@@ -1651,7 +1651,7 @@
       {
         "name": "Saya Sakakibara",
         "country": "AUS",
-        "note": "Paris gold medalist. Australian who overcame a horror crash to win Olympic gold"
+        "note": "Paris gold medalist. Australian who overcame a horror crash to win Games gold"
       },
       {
         "name": "Sylvain Andre",
@@ -1666,7 +1666,7 @@
     ]
   },
   "Equestrian": {
-    "la28Context": "Equestrian at the Fairgrounds in Pomona — dressage, eventing, and show jumping. The sport’s three disciplines test completely different aspects of the horse-rider partnership.",
+    "gamesContext": "Equestrian at the Fairgrounds in Pomona — dressage, eventing, and show jumping. The sport’s three disciplines test completely different aspects of the horse-rider partnership.",
     "venueNotes": {
       "Fairgrounds Cricket Stadium": "The Pomona Fairplex hosts equestrian events in purpose-built arenas adjacent to the cricket venue."
     },
@@ -1688,7 +1688,7 @@
       {
         "name": "Steve Guerdat",
         "country": "SUI",
-        "note": "Swiss show jumping legend. Olympic gold in 2012 and still competing at the highest level"
+        "note": "Swiss show jumping legend. Games gold in 2012 and still competing at the highest level"
       },
       {
         "name": "Laura Collett",
@@ -1698,7 +1698,7 @@
     ]
   },
   "Rowing": {
-    "la28Context": "Rowing at the Long Beach Marine course — early mornings on the water with the Long Beach skyline as a backdrop. Rowing is one of the most demanding endurance sports.",
+    "gamesContext": "Rowing at the Long Beach Marine course — early mornings on the water with the Long Beach skyline as a backdrop. Rowing is one of the most demanding endurance sports.",
     "venueNotes": {
       "Long Beach Aquatics Center": "Marine rowing course in Long Beach harbor. Flat water, California mornings, and 2,000 meters of racing."
     },
@@ -1725,7 +1725,7 @@
     ]
   },
   "Rowing Coastal": {
-    "la28Context": "Coastal rowing debuts at LA28 — open-water rowing in the Pacific, dealing with waves, swells, and wind. A dramatic new addition that tests seamanship alongside rowing power.",
+    "gamesContext": "Coastal rowing debuts at the 2028 Games — open-water rowing in the Pacific, dealing with waves, swells, and wind. A dramatic new addition that tests seamanship alongside rowing power.",
     "venueNotes": {
       "Belmont Shore": "Long Beach’s Belmont Shore hosts coastal rowing. Open Pacific water means waves, currents, and unpredictable conditions."
     },
@@ -1741,7 +1741,7 @@
     ]
   },
   "Shooting (R/P)": {
-    "la28Context": "Rifle and pistol shooting at Whittier Narrows — a sport of absolute precision where hundredths of a point decide medals. Tiny margins, enormous pressure.",
+    "gamesContext": "Rifle and pistol shooting at Whittier Narrows — a sport of absolute precision where hundredths of a point decide medals. Tiny margins, enormous pressure.",
     "venueNotes": {
       "Whittier Narrows Clay Center": "Shooting range east of downtown LA. The range hosts both rifle/pistol and shotgun events."
     },
@@ -1763,7 +1763,7 @@
     ]
   },
   "Shooting (Shotgun)": {
-    "la28Context": "Shotgun events at Whittier Narrows — trap and skeet shooting where flying clay targets must be shattered in mid-air.",
+    "gamesContext": "Shotgun events at Whittier Narrows — trap and skeet shooting where flying clay targets must be shattered in mid-air.",
     "venueNotes": {
       "Whittier Narrows Clay Center": "Outdoor shotgun range with clay target throwers."
     },
@@ -1775,7 +1775,7 @@
       {
         "name": "Nathan Hales",
         "country": "GBR",
-        "note": "Paris trap gold medalist. Set an Olympic record in qualifying"
+        "note": "Paris trap gold medalist. Set an Games record in qualifying"
       },
       {
         "name": "Amber Rutter",
@@ -1785,7 +1785,7 @@
     ]
   },
   "Sailing (D/S/M)": {
-    "la28Context": "Sailing events out of Long Beach harbor — dinghy, skiff, and multihull classes racing on the Pacific Ocean. Wind, waves, and tactical genius.",
+    "gamesContext": "Sailing events out of Long Beach harbor — dinghy, skiff, and multihull classes racing on the Pacific Ocean. Wind, waves, and tactical genius.",
     "venueNotes": {
       "Long Beach Aquatics Center": "Sailing launches from Long Beach marina. Pacific Ocean racing with the LA coastline as a backdrop."
     },
@@ -1806,12 +1806,12 @@
     ]
   },
   "Sailing (W/K)": {
-    "la28Context": "Windsurfing and kiteboarding events on the Pacific — the newer sailing disciplines that bring extreme-sport energy to Olympic sailing.",
+    "gamesContext": "Windsurfing and kiteboarding events on the Pacific — the newer sailing disciplines that bring extreme-sport energy to Games sailing.",
     "venueNotes": {
       "Long Beach Aquatics Center": "Pacific Ocean conditions off Long Beach. Kiteboarding debuted in Paris — LA’s wind conditions will create a different challenge."
     },
     "eventHighlights": {
-      "Kite Final": "Formula kite racing — foiling above the water at 40+ knots. One of the most visually spectacular Olympic sports."
+      "Kite Final": "Formula kite racing — foiling above the water at 40+ knots. One of the most visually spectacular Games sports."
     },
     "potentialContenders": [
       {
@@ -1827,7 +1827,7 @@
     ]
   },
   "Trampoline Gymnastics": {
-    "la28Context": "Trampoline gymnastics at the Intuit Dome — athletes launch 30 feet in the air performing multiple somersaults and twists. It’s one of the most visually spectacular events at the Games.",
+    "gamesContext": "Trampoline gymnastics at the Intuit Dome — athletes launch 30 feet in the air performing multiple somersaults and twists. It’s one of the most visually spectacular events at the Games.",
     "venueNotes": {
       "Intuit Dome": "The arena’s Halo Board will create a dramatic backdrop for athletes flying 30 feet in the air."
     },
@@ -1849,7 +1849,7 @@
     ]
   },
   "Rhythmic Gymnastics": {
-    "la28Context": "Rhythmic gymnastics at the Intuit Dome — combining dance, flexibility, and apparatus manipulation (ribbon, ball, hoop, clubs) into a uniquely artistic Olympic sport.",
+    "gamesContext": "Rhythmic gymnastics at the Intuit Dome — combining dance, flexibility, and apparatus manipulation (ribbon, ball, hoop, clubs) into a uniquely artistic Games sport.",
     "venueNotes": {
       "Intuit Dome": "The arena’s lighting and halo screen will enhance the visual artistry of rhythmic gymnastics."
     },
@@ -1876,7 +1876,7 @@
     ]
   },
   "Artistic Swimming": {
-    "la28Context": "Artistic swimming (formerly synchronized swimming) at the Rose Bowl Aquatics Center — the sport combines swimming, dance, and acrobatics performed in water. China has dominated recently.",
+    "gamesContext": "Artistic swimming (formerly synchronized swimming) at the Rose Bowl Aquatics Center — the sport combines swimming, dance, and acrobatics performed in water. China has dominated recently.",
     "venueNotes": {
       "Rose Bowl Aquatics Center": "The outdoor pool in Pasadena gives artistic swimming a sun-drenched California setting."
     },
@@ -1898,7 +1898,7 @@
     ]
   },
   "Triathlon": {
-    "la28Context": "Triathlon in downtown LA — swim, bike, run through the city streets. The mixed relay format adds team tactics and draft-legal racing.",
+    "gamesContext": "Triathlon in downtown LA — swim, bike, run through the city streets. The mixed relay format adds team tactics and draft-legal racing.",
     "venueNotes": {
       "LA Memorial Coliseum": "Triathlon uses a city-center course with transitions near the Coliseum complex."
     },
@@ -1926,7 +1926,7 @@
     ]
   },
   "Modern Pentathlon": {
-    "la28Context": "Modern pentathlon gets a format overhaul for LA28 — the new “obstacle racing” discipline replaces horse riding. Five events in one day: fencing, swimming, obstacle course, laser-run.",
+    "gamesContext": "Modern pentathlon gets a format overhaul for the 2028 Games — the new “obstacle racing” discipline replaces horse riding. Five events in one day: fencing, swimming, obstacle course, laser-run.",
     "venueNotes": {
       "Exposition Park Stadium": "Modern pentathlon’s multi-discipline format uses venues near the Coliseum complex."
     },
@@ -1948,7 +1948,7 @@
     ]
   },
   "Mountain Bike": {
-    "la28Context": "Mountain biking at Industry Hills — technical cross-country racing on a purpose-built course in the hills east of LA. Heat, dust, and brutal climbs.",
+    "gamesContext": "Mountain biking at Industry Hills — technical cross-country racing on a purpose-built course in the hills east of LA. Heat, dust, and brutal climbs.",
     "venueNotes": {
       "Industry Hills MTB Course": "Purpose-built cross-country course in the hills east of LA. Expect technical rock gardens, steep climbs, and California heat."
     },
@@ -1970,7 +1970,7 @@
     ]
   },
   "Open Water Swimming": {
-    "la28Context": "Open-water swimming in the Pacific off Long Beach — a 10km marathon swim in the ocean, dealing with currents, swells, and other swimmers.",
+    "gamesContext": "Open-water swimming in the Pacific off Long Beach — a 10km marathon swim in the ocean, dealing with currents, swells, and other swimmers.",
     "venueNotes": {
       "Belmont Shore": "Open-water course off Belmont Shore in Long Beach. Pacific Ocean conditions — colder water, currents, and potentially choppy conditions."
     },
@@ -1982,7 +1982,7 @@
       {
         "name": "Sharon van Rouwendaal",
         "country": "NED",
-        "note": "Dutch open-water star. 2016 gold, 2024 gold. The most decorated Olympic open-water swimmer"
+        "note": "Dutch open-water star. 2016 gold, 2024 gold. The most decorated Games open-water swimmer"
       },
       {
         "name": "Kristof Rasovszky",

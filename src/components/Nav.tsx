@@ -2,14 +2,6 @@ import { Github } from 'lucide-react'
 
 import { ThemeToggle } from './ThemeToggle'
 
-const ringColors = [
-  'var(--ring-blue)',
-  'var(--ring-yellow)',
-  'var(--ring-black)',
-  'var(--ring-green)',
-  'var(--ring-red)',
-]
-
 export function Nav() {
   return (
     <div className="relative overflow-hidden px-6 pt-12 pb-6 text-center max-md:px-4 max-md:pt-10">
@@ -24,15 +16,6 @@ export function Nav() {
         <Github size={18} />
       </a>
       <ThemeToggle />
-      <div className="relative mb-3.5 flex justify-center gap-[3px]">
-        {ringColors.map((color, i) => (
-          <div
-            key={i}
-            className="size-[18px] rounded-full border-2 border-solid opacity-60"
-            style={{ borderColor: color }}
-          />
-        ))}
-      </div>
       <h1 className="font-display relative mb-1.5 text-[2.2rem] leading-[1.1] font-normal -tracking-[0.03em] max-md:text-[1.6rem]">
         <em className="text-gold italic">2028 Games</em> Unofficial Guide
       </h1>

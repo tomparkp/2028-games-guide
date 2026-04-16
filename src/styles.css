@@ -36,11 +36,6 @@
   --accent: #4a9eff;
   --red: #e8473a;
   --green: #3dba6f;
-  --ring-blue: #0085c7;
-  --ring-yellow: #f4c300;
-  --ring-black: #e0e0e0;
-  --ring-green: #009f3d;
-  --ring-red: #df0024;
   color-scheme: dark;
 }
 
@@ -61,7 +56,6 @@
   --accent: #0066cc;
   --red: #b83228;
   --green: #257548;
-  --ring-black: #1a1d27;
   color-scheme: light;
 }
 
@@ -82,7 +76,6 @@
     --accent: #0066cc;
     --red: #b83228;
     --green: #257548;
-    --ring-black: #1a1d27;
     color-scheme: light;
   }
 }

@@ -2,14 +2,13 @@ import 'dotenv/config'
 import Anthropic from '@anthropic-ai/sdk'
 
 import {
-  parseDbTargetFromArgs,
   readGroundingForSession,
   readSessionById,
   readWritingForSession,
   upsertGrounding,
   upsertScoring,
   upsertWriting,
-} from './lib/db.js'
+} from './lib/content-store.js'
 import {
   ANTHROPIC_SCORING_DEFAULT_MODEL,
   ANTHROPIC_WRITING_DEFAULT_MODEL,
@@ -64,8 +63,6 @@ function parseArgs(argv: string[]): ParsedArgs {
       parsed.skipScoring = true
     } else if (arg === '--dry-run') {
       parsed.dryRun = true
-    } else if (arg === '--remote' || arg === '--local') {
-      // handled by parseDbTargetFromArgs
     } else if (arg === '--perplexity-model') {
       parsed.perplexityModel = args[++i]
     } else if (arg.startsWith('--perplexity-model=')) {
@@ -98,15 +95,14 @@ function usage(): never {
   console.error(`Usage: pnpm refresh <sessionId> [options]
 
 Regenerates blurb, contenders, and related news for a single session
-against D1 (default: --local; use --remote to write to prod).
+and writes the updates back into the JSON content store under src/data/.
 
 Options:
   --prompt <text>          Extra instructions appended to both grounding and writing prompts.
-  --skip-grounding         Skip Perplexity; reuse the grounding row already in D1.
+  --skip-grounding         Skip Perplexity; reuse the grounding entry already in the store.
   --skip-writing           Skip Anthropic writing; only refresh grounding.
   --skip-scoring           Skip Anthropic scoring; leave the existing scorecard in place.
   --dry-run                Print resolved session and prompts, make no API calls.
-  --remote                 Write to production D1 (default is local).
   --perplexity-model <m>         Override grounding model (default: ${PERPLEXITY_DEFAULT_MODEL}).
   --anthropic-writing-model <m>  Writing model (default: ${ANTHROPIC_WRITING_DEFAULT_MODEL}).
   --anthropic-scoring-model <m>  Scoring model (default: ${ANTHROPIC_SCORING_DEFAULT_MODEL}).
@@ -114,7 +110,7 @@ Options:
 
 Example:
   pnpm refresh ATH04
-  pnpm refresh ATH04 --remote --prompt "Noah Lyles withdrew due to injury"
+  pnpm refresh ATH04 --prompt "Noah Lyles withdrew due to injury"
   pnpm refresh ATH04 --skip-grounding --prompt "Tighten the blurb"
 `)
   process.exit(1)
@@ -138,17 +134,14 @@ async function main() {
     }
   }
 
-  const dbTarget = parseDbTargetFromArgs(process.argv.slice(2))
-  console.log(`D1 target: ${dbTarget}`)
-
-  const session = await readSessionById(args.sessionId, dbTarget)
+  const session = readSessionById(args.sessionId)
   if (!session) {
-    console.error(`Error: session "${args.sessionId}" not found in D1 (${dbTarget})`)
+    console.error(`Error: session "${args.sessionId}" not found in src/data/sessions.json`)
     process.exit(1)
   }
 
-  const existingGrounding = await readGroundingForSession(session.id, dbTarget)
-  const existingWriting = await readWritingForSession(session.id, dbTarget)
+  const existingGrounding = readGroundingForSession(session.id)
+  const existingWriting = readWritingForSession(session.id)
 
   console.log(`Session:       ${session.id} — ${session.name}`)
   console.log(`Sport/Venue:   ${session.sport} @ ${session.venue}`)
@@ -200,7 +193,6 @@ async function main() {
         promptVersion: GROUNDING_VERSION,
         generatedAt: new Date().toISOString(),
       },
-      dbTarget,
     )
   } else {
     console.log('\n=== Stage 1: Grounding (skipped) ===')
@@ -209,7 +201,7 @@ async function main() {
         id: session.id,
         groundingFacts: existingGrounding.facts,
         relatedNews: existingGrounding.relatedNews,
-        sources: existingGrounding.sources,
+        sources: existingGrounding.sources ?? undefined,
       }
     }
   }
@@ -253,7 +245,6 @@ async function main() {
         promptVersion: WRITING_VERSION,
         generatedAt: new Date().toISOString(),
       },
-      dbTarget,
     )
   } else {
     console.log('\n=== Stage 2: Writing (skipped) ===')
@@ -296,15 +287,11 @@ async function main() {
     console.log(
       `  ✓ Sig${sc.significance.score} Exp${sc.experience.score} Star${sc.starPower.score} Uniq${sc.uniqueness.score} Dem${sc.demand.score} = ${sc.aggregate}`,
     )
-    await upsertScoring(
-      [{ sessionId: session.id, scorecard: scoring.scorecard }],
-      {
-        model: args.scoringModel,
-        promptVersion: SCORING_VERSION,
-        generatedAt: new Date().toISOString(),
-      },
-      dbTarget,
-    )
+    await upsertScoring([{ sessionId: session.id, scorecard: scoring.scorecard }], {
+      model: args.scoringModel,
+      promptVersion: SCORING_VERSION,
+      generatedAt: new Date().toISOString(),
+    })
   } else {
     console.log('\n=== Stage 3: Scoring (skipped) ===')
   }

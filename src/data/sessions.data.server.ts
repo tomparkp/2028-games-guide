@@ -1,15 +1,19 @@
-import { and, eq, gte, inArray, lte, sql } from 'drizzle-orm'
-
-import { getDb } from '@/db/client'
-import { sessionContent, sessions as sessionsTable } from '@/db/schema'
+import groundingData from '@/data/grounding.json'
+import scoringData from '@/data/scoring.json'
+import sessionsData from '@/data/sessions.json'
+import writingData from '@/data/writing.json'
 import { getSessionInsights, type SessionInsights } from '@/lib/ai-scorecard'
-import { sortSessions } from '@/lib/filter'
+import { filterSessions, sortSessions } from '@/lib/filter'
 import type {
+  Contender,
+  ContentMeta,
+  ContentSource,
   Filters,
-  RoundType,
+  RelatedNews,
+  Scorecard,
   Session,
   SessionContent,
-  SessionWithContent,
+  SessionSource,
   SortState,
 } from '@/types/session'
 
@@ -24,47 +28,67 @@ export interface SessionsPage {
 export interface SessionDetailPayload {
   session: Session
   insights: SessionInsights
-  contentMeta?: SessionContent['contentMeta']
+  contentMeta?: ContentMeta
 }
 
-function buildFilterConditions(filters: Filters) {
-  const conditions = []
-
-  if (filters.sport) conditions.push(eq(sessionsTable.sport, filters.sport))
-  if (filters.round) conditions.push(eq(sessionsTable.rt, filters.round as RoundType))
-  if (filters.zone) conditions.push(eq(sessionsTable.zone, filters.zone))
-
-  if (filters.price) {
-    const [lo, hi] = filters.price.split('-').map(Number)
-    if (Number.isFinite(lo)) conditions.push(gte(sessionsTable.pLo, lo))
-    if (Number.isFinite(hi)) conditions.push(lte(sessionsTable.pLo, hi))
-  }
-
-  if (filters.score) {
-    const scoreMin = Number(filters.score)
-    if (Number.isFinite(scoreMin) && scoreMin > 0) {
-      conditions.push(gte(sessionsTable.agg, scoreMin))
-    }
-  }
-
-  return conditions.length > 0 ? and(...conditions) : undefined
+interface GroundingEntry {
+  facts: string[] | null
+  relatedNews: RelatedNews[]
+  sources: ContentSource[] | null
+  model: string
+  promptVersion: number
+  generatedAt: string
 }
 
-async function getSportsAndZones(): Promise<{ sports: string[]; zones: string[] }> {
-  const db = getDb()
-  const [sportRows, zoneRows] = await Promise.all([
-    db
-      .selectDistinct({ sport: sessionsTable.sport })
-      .from(sessionsTable)
-      .orderBy(sessionsTable.sport),
-    db.selectDistinct({ zone: sessionsTable.zone }).from(sessionsTable).orderBy(sessionsTable.zone),
-  ])
+interface WritingEntry {
+  blurb: string
+  potentialContendersIntro: string | null
+  potentialContenders: Contender[]
+  model: string
+  promptVersion: number
+  batchId: string | null
+  generatedAt: string
+}
 
+interface ScoringEntry {
+  agg: number
+  rSig: number
+  rExp: number
+  rStar: number
+  rUniq: number
+  rDem: number
+  scorecard: Scorecard | null
+  model: string
+  promptVersion: number
+  batchId: string | null
+  generatedAt: string
+}
+
+const sessionSources = sessionsData as SessionSource[]
+const grounding = groundingData as Record<string, GroundingEntry>
+const writing = writingData as Record<string, WritingEntry>
+const scoring = scoringData as Record<string, ScoringEntry>
+
+function toSession(source: SessionSource): Session {
+  const score = scoring[source.id]
   return {
-    sports: sportRows.map((r) => r.sport).filter(Boolean),
-    zones: zoneRows.map((r) => r.zone),
+    ...source,
+    agg: score?.agg ?? 0,
+    rSig: score?.rSig ?? 0,
+    rExp: score?.rExp ?? 0,
+    rStar: score?.rStar ?? 0,
+    rUniq: score?.rUniq ?? 0,
+    rDem: score?.rDem ?? 0,
   }
 }
+
+// Merge happens once at module load. Session list is small (~1000) so the
+// cost is trivial and we avoid redoing the join on every request.
+const sessions: Session[] = sessionSources.map(toSession)
+const sessionsById = new Map(sessions.map((s) => [s.id, s]))
+
+const sports = [...new Set(sessions.map((s) => s.sport).filter(Boolean))].sort()
+const zones = [...new Set(sessions.map((s) => s.zone).filter(Boolean))].sort()
 
 export async function getSessionsPageData({
   filters,
@@ -77,20 +101,8 @@ export async function getSessionsPageData({
   offset: number
   limit: number
 }): Promise<SessionsPage> {
-  const db = getDb()
-  const where = buildFilterConditions(filters)
-
-  const [rows, { sports, zones }] = await Promise.all([
-    db
-      .select()
-      .from(sessionsTable)
-      .where(where ?? sql`1 = 1`),
-    getSportsAndZones(),
-  ])
-
-  // Sort in JS to preserve the tie-breaking behavior of the existing util
-  // (date sort parses `time` into minutes). Dataset is ~800 rows.
-  const sorted = sortSessions(rows as Session[], sort)
+  const filtered = filterSessions(sessions, filters)
+  const sorted = sortSessions(filtered, sort)
   const items = sorted.slice(offset, offset + limit)
   const nextOffset = offset + items.length < sorted.length ? offset + items.length : null
 
@@ -106,35 +118,51 @@ export async function getSessionsPageData({
 export async function getSessionDetailData(
   sessionId: string,
 ): Promise<SessionDetailPayload | null> {
-  const db = getDb()
-  const row = await db
-    .select()
-    .from(sessionsTable)
-    .leftJoin(sessionContent, eq(sessionContent.sessionId, sessionsTable.id))
-    .where(eq(sessionsTable.id, sessionId))
-    .get()
+  const session = sessionsById.get(sessionId)
+  if (!session) return null
 
-  if (!row) return null
+  const w = writing[sessionId]
+  const g = grounding[sessionId]
+  const s = scoring[sessionId]
 
-  const session = row.sessions as Session
-  const content = (row.session_content ?? {}) as Partial<SessionContent>
-  const withContent: SessionWithContent = { ...session, ...content }
+  const content: SessionContent = {
+    blurb: w?.blurb,
+    potentialContendersIntro: w?.potentialContendersIntro ?? undefined,
+    potentialContenders: w?.potentialContenders,
+    relatedNews: g?.relatedNews,
+    scorecard: s?.scorecard ?? undefined,
+    contentMeta: buildContentMeta(g, w, s),
+  }
 
   return {
     session,
-    insights: getSessionInsights(withContent),
+    insights: getSessionInsights({ ...session, ...content }),
     contentMeta: content.contentMeta,
+  }
+}
+
+function buildContentMeta(
+  g: GroundingEntry | undefined,
+  w: WritingEntry | undefined,
+  s: ScoringEntry | undefined,
+): ContentMeta | undefined {
+  if (!g && !w && !s) return undefined
+  return {
+    provider: 'hybrid',
+    groundingModel: g?.model,
+    writingModel: w?.model,
+    scoringModel: s?.model,
+    sources: g?.sources ?? undefined,
+    generatedAt: s?.generatedAt || w?.generatedAt || g?.generatedAt || '',
   }
 }
 
 export async function getSessionsByIds(ids: string[]): Promise<Session[]> {
   if (ids.length === 0) return []
-
-  const db = getDb()
-  const rows = (await db
-    .select()
-    .from(sessionsTable)
-    .where(inArray(sessionsTable.id, ids))) as Session[]
-
-  return rows.sort((a, b) => a.dk.localeCompare(b.dk) || a.name.localeCompare(b.name))
+  const out: Session[] = []
+  for (const id of ids) {
+    const s = sessionsById.get(id)
+    if (s) out.push(s)
+  }
+  return out.sort((a, b) => a.dk.localeCompare(b.dk) || a.name.localeCompare(b.name))
 }

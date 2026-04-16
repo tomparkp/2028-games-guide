@@ -15,51 +15,30 @@ The dev server runs on port 3000.
 - `pnpm build` — Production build
 - `pnpm preview` — Preview production build
 - `pnpm test` — Run tests with Vitest
-- `pnpm generate-content` — Run the AI content + scorecard pipeline (see [Database](#database))
+- `pnpm generate-content` — Run the AI content + scorecard pipeline (see [Data](#data))
 
-## Database
+## Data
 
-Session data lives in a Cloudflare D1 database (binding `DB`, defined in `wrangler.jsonc`). The schema is managed by Drizzle — source of truth is `src/db/schema.ts`.
+Session data lives in four JSON files under `src/data/`, committed to the repo and bundled into the worker at build time:
 
-### Local development
+- `sessions.json` — hand-validated source data from the official Session Table (id, sport, venue, date, price, etc.). No generated content.
+- `grounding.json` — raw Perplexity output (facts, related news, sources), keyed by session id.
+- `writing.json` — Anthropic-authored prose (blurb, contenders), keyed by session id.
+- `scoring.json` — ratings + optional full Scorecard (dimension scores with explanations), keyed by session id.
 
-Dev uses Wrangler's local SQLite emulation under `.wrangler/state/`. Each worktree has its own local DB.
-
-```bash
-pnpm db:migrate:local   # apply migrations to local D1
-pnpm db:studio          # browse/edit local DB at https://local.drizzle.studio
-```
-
-A fresh worktree has no local data. Options:
-
-- **External contributors**: ask the maintainer for a seed SQL dump, then `pnpm wrangler d1 execute la28 --local --file=<dump>`. `pnpm db:pull` won't work without maintainer credentials since Cloudflare doesn't support per-database scoped access.
-- **Maintainer** (or anyone authed to the Cloudflare account owning this D1):
-
-  ```bash
-  pnpm wrangler login   # one-time per machine
-  pnpm db:pull          # exports remote D1 and upserts into local
-  ```
-
-- **If you have Anthropic/Perplexity API keys**: `pnpm generate-content` will build content from scratch against the 2028 Games schedule, no remote access required. Note this makes paid API calls (Perplexity grounding + Claude writing + Claude scoring for each of ~850 sessions) and costs real money — scope with `--sport="Athletics (Track & Field)"` or similar to limit spend while developing.
-
-### Remote (production)
-
-```bash
-pnpm db:migrate:remote  # apply migrations to prod D1
-```
-
-To browse/edit prod data, use the official [Cloudflare Dashboard D1 console](https://dash.cloudflare.com) (Workers & Pages → D1 → `la28` → Console). Drizzle Studio is local-only in this repo — Cloudflare doesn't support scoping API tokens to a single D1 database, so we avoid creating tokens with account-wide D1 access.
-
-### Schema changes
-
-1. Edit `src/db/schema.ts`
-2. `pnpm db:generate --name <short-description>` — generates `drizzle/<timestamp>_<name>.sql` (drop `--name` and Drizzle appends a random suffix)
-3. Review the SQL, then `pnpm db:migrate:local` to apply
-4. After merge, `pnpm db:migrate:remote` to apply to prod
+Runtime reads happen in `src/data/sessions.data.server.ts`, which merges the four files at module load.
 
 ### Regenerating session content and ratings
 
-`pnpm generate-content` runs the full AI pipeline (grounding → writing → scoring) and writes the resulting blurb, scorecard, and aggregate rating back to D1 in one pass. `pnpm refresh <sessionId>` refreshes a single session. Both default to local D1; pass `--remote` to target prod.
+`pnpm generate-content` runs the three-stage AI pipeline (grounding → writing → scoring) and updates `grounding.json`, `writing.json`, and `scoring.json` in place. `pnpm refresh <sessionId>` refreshes a single session. Stages can be skipped independently:
+
+```bash
+pnpm generate-content --sport="Athletics (Track & Field)"
+pnpm generate-content --skip-grounding  # keep existing facts/news, rewrite prose
+pnpm refresh ATH04 --skip-grounding --prompt "Tighten the blurb"
+```
+
+Regenerated files are committed like any other source — there's no separate deploy step for data. Note that `generate-content` makes paid API calls (Perplexity grounding + Claude writing + Claude scoring for each of ~850 sessions) and costs real money — scope with `--sport=...` to limit spend while developing.
 
 ## Routing
 

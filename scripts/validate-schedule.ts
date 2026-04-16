@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { parseDbTargetFromArgs, readAllSessions } from './lib/db'
+import { readAllSessions } from './lib/content-store'
 
 const csvPath = resolve('/Users/Home/Downloads/2028 SCHEDULE - Schedule By Event.csv')
 
@@ -177,7 +177,7 @@ const csvRaw = readFileSync(csvPath, 'utf-8')
 const csvRows = parseCsv(csvRaw)
 const csvSessions = groupBySession(csvRows)
 
-const sessions: Session[] = (await readAllSessions(parseDbTargetFromArgs())) as Session[]
+const sessions: Session[] = readAllSessions() as Session[]
 const sessionMap = new Map(sessions.map((s) => [s.id, s]))
 
 console.log(`\n${'='.repeat(70)}`)

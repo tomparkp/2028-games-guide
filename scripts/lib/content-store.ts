@@ -17,8 +17,11 @@ const DATA_DIR = resolve(process.cwd(), 'src/data')
 
 const SESSIONS_PATH = resolve(DATA_DIR, 'sessions.json')
 const SESSION_FACTS_PATH = resolve(DATA_DIR, 'session-facts.json')
-const WRITING_PATH = resolve(DATA_DIR, 'writing.json')
-const SCORING_PATH = resolve(DATA_DIR, 'scoring.json')
+const SESSION_CONTENT_PATH = resolve(DATA_DIR, 'session-content.json')
+const SESSION_SCORES_PATH = resolve(DATA_DIR, 'session-scores.json')
+const SESSION_CORRECTIONS_PATH = resolve(DATA_DIR, 'session-corrections.json')
+const SPORT_CORRECTIONS_PATH = resolve(DATA_DIR, 'sport-corrections.json')
+const VENUE_CORRECTIONS_PATH = resolve(DATA_DIR, 'venue-corrections.json')
 
 export interface StageMetadata {
   model: string
@@ -54,7 +57,7 @@ export interface ScoringEntry {
   rUniq: number
   rDem: number
   // null for legacy entries migrated from the pre-scorecard D1 snapshot.
-  // generate-session-content always writes a full scorecard.
+  // generate-session-scores always writes a full scorecard.
   scorecard: Scorecard | null
   model: string
   promptVersion: number
@@ -109,6 +112,21 @@ let sessionsCache: SessionSource[] | null = null
 let groundingCache: Record<string, GroundingEntry> | null = null
 let writingCache: Record<string, WritingEntry> | null = null
 let scoringCache: Record<string, ScoringEntry> | null = null
+let sessionCorrectionsCache: Record<string, string[]> | null = null
+let sportCorrectionsCache: Record<string, string[]> | null = null
+let venueCorrectionsCache: Record<string, string[]> | null = null
+
+type CorrectionsFile = Record<string, string[] | { notes?: string } | undefined>
+
+function loadCorrections(path: string): Record<string, string[]> {
+  const raw = readJsonFile<CorrectionsFile>(path, {})
+  const out: Record<string, string[]> = {}
+  for (const [key, val] of Object.entries(raw)) {
+    if (key === '_meta') continue
+    if (Array.isArray(val)) out[key] = val.filter((v): v is string => typeof v === 'string')
+  }
+  return out
+}
 
 function loadSessions(): SessionSource[] {
   if (sessionsCache) return sessionsCache
@@ -124,13 +142,13 @@ function loadGrounding(): Record<string, GroundingEntry> {
 
 function loadWriting(): Record<string, WritingEntry> {
   if (writingCache) return writingCache
-  writingCache = readJsonFile<Record<string, WritingEntry>>(WRITING_PATH, {})
+  writingCache = readJsonFile<Record<string, WritingEntry>>(SESSION_CONTENT_PATH, {})
   return writingCache
 }
 
 function loadScoring(): Record<string, ScoringEntry> {
   if (scoringCache) return scoringCache
-  scoringCache = readJsonFile<Record<string, ScoringEntry>>(SCORING_PATH, {})
+  scoringCache = readJsonFile<Record<string, ScoringEntry>>(SESSION_SCORES_PATH, {})
   return scoringCache
 }
 
@@ -170,6 +188,21 @@ export function readWritingForSession(sessionId: string): WritingEntry | null {
 
 export function readScoringForSession(sessionId: string): ScoringEntry | null {
   return loadScoring()[sessionId] ?? null
+}
+
+export function readSessionCorrections(sessionId: string): string[] {
+  if (!sessionCorrectionsCache) sessionCorrectionsCache = loadCorrections(SESSION_CORRECTIONS_PATH)
+  return sessionCorrectionsCache[sessionId] ?? []
+}
+
+export function readSportCorrections(sport: string): string[] {
+  if (!sportCorrectionsCache) sportCorrectionsCache = loadCorrections(SPORT_CORRECTIONS_PATH)
+  return sportCorrectionsCache[sport] ?? []
+}
+
+export function readVenueCorrections(venue: string): string[] {
+  if (!venueCorrectionsCache) venueCorrectionsCache = loadCorrections(VENUE_CORRECTIONS_PATH)
+  return venueCorrectionsCache[venue] ?? []
 }
 
 // Serialize writes: each upsert reads-modify-writes the whole JSON file.
@@ -221,7 +254,7 @@ export function upsertWriting(rows: WritingUpsert[], meta: StageMetadata): Promi
       }
     }
     writingCache = sortedKeys(cache)
-    writeJsonAtomic(WRITING_PATH, writingCache)
+    writeJsonAtomic(SESSION_CONTENT_PATH, writingCache)
   })
 }
 
@@ -246,7 +279,7 @@ export function upsertScoring(rows: ScoringUpsert[], meta: StageMetadata): Promi
       }
     }
     scoringCache = sortedKeys(cache)
-    writeJsonAtomic(SCORING_PATH, scoringCache)
+    writeJsonAtomic(SESSION_SCORES_PATH, scoringCache)
   })
 }
 

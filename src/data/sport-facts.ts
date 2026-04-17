@@ -2,8 +2,6 @@ import data from './sport-facts.json'
 
 export interface SportFacts {
   gamesContext: string
-  venueNotes: Record<string, string>
-  eventHighlights: Record<string, string>
   parisRecap: string
 }
 

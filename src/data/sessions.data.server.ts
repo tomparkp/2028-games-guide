@@ -1,7 +1,7 @@
-import scoringData from '@/data/scoring.json'
+import sessionContentData from '@/data/session-content.json'
 import sessionFactsData from '@/data/session-facts.json'
+import sessionScoresData from '@/data/session-scores.json'
 import sessionsData from '@/data/sessions.json'
-import writingData from '@/data/writing.json'
 import { getSessionInsights, type SessionInsights } from '@/lib/ai-scorecard'
 import { filterSessions, sortSessions } from '@/lib/filter'
 import type {
@@ -66,11 +66,11 @@ interface ScoringEntry {
 
 const sessionSources = sessionsData as SessionSource[]
 const sessionFacts = sessionFactsData as Record<string, GroundingEntry>
-const writing = writingData as Record<string, WritingEntry>
-const scoring = scoringData as Record<string, ScoringEntry>
+const sessionContent = sessionContentData as Record<string, WritingEntry>
+const sessionScores = sessionScoresData as Record<string, ScoringEntry>
 
 function toSession(source: SessionSource): Session {
-  const score = scoring[source.id]
+  const score = sessionScores[source.id]
   return {
     ...source,
     agg: score?.agg ?? 0,
@@ -121,9 +121,9 @@ export async function getSessionDetailData(
   const session = sessionsById.get(sessionId)
   if (!session) return null
 
-  const w = writing[sessionId]
+  const w = sessionContent[sessionId]
   const g = sessionFacts[sessionId]
-  const s = scoring[sessionId]
+  const s = sessionScores[sessionId]
 
   const content: SessionContent = {
     blurb: w?.blurb,

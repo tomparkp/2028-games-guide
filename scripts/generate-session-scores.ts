@@ -7,23 +7,23 @@ import {
   readAllSessions,
   readGroundingForSession,
   readStageStatus,
-  upsertWriting,
+  readWritingForSession,
+  upsertScoring,
   type StageStatus,
 } from './lib/content-store.js'
 import {
-  ANTHROPIC_WRITING_DEFAULT_MODEL,
-  GROUNDING_VERSION,
+  ANTHROPIC_SCORING_DEFAULT_MODEL,
   type GroundingData,
-  WRITING_BATCH_SIZE,
+  SCORING_BATCH_SIZE,
+  SCORING_VERSION,
+  type ScoringJob,
   WRITING_VERSION,
-  type WritingJob,
+  type WritingData,
   buildCorrectionContext,
-  generateWriting,
-  generateWritingViaBatches,
+  generateScoring,
+  generateScoringViaBatches,
 } from './lib/session-content.js'
 
-// Anthropic tier-1 output TPM (8k/min on sonnet-4.5) is the binding constraint;
-// 2 concurrent writing batches (~2.5k output each) stays safely under.
 const DEFAULT_CONCURRENCY = 2
 
 function getArgValue(name: string): string | undefined {
@@ -49,14 +49,14 @@ function groupBySport<T extends { sport: string }>(items: T[]): Map<string, T[]>
   return groups
 }
 
-function needsWriting(status: StageStatus | undefined, forceAll: boolean): boolean {
+function needsScoring(status: StageStatus | undefined, forceAll: boolean): boolean {
   if (forceAll) return true
   if (!status) return true
-  return (status.writingPromptVersion ?? -1) < WRITING_VERSION
+  return (status.scoringPromptVersion ?? -1) < SCORING_VERSION
 }
 
 async function main() {
-  const writingModel = getArgValue('--anthropic-model') ?? ANTHROPIC_WRITING_DEFAULT_MODEL
+  const scoringModel = getArgValue('--anthropic-model') ?? ANTHROPIC_SCORING_DEFAULT_MODEL
   const forceAll = process.argv.includes('--force')
   const dryRun = process.argv.includes('--dry-run')
   const noBatch = process.argv.includes('--no-batch')
@@ -70,7 +70,7 @@ async function main() {
   }
 
   const mode = noBatch ? `sync concurrency=${concurrency}` : 'batches-api'
-  console.log(`Writing: anthropic ${writingModel}  ${mode}`)
+  console.log(`Scoring: anthropic ${scoringModel}  ${mode}`)
 
   const sessions = readAllSessions()
   const sessionMap = new Map(sessions.map((s) => [s.id, s]))
@@ -80,18 +80,18 @@ async function main() {
   const targets = sessions.filter((s) => {
     if (sportFilter && s.sport !== sportFilter) return false
     const st = stageStatus.get(s.id)
-    if (!needsWriting(st, forceAll)) return false
-    // Require grounding at current version — writing depends on session-facts.
-    return (st?.groundingPromptVersion ?? -1) >= GROUNDING_VERSION
+    if (!needsScoring(st, forceAll)) return false
+    // Require writing at current version — scoring depends on session-content.
+    return (st?.writingPromptVersion ?? -1) >= WRITING_VERSION
   })
   const blocked = sessions.filter((s) => {
     if (sportFilter && s.sport !== sportFilter) return false
     const st = stageStatus.get(s.id)
-    return needsWriting(st, forceAll) && (st?.groundingPromptVersion ?? -1) < GROUNDING_VERSION
+    return needsScoring(st, forceAll) && (st?.writingPromptVersion ?? -1) < WRITING_VERSION
   })
-  console.log(`${targets.length} session(s) ready for writing`)
+  console.log(`${targets.length} session(s) ready for scoring`)
   if (blocked.length > 0) {
-    console.log(`${blocked.length} session(s) blocked — run pnpm generate:session-facts first`)
+    console.log(`${blocked.length} session(s) blocked — run pnpm generate:session-content first`)
   }
 
   if (dryRun) {
@@ -102,35 +102,39 @@ async function main() {
 
   const anthropicClient = new Anthropic({ apiKey: anthropicKey! })
 
-  const groundingByid = new Map<string, GroundingData>()
-  for (const s of targets) {
-    const g = readGroundingForSession(s.id)
-    if (g?.facts) {
-      groundingByid.set(s.id, {
-        id: s.id,
-        groundingFacts: g.facts,
-        relatedNews: g.relatedNews,
-        sources: g.sources ?? undefined,
-      })
-    }
-  }
-
   const bySport = groupBySport(targets)
   const sports = [...bySport.keys()].sort()
-  const jobs: WritingJob[] = []
+  const jobs: ScoringJob[] = []
   for (const sport of sports) {
     const list = bySport.get(sport)!
-    for (const batch of chunkList(list, WRITING_BATCH_SIZE)) {
+    for (const batch of chunkList(list, SCORING_BATCH_SIZE)) {
       const grounding = new Map<string, GroundingData>()
+      const writing = new Map<string, WritingData>()
       for (const s of batch) {
-        const g = groundingByid.get(s.id)
-        if (g) grounding.set(s.id, g)
+        const g = readGroundingForSession(s.id)
+        if (g?.facts) {
+          grounding.set(s.id, {
+            id: s.id,
+            groundingFacts: g.facts,
+            relatedNews: g.relatedNews,
+            sources: g.sources ?? undefined,
+          })
+        }
+        const w = readWritingForSession(s.id)
+        if (w) {
+          writing.set(s.id, {
+            id: s.id,
+            blurb: w.blurb,
+            potentialContendersIntro: w.potentialContendersIntro ?? '',
+            potentialContenders: w.potentialContenders,
+          })
+        }
       }
       const extraInstructions = buildCorrectionContext({
         sessionIds: batch.map((s) => s.id),
         sport,
       })
-      jobs.push({ sport, batch, grounding, extraInstructions })
+      jobs.push({ sport, batch, grounding, writing, extraInstructions })
     }
   }
   console.log(`${jobs.length} batch(es) across ${sports.length} sport(s)`)
@@ -143,43 +147,39 @@ async function main() {
     await Promise.all(
       jobs.map((job) =>
         limit(async () => {
-          const results = await generateWriting(
+          const results = await generateScoring(
             anthropicClient,
             job.batch,
             job.sport,
             job.grounding,
-            writingModel,
+            job.writing,
+            scoringModel,
             job.extraInstructions,
           )
           const toUpsert = results
             .filter((r) => sessionMap.has(r.id))
-            .map((r) => ({
-              sessionId: r.id,
-              blurb: r.blurb,
-              potentialContendersIntro: r.potentialContendersIntro || undefined,
-              potentialContenders: r.potentialContenders,
-            }))
-          await upsertWriting(toUpsert, {
-            model: writingModel,
-            promptVersion: WRITING_VERSION,
+            .map((r) => ({ sessionId: r.id, scorecard: r.scorecard }))
+          await upsertScoring(toUpsert, {
+            model: scoringModel,
+            promptVersion: SCORING_VERSION,
             generatedAt: new Date().toISOString(),
           })
           done += 1
-          const missing = job.batch.filter((s) => !toUpsert.find((w) => w.sessionId === s.id))
+          const missing = job.batch.filter((s) => !toUpsert.find((r) => r.sessionId === s.id))
           const tail = missing.length > 0 ? ` ✗ missing ${missing.map((s) => s.id).join(',')}` : ''
           console.log(
-            `  [${done}/${jobs.length}] ${job.sport} (${job.batch.length}) ✓ wrote ${toUpsert.length}${tail}`,
+            `  [${done}/${jobs.length}] ${job.sport} (${job.batch.length}) ✓ scored ${toUpsert.length}${tail}`,
           )
         }),
       ),
     )
   } else {
-    await generateWritingViaBatches(anthropicClient, jobs, writingModel, {
+    await generateScoringViaBatches(anthropicClient, jobs, scoringModel, {
       onSportComplete: async ({ sport, outcomes, elapsedSec }) => {
-        let wrote = 0
+        let scored = 0
         let failed = 0
         const missing: string[] = []
-        const toUpsert: Parameters<typeof upsertWriting>[0] = []
+        const toUpsert: Parameters<typeof upsertScoring>[0] = []
         for (const { job, results, error } of outcomes) {
           if (error) {
             failed += 1
@@ -189,36 +189,31 @@ async function main() {
           const got = new Set<string>()
           for (const r of results) {
             if (!sessionMap.has(r.id)) continue
-            toUpsert.push({
-              sessionId: r.id,
-              blurb: r.blurb,
-              potentialContendersIntro: r.potentialContendersIntro || undefined,
-              potentialContenders: r.potentialContenders,
-            })
+            toUpsert.push({ sessionId: r.id, scorecard: r.scorecard })
             got.add(r.id)
-            wrote += 1
+            scored += 1
           }
           for (const s of job.batch) if (!got.has(s.id)) missing.push(s.id)
           if (toUpsert.length > 0) {
-            await upsertWriting(toUpsert.splice(0, toUpsert.length), {
-              model: writingModel,
-              promptVersion: WRITING_VERSION,
+            await upsertScoring(toUpsert.splice(0, toUpsert.length), {
+              model: scoringModel,
+              promptVersion: SCORING_VERSION,
               generatedAt: new Date().toISOString(),
             })
           }
         }
         const tail = missing.length > 0 ? ` ✗ missing ${missing.join(',')}` : ''
         const fail = failed > 0 ? ` (${failed} batch error(s))` : ''
-        console.log(`    ✓ ${sport} done in ${elapsedSec}s — wrote ${wrote}${fail}${tail}`)
+        console.log(`    ✓ ${sport} done in ${elapsedSec}s — scored ${scored}${fail}${tail}`)
       },
     })
   }
 
   const finalStatus = readStageStatus()
-  const written = [...finalStatus.values()].filter(
-    (s) => (s.writingPromptVersion ?? -1) >= WRITING_VERSION,
+  const scored = [...finalStatus.values()].filter(
+    (s) => (s.scoringPromptVersion ?? -1) >= SCORING_VERSION,
   ).length
-  console.log(`\nDone: ${written} written (v${WRITING_VERSION})`)
+  console.log(`\nDone: ${scored} scored (v${SCORING_VERSION})`)
 }
 
 main().catch((err) => {

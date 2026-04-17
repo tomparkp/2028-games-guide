@@ -24,10 +24,6 @@ function getFacts(sport: string) {
   return SPORT_FACTS[sport]
 }
 
-function getVenueNote(sport: string, venue: string): string | undefined {
-  return getFacts(sport)?.venueNotes?.[venue]
-}
-
 function isMedalStage(session: SessionWithContent) {
   return (
     session.rt === 'Final' || session.rt === 'Bronze' || /\bfinal\b|\bmedal\b/i.test(session.desc)
@@ -41,8 +37,7 @@ function buildFallbackSummary(session: SessionWithContent): string {
   const facts = getFacts(session.sport)
 
   if (session.rt === 'Ceremony') {
-    const venueNote = getVenueNote(session.sport, session.venue)
-    return `${session.desc} at ${session.venue}. ${venueNote ?? 'The defining moment of the 2028 Games.'}`
+    return `${session.desc} at ${session.venue}. The defining moment of the 2028 Games.`
   }
 
   if (isMedalStage(session) && facts?.gamesContext) {
@@ -54,14 +49,8 @@ function buildFallbackSummary(session: SessionWithContent): string {
     return `A ${round} session in ${session.sport} at ${session.venue}. Win-or-go-home competition — this is where the drama lives.`
   }
 
-  if (facts) {
-    const venueNote = getVenueNote(session.sport, session.venue)
-    if (venueNote) {
-      return `Early-round ${session.sport} at ${session.venue} — ${venueNote.split('.')[0].toLowerCase()}. A chance to see world-class competition before the headline sessions.`
-    }
-    if (facts.gamesContext) {
-      return `${session.sport} at ${session.venue}. ${facts.gamesContext.split('.')[0]}. Preliminary rounds are where you discover the stories that define the rest of the tournament.`
-    }
+  if (facts?.gamesContext) {
+    return `${session.sport} at ${session.venue}. ${facts.gamesContext.split('.')[0]}. Preliminary rounds are where you discover the stories that define the rest of the tournament.`
   }
 
   return `${session.sport} at ${session.venue}. Every session at the 2028 Games is a live, world-class competition — even the early rounds deliver moments you won't forget.`

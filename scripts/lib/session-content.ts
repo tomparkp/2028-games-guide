@@ -21,6 +21,11 @@ import type {
   SessionSource,
 } from '../../src/types/session.js'
 import {
+  readSessionCorrections,
+  readSportCorrections,
+  readVenueCorrections,
+} from './content-store.js'
+import {
   getSportMedals,
   matchSessionEvents,
   type ParisMedalEvent,
@@ -48,7 +53,7 @@ export const ANTHROPIC_WRITING_DEFAULT_MODEL = 'claude-sonnet-4-5-20250929'
 export const ANTHROPIC_SCORING_DEFAULT_MODEL = 'claude-haiku-4-5-20251001'
 export const GROUNDING_VERSION = 2
 export const WRITING_VERSION = 3
-export const SCORING_VERSION = 3
+export const SCORING_VERSION = 5
 export const MAX_RETRIES = 3
 export const RETRY_DELAY_MS = 5000
 export const MAX_NEWS_ITEMS = 10
@@ -261,9 +266,60 @@ Rules:
 Return a JSON array of objects, one per session id, each with "id", "blurb", "potentialContendersIntro", and "potentialContenders". No markdown fences around the JSON.
 ${BANNED_TERMS_BLOCK}`
 
-function augmentationBlock(extraInstructions?: string): string {
+export function augmentationBlock(extraInstructions?: string): string {
   if (!extraInstructions?.trim()) return ''
   return `\n### User correction / additional context (authoritative — supersedes conflicting information)\n${extraInstructions.trim()}\n\n`
+}
+
+// Assembles the "User correction / additional context" payload for a prompt by
+// merging hand-edited corrections (session/sport/venue) with any ad-hoc CLI
+// --prompt text. Returns undefined if nothing is present so callers can skip
+// the section entirely. The returned string is fed into augmentationBlock().
+export function buildCorrectionContext(opts: {
+  sessionIds?: string[]
+  sport?: string
+  venue?: string
+  cliPrompt?: string
+}): string | undefined {
+  const sections: string[] = []
+
+  if (opts.sport) {
+    const sportFixes = readSportCorrections(opts.sport)
+      .map((s) => s.trim())
+      .filter(Boolean)
+    if (sportFixes.length > 0) {
+      const header = `Sport-wide (${opts.sport}):`
+      sections.push([header, ...sportFixes.map((s) => `- ${s}`)].join('\n'))
+    }
+  }
+
+  if (opts.venue) {
+    const venueFixes = readVenueCorrections(opts.venue)
+      .map((s) => s.trim())
+      .filter(Boolean)
+    if (venueFixes.length > 0) {
+      const header = `Venue (${opts.venue}):`
+      sections.push([header, ...venueFixes.map((s) => `- ${s}`)].join('\n'))
+    }
+  }
+
+  if (opts.sessionIds && opts.sessionIds.length > 0) {
+    const sessionBlocks: string[] = []
+    for (const id of opts.sessionIds) {
+      const fixes = readSessionCorrections(id)
+        .map((s) => s.trim())
+        .filter(Boolean)
+      if (fixes.length === 0) continue
+      sessionBlocks.push([`Session ${id}:`, ...fixes.map((s) => `- ${s}`)].join('\n'))
+    }
+    if (sessionBlocks.length > 0) sections.push(sessionBlocks.join('\n\n'))
+  }
+
+  const trimmedCli = opts.cliPrompt?.trim() ?? ''
+  if (trimmedCli) sections.push(trimmedCli)
+
+  if (sections.length === 0) return undefined
+  return sections.join('\n\n')
 }
 
 function formatMedalist(m: { name: string; country: string } | null): string {
@@ -293,18 +349,6 @@ export function buildSportContext(sport: string): string {
   let out = `## Sport: ${sport}\n\n`
   if (!facts) return out
   if (facts.gamesContext) out += `### Background\n${facts.gamesContext}\n\n`
-  const venueEntries = Object.entries(facts.venueNotes ?? {})
-  if (venueEntries.length > 0) {
-    out += `### Sport-specific venue notes\n`
-    for (const [venue, note] of venueEntries) out += `- ${venue}: ${note}\n`
-    out += '\n'
-  }
-  const eventEntries = Object.entries(facts.eventHighlights ?? {})
-  if (eventEntries.length > 0) {
-    out += `### Notable Events\n`
-    for (const [event, note] of eventEntries) out += `- ${event}: ${note}\n`
-    out += '\n'
-  }
   if (facts.parisRecap) {
     out += `### Paris 2024 Recap\n${facts.parisRecap}\n\n`
   }
@@ -754,6 +798,7 @@ export interface WritingJob {
   sport: string
   batch: SessionSource[]
   grounding: Map<string, GroundingData>
+  extraInstructions?: string
 }
 
 export interface WritingBatchOutcome {
@@ -965,7 +1010,13 @@ export async function generateWritingViaBatches(
     client,
     jobs,
     (job) =>
-      buildWritingRequest(job.batch, job.sport, job.grounding, model, options.extraInstructions),
+      buildWritingRequest(
+        job.batch,
+        job.sport,
+        job.grounding,
+        model,
+        job.extraInstructions ?? options.extraInstructions,
+      ),
     parseWritingMessage,
     'writing',
     { onSportComplete: options.onSportComplete, pollIntervalMs: options.pollIntervalMs },
@@ -1022,16 +1073,17 @@ Dimensions and rubric:
 
 For each dimension produce:
 - "score": integer 1-10 (in practice 4-10; do not go below 4).
-- "explanation": one to two sentences (max ~40 words) that justify THIS specific score with nuanced, grounded language. The tone must match the score AND acknowledge the Games context:
-  - A 10 reads "exceptional because…"
-  - A 7-9 reads "strong because…"
-  - A 5-6 reads "solid — a Games session at [venue], though without [the prime-time slot / medal stakes / marquee-round matchup] that would push it higher"
-  - A 4 reads "baseline — a [morning prelim] with [specific limiting factor], which is about as modest as sessions get, but still a live 2028 ticket"
-- Avoid harsh language. Do NOT write "low crowd energy", "sparse attendance", "weak demand", "tickets widely available", "forgettable", "minimal stakes", "lacking". Instead use nuanced framing like "crowds may be quieter than prime-time", "easier to book relative to marquee nights", "stakes are earned through advancement rather than medals".
-- Reference actual session/venue/round factors, but frame them as tradeoffs against the Games baseline, not flaws.
+- "explanation": 1-2 sentences (max ~35 words) that justify THIS score. Punchy and specific; lead with the one thing that sets the score, then optionally add one beat of supporting detail. Fragments welcome. Avoid the "sentence one + sentence two restating the same idea" pattern.
+  - A 10: "Gold-medal final on the track where Carl Lewis won in '84. Peak Games theater with medals on the line."
+  - A 7-9: "Semifinal night at the Rose Bowl — marquee stage, medal-adjacent stakes, and a likely rematch of the Paris final."
+  - A 5-6: "Quarterfinal volleyball at Long Beach — Games energy without the medal drama; good for fans of the sport."
+  - A 4: "Morning prelim of a niche event at a smaller venue. Mostly for completionists and genuine sport fans."
+- Each explanation should sound like a different take, not five variations of the same template sentence. Vary sentence structure across the five dimensions of a single session.
+- Avoid harsh language. Do NOT write "forgettable", "weak demand", "tickets widely available", "lacking". But DO use confident framing: "easier ticket", "softer stakes", "smaller stage" are fine and preferred over hedged PR-speak.
+- Reference the actual session/venue/round factor that drives the score. Skip generic Games boilerplate.
 
 Also produce:
-- "overall": one to two sentences summarizing where the session lands and what carries or limits it. Tone should be measured, not dismissive — even a low-aggregate session is still a Games ticket.
+- "overall": 1-2 sentences (max ~45 words) — the session's pitch. What it is and what carries or limits it. Punchy beats comprehensive; the second sentence should add information, not pad the first.
 
 Rules:
 - Scores are integers 1-10, effectively 4-10 given the Games baseline.
@@ -1221,6 +1273,7 @@ export interface ScoringJob {
   batch: SessionSource[]
   grounding: Map<string, GroundingData>
   writing: Map<string, WritingData>
+  extraInstructions?: string
 }
 
 export type ScoringBatchOutcome = BatchOutcome<ScoringJob, ScoringData>
@@ -1248,7 +1301,7 @@ export async function generateScoringViaBatches(
         job.grounding,
         job.writing,
         model,
-        options.extraInstructions,
+        job.extraInstructions ?? options.extraInstructions,
       ),
     parseScoringMessage,
     'scoring',

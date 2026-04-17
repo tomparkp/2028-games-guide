@@ -81,7 +81,7 @@ export interface SessionSource {
 }
 
 // Runtime shape used by routes/components: source + derived ratings merged
-// from scoring.json so table/sort/filter UI works unchanged.
+// from session-scores.json so table/sort/filter UI works unchanged.
 export interface Session extends SessionSource {
   rSig: number
   rExp: number

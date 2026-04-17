@@ -16,13 +16,29 @@ This file provides guidance to AI coding agents working with code in this reposi
 
 ### Content pipeline commands
 
-- `pnpm generate-content` — Three-stage AI pipeline: grounding (Perplexity) → writing (Claude Sonnet, batches API) → scoring (Claude Haiku, batches API). Scoped via `--sport=<name>`, `--force`, `--dry-run`. Escape hatches: `--writing-no-batch`, `--scoring-no-batch`, `--skip-grounding|writing|scoring`.
-- `pnpm generate-sport-facts` — Regenerate `src/data/sport-facts.json` per sport via Perplexity, anchored on `paris-2024-medals.json`. Flags: `--sport=<name>`, `--force` (regen even when `parisRecap` already populated), `--dry-run`.
-- `pnpm generate-venue-facts` — Regenerate `src/data/venue-facts.json` per venue via Perplexity (capacity, history, spectator experience, 2028 changes). Flags: `--venue=<name>`, `--force`, `--dry-run`.
-- `pnpm refresh <sessionId>` — Refresh one session with an optional `--prompt "..."` correction; same skip/stage flags as `generate-content`.
-- `pnpm fetch:paris-medals` — Rescrape Olympedia into `paris-2024-medals.json`. One-off; run only when medal data needs refreshing.
+Six independent scripts; each reads JSON output of upstream stages and writes one file. Run in order, or any subset with `--sport=<name>` / `--force` / `--dry-run`.
 
-All paid API calls require `PERPLEXITY_API_KEY` and/or `ANTHROPIC_API_KEY` in `.env`. Every stage uses Anthropic prompt caching and, where possible, Messages Batches (50% discount) — see `scripts/lib/session-content.ts` for the batching helpers.
+- `pnpm generate:paris-medals` — Rescrape Olympedia into `src/data/paris-2024-medals.json`. One-off; run only when medal data needs refreshing.
+- `pnpm generate:sport-facts` — Regenerate `src/data/sport-facts.json` per sport via Perplexity, anchored on `paris-2024-medals.json`. Extra flag: `--force` regenerates even when `parisRecap` already populated.
+- `pnpm generate:venue-facts` — Regenerate `src/data/venue-facts.json` per venue via Perplexity (capacity, history, spectator experience, 2028 changes). Filter: `--venue=<name>`.
+- `pnpm generate:session-facts` — Per-session Perplexity grounding → `src/data/session-facts.json` (facts, related news, sources). Flag: `--concurrency=<n>`.
+- `pnpm generate:session-content` — Per-session Anthropic writing → `src/data/session-content.json` (blurb, contenders). Requires `session-facts.json` populated. Flags: `--no-batch`, `--anthropic-model=<m>`.
+- `pnpm generate:session-scores` — Per-session Anthropic scoring → `src/data/session-scores.json` (ratings + scorecard). Requires `session-content.json` populated. Flags: `--no-batch`, `--anthropic-model=<m>`.
+- `pnpm refresh <sessionId>` — Refresh grounding+writing+scoring for a single session with an optional `--prompt "..."` correction. Flags: `--skip-grounding|writing|scoring`.
+
+All paid API calls require `PERPLEXITY_API_KEY` and/or `ANTHROPIC_API_KEY` in `.env`. Writing and scoring stages use Anthropic prompt caching and Messages Batches (50% discount) by default — see `scripts/lib/session-content.ts` for the batching helpers.
+
+#### Persistent corrections
+
+Hand-edited correction files override AI output across regenerations. Three files mirror the three correction scopes:
+
+- `src/data/session-corrections.json` — keyed by session id; injected into `generate:session-facts`, `generate:session-content`, `generate:session-scores`, and `refresh`.
+- `src/data/sport-corrections.json` — keyed by sport name; injected into `generate:sport-facts`, plus per-sport prompts in writing/scoring.
+- `src/data/venue-corrections.json` — keyed by venue name; injected into `generate:venue-facts`.
+
+Shape: `{ "<key>": ["correction text", ...] }`. Each value is an array so corrections stack. Edit the file, then re-run the relevant generate command (or `pnpm refresh <id>`) — corrections are feed-forward, no version bump.
+
+For globally-wrong Paris 2024 medal data, fix `src/data/paris-2024-medals.json` directly and rerun `generate:session-facts` for affected sessions. The medal block is already authoritative in every prompt that references it.
 
 ### Pre-PR checks
 
@@ -46,13 +62,14 @@ Session data lives in JSON files under `src/data/`, committed to the repo and bu
 
 - `sessions.json` — hand-validated source data (id, sport, venue, date, price, etc.); no generated content
 - `paris-2024-medals.json` — Olympedia-scraped medal results; authoritative history, used as grounding anchor
-- `sport-facts.json` — per-sport Perplexity output (gamesContext, venueNotes, eventHighlights, parisRecap), keyed by sport
+- `sport-facts.json` — per-sport Perplexity output (gamesContext, parisRecap), keyed by sport
 - `venue-facts.json` — per-venue Perplexity output (capacity, yearBuilt, location, iconicMoments, spectatorExperience, changes2028), keyed by venue name
 - `session-facts.json` — per-session Perplexity output (facts, related news, sources), keyed by session id
-- `writing.json` — Anthropic prose (blurb, contenders), keyed by session id
-- `scoring.json` — ratings + optional Scorecard (dimension scores with explanations), keyed by session id
+- `session-content.json` — Anthropic prose (blurb, contenders), keyed by session id
+- `session-scores.json` — ratings + optional Scorecard (dimension scores with explanations), keyed by session id
+- `session-corrections.json` / `sport-corrections.json` / `venue-corrections.json` — hand-edited authoritative overrides injected into prompts at generation time (see Persistent corrections above)
 
-Runtime reads happen in `src/data/sessions.data.server.ts`, which merges sessions + session-facts + writing + scoring on module load. Writer scripts use `scripts/lib/content-store.ts` to upsert the generated files; each stage can be regenerated independently (e.g. refresh news without rewriting descriptions). Regenerated files are committed to the repo — there's no separate deploy step for data.
+Runtime reads happen in `src/data/sessions.data.server.ts`, which merges sessions + session-facts + session-content + session-scores on module load. Writer scripts use `scripts/lib/content-store.ts` to upsert the generated files; each stage can be regenerated independently (e.g. refresh news without rewriting descriptions). Regenerated files are committed to the repo — there's no separate deploy step for data.
 
 ### Routing
 

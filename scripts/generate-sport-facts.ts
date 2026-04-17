@@ -6,7 +6,12 @@ import pLimit from 'p-limit'
 
 import type { SessionSource } from '../src/types/session.js'
 import { getSportMedals, type ParisMedalsData } from './lib/paris-medals.js'
-import { PERPLEXITY_DEFAULT_MODEL, ROOT, writeJson } from './lib/session-content.js'
+import {
+  PERPLEXITY_DEFAULT_MODEL,
+  ROOT,
+  stripCitationMarkers,
+  writeJson,
+} from './lib/session-content.js'
 
 interface SportFacts {
   gamesContext: string
@@ -60,11 +65,13 @@ const SPORT_FACTS_SCHEMA = {
 
 const SYSTEM_PROMPT = `You gather per-sport reference facts for a 2028 Los Angeles Summer Games ticket-buying guide. Your output is used as background context by another stage that writes session-level prose — you do NOT write marketing copy. Keep everything factual, specific, and sourced from your web searches.
 
+IMPORTANT SCOPE — venue metadata lives in a separate venue-facts.json file. Do NOT duplicate venue capacity, year built, location, or general history here. Anything you write should be sport-scoped.
+
 Return four fields:
 
-1. gamesContext — 2-4 short sentences on this sport's role in the 2028 Games: venue(s), format, how many medal events, what makes it notable, any format/event changes from Paris.
+1. gamesContext — 2-4 short sentences on the sport's status at the 2028 Games: debut / returning / absent-since-year, format (tournament / qualifying → finals / time trials / etc.), how many medal events, notable storylines, and any format or event changes from Paris 2024. Do NOT describe venues here — that's what venueNotes is for.
 
-2. venueNotes — one entry per venue listed in the user prompt. Value is 1-2 sentences: capacity, history at the Games, distinguishing physical feature, what a spectator should expect. Keep concrete — no adjective stacks.
+2. venueNotes — one entry per venue listed in the user prompt (venue name as key). Value is ONE short sentence describing how THIS sport uses THIS venue at 2028 — the session type it hosts, the specific configuration, or a sport-specific historical echo. E.g. "Hosts all Athletics finals sessions on the same track surface as 1984." Do NOT include capacity, address, or generic venue history — that belongs in venue-facts.json.
 
 3. eventHighlights — short entries for the most notable events in this sport. Keyed by event name as it appears in the user's event list (or a reasonable normalization). Value is 1-2 sentences on format, stakes, or tradition. You don't need to cover every event — 4-10 entries is fine for large sports.
 
@@ -75,6 +82,7 @@ Rules:
 - Do not name athletes who aren't in the Paris medal block unless you have a current source.
 - If the user provides a Paris medal block, those gold/silver/bronze assignments are authoritative. Never substitute different athletes.
 - No markdown, no code fences. Return valid JSON matching the schema.
+- Do NOT include inline citation markers like "[1]", "[2, 3]", or "[1][5]" in any output field. Your search sources are returned separately by the API; your text must be citation-free prose.
 - Do not use trademarked terms "Olympic", "Olympics", "Olympian", "LA28", "Paralympic", "Paralympics" in any form. Use "the 2028 Games", "the 2028 Summer Games", "Paris 2024" (event name is acceptable as historical reference), "medalist", etc. This applies even when source material uses them — rephrase.`
 
 function formatMedalist(m: { name: string; country: string } | null): string {
@@ -162,11 +170,18 @@ async function fetchSportFacts(
       ) {
         throw new Error('Response missing required fields')
       }
+      const stripMap = (m: Record<string, string>): Record<string, string> => {
+        const out: Record<string, string> = {}
+        for (const [k, v] of Object.entries(m)) {
+          if (typeof v === 'string') out[k] = stripCitationMarkers(v)
+        }
+        return out
+      }
       return {
-        gamesContext: parsed.gamesContext,
-        venueNotes: parsed.venueNotes as Record<string, string>,
-        eventHighlights: parsed.eventHighlights as Record<string, string>,
-        parisRecap: parsed.parisRecap,
+        gamesContext: stripCitationMarkers(parsed.gamesContext),
+        venueNotes: stripMap(parsed.venueNotes as Record<string, string>),
+        eventHighlights: stripMap(parsed.eventHighlights as Record<string, string>),
+        parisRecap: stripCitationMarkers(parsed.parisRecap),
       }
     } catch (err) {
       const cause = err instanceof Error && err.cause ? ` [cause: ${err.cause}]` : ''

@@ -435,6 +435,19 @@ export function buildWritingPrompt(
   return buildSportContext(sport) + buildWritingSessionsBody(sessions, grounding, extraInstructions)
 }
 
+// Perplexity sonar-pro occasionally leaks inline citation markers like "[1]"
+// or "[1][5]" or "[1, 3]" into prose even when the system prompt forbids them.
+// Belt-and-suspenders strip, shared across the sport-facts and venue-facts
+// generators. Matches adjacent bracketed-digit groups with optional commas or
+// ranges inside, plus surrounding whitespace so we don't leave double spaces.
+export function stripCitationMarkers(text: string): string {
+  return text
+    .replace(/\s*(?:\[\s*\d+(?:\s*[-,]\s*\d+)*\s*\]\s*)+/g, ' ')
+    .replace(/\s+([.,;:!?])/g, '$1')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
 export function writeJson(path: string, data: unknown) {
   mkdirSync(dirname(path), { recursive: true })
   const tempPath = `${path}.tmp`

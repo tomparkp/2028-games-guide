@@ -5,7 +5,12 @@ import { resolve } from 'node:path'
 import pLimit from 'p-limit'
 
 import type { SessionSource } from '../src/types/session.js'
-import { PERPLEXITY_DEFAULT_MODEL, ROOT, writeJson } from './lib/session-content.js'
+import {
+  PERPLEXITY_DEFAULT_MODEL,
+  ROOT,
+  stripCitationMarkers,
+  writeJson,
+} from './lib/session-content.js'
 
 interface VenueFacts {
   capacity?: number
@@ -75,6 +80,7 @@ Rules:
 - Facts only; no superlative prose ("legendary," "iconic," "world-class" without substance).
 - If the venue is a temporary Games-only structure, say so explicitly.
 - If you can't find a fact, omit the field rather than guess.
+- Do NOT include inline citation markers like "[1]", "[2, 3]", or "[1][5]" in any output field. Your search sources are returned separately by the API; your text must be citation-free prose.
 - Do not use trademarked terms "Olympic", "Olympics", "Olympian", "LA28", "Paralympic", "Paralympics". Use "the 2028 Games", "the 2028 Summer Games", "Paris 2024", "medalist", "Games history". This applies even when source material uses them — rephrase.
 - No markdown, no code fences. Return valid JSON matching the schema.`
 
@@ -133,9 +139,9 @@ async function fetchVenueFacts(
         throw new Error('Response missing required fields')
       }
       const out: VenueFacts = {
-        location: parsed.location,
-        iconicMoments: parsed.iconicMoments,
-        spectatorExperience: parsed.spectatorExperience,
+        location: stripCitationMarkers(parsed.location),
+        iconicMoments: stripCitationMarkers(parsed.iconicMoments),
+        spectatorExperience: stripCitationMarkers(parsed.spectatorExperience),
       }
       if (typeof parsed.capacity === 'number' && Number.isFinite(parsed.capacity)) {
         out.capacity = Math.round(parsed.capacity)
@@ -144,7 +150,7 @@ async function fetchVenueFacts(
         out.yearBuilt = Math.round(parsed.yearBuilt)
       }
       if (typeof parsed.changes2028 === 'string' && parsed.changes2028.trim()) {
-        out.changes2028 = parsed.changes2028.trim()
+        out.changes2028 = stripCitationMarkers(parsed.changes2028)
       }
       return out
     } catch (err) {

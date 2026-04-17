@@ -3,10 +3,10 @@
  * JSON dataset keyed by sport name. Run manually when the source data
  * needs a refresh; the output is committed to the repo.
  *
- * Usage: pnpm tsx scripts/fetch-paris-2024-medals.ts
+ * Usage: pnpm generate:paris-medals
  *
- * The generated file powers deterministic Paris 2024 grounding in
- * scripts/generate-session-content.ts so the LLM can't hallucinate medalists.
+ * The generated file powers deterministic Paris 2024 grounding for the
+ * session-content pipeline so the LLM can't hallucinate medalists.
  */
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
@@ -250,7 +250,7 @@ async function main() {
     _meta: {
       source: `https://www.olympedia.org/editions/${PARIS_EDITION_ID}`,
       fetchedAt: new Date().toISOString(),
-      note: 'Paris 2024 medal results keyed by sport name. Used as deterministic grounding in scripts/generate-session-content.ts.',
+      note: 'Paris 2024 medal results keyed by sport name. Used as deterministic grounding for the session-content pipeline.',
     },
   }
 

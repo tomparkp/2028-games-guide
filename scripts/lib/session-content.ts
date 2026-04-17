@@ -293,18 +293,6 @@ export function buildSportContext(sport: string): string {
   let out = `## Sport: ${sport}\n\n`
   if (!facts) return out
   if (facts.gamesContext) out += `### Background\n${facts.gamesContext}\n\n`
-  const venueEntries = Object.entries(facts.venueNotes ?? {})
-  if (venueEntries.length > 0) {
-    out += `### Sport-specific venue notes\n`
-    for (const [venue, note] of venueEntries) out += `- ${venue}: ${note}\n`
-    out += '\n'
-  }
-  const eventEntries = Object.entries(facts.eventHighlights ?? {})
-  if (eventEntries.length > 0) {
-    out += `### Notable Events\n`
-    for (const [event, note] of eventEntries) out += `- ${event}: ${note}\n`
-    out += '\n'
-  }
   if (facts.parisRecap) {
     out += `### Paris 2024 Recap\n${facts.parisRecap}\n\n`
   }

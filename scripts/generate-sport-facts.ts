@@ -15,8 +15,6 @@ import {
 
 interface SportFacts {
   gamesContext: string
-  venueNotes: Record<string, string>
-  eventHighlights: Record<string, string>
   parisRecap: string
 }
 
@@ -48,17 +46,9 @@ function parsePositiveInt(value: string | undefined, fallback: number): number {
 const SPORT_FACTS_SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['gamesContext', 'venueNotes', 'eventHighlights', 'parisRecap'],
+  required: ['gamesContext', 'parisRecap'],
   properties: {
     gamesContext: { type: 'string' },
-    venueNotes: {
-      type: 'object',
-      additionalProperties: { type: 'string' },
-    },
-    eventHighlights: {
-      type: 'object',
-      additionalProperties: { type: 'string' },
-    },
     parisRecap: { type: 'string' },
   },
 }
@@ -67,15 +57,11 @@ const SYSTEM_PROMPT = `You gather per-sport reference facts for a 2028 Los Angel
 
 IMPORTANT SCOPE — venue metadata lives in a separate venue-facts.json file. Do NOT duplicate venue capacity, year built, location, or general history here. Anything you write should be sport-scoped.
 
-Return four fields:
+Return two fields:
 
-1. gamesContext — 2-4 short sentences on the sport's status at the 2028 Games: debut / returning / absent-since-year, format (tournament / qualifying → finals / time trials / etc.), how many medal events, notable storylines, and any format or event changes from Paris 2024. Do NOT describe venues here — that's what venueNotes is for.
+1. gamesContext — 2-4 short sentences on the sport's status at the 2028 Games: debut / returning / absent-since-year, format (tournament / qualifying → finals / time trials / etc.), how many medal events, notable storylines, and any format or event changes from Paris 2024. Do NOT describe venues here — venue metadata is handled separately.
 
-2. venueNotes — one entry per venue listed in the user prompt (venue name as key). Value is ONE short sentence describing how THIS sport uses THIS venue at 2028 — the session type it hosts, the specific configuration, or a sport-specific historical echo. E.g. "Hosts all Athletics finals sessions on the same track surface as 1984." Do NOT include capacity, address, or generic venue history — that belongs in venue-facts.json.
-
-3. eventHighlights — short entries for the most notable events in this sport. Keyed by event name as it appears in the user's event list (or a reasonable normalization). Value is 1-2 sentences on format, stakes, or tradition. You don't need to cover every event — 4-10 entries is fine for large sports.
-
-4. parisRecap — 2-4 sentences summarizing Paris 2024 for this sport. Reference the authoritative medal block in the user prompt — do not invent different medalists. Mention defining storylines: who won what, any records, rivalries, upsets.
+2. parisRecap — 2-4 sentences summarizing Paris 2024 for this sport. Reference the authoritative medal block in the user prompt — do not invent different medalists. Mention defining storylines: who won what, any records, rivalries, upsets.
 
 Rules:
 - Do not state 2028 participation as confirmed. Names mentioned should be historical (Paris medalists) or clearly flagged as projected contenders.
@@ -105,19 +91,12 @@ function buildParisBlock(sport: string, medals: ParisMedalsData): string {
   return out
 }
 
-function buildPrompt(
-  sport: string,
-  venues: string[],
-  events: string[],
-  medals: ParisMedalsData,
-): string {
+function buildPrompt(sport: string, events: string[], medals: ParisMedalsData): string {
   let prompt = `## Sport: ${sport}\n\n`
-  prompt += `### Venues used at 2028\n`
-  for (const v of venues) prompt += `- ${v}\n`
-  prompt += `\n### Events (sampled from 2028 session schedule)\n`
+  prompt += `### Events (sampled from 2028 session schedule)\n`
   for (const e of events) prompt += `- ${e}\n`
   prompt += `\n${buildParisBlock(sport, medals)}\n`
-  prompt += `Use current web search (sport governing body, team/federation sources, reputable outlets) to produce gamesContext, venueNotes, eventHighlights, and parisRecap. Treat the Paris medal block as authoritative for historical results. Return a single JSON object matching the schema — no markdown fences.`
+  prompt += `Use current web search (sport governing body, team/federation sources, reputable outlets) to produce gamesContext and parisRecap. Treat the Paris medal block as authoritative for historical results. Return a single JSON object matching the schema — no markdown fences.`
   return prompt
 }
 
@@ -128,12 +107,11 @@ interface PerplexityResponse {
 async function fetchSportFacts(
   apiKey: string,
   sport: string,
-  venues: string[],
   events: string[],
   medals: ParisMedalsData,
   model: string,
 ): Promise<SportFacts | null> {
-  const prompt = buildPrompt(sport, venues, events, medals)
+  const prompt = buildPrompt(sport, events, medals)
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await fetch('https://api.perplexity.ai/v1/sonar', {
@@ -162,25 +140,11 @@ async function fetchSportFacts(
       const text = body.choices?.[0]?.message?.content
       if (!text) throw new Error('No Perplexity message content')
       const parsed = JSON.parse(text) as Partial<SportFacts>
-      if (
-        typeof parsed.gamesContext !== 'string' ||
-        typeof parsed.parisRecap !== 'string' ||
-        typeof parsed.venueNotes !== 'object' ||
-        typeof parsed.eventHighlights !== 'object'
-      ) {
+      if (typeof parsed.gamesContext !== 'string' || typeof parsed.parisRecap !== 'string') {
         throw new Error('Response missing required fields')
-      }
-      const stripMap = (m: Record<string, string>): Record<string, string> => {
-        const out: Record<string, string> = {}
-        for (const [k, v] of Object.entries(m)) {
-          if (typeof v === 'string') out[k] = stripCitationMarkers(v)
-        }
-        return out
       }
       return {
         gamesContext: stripCitationMarkers(parsed.gamesContext),
-        venueNotes: stripMap(parsed.venueNotes as Record<string, string>),
-        eventHighlights: stripMap(parsed.eventHighlights as Record<string, string>),
         parisRecap: stripCitationMarkers(parsed.parisRecap),
       }
     } catch (err) {
@@ -211,18 +175,14 @@ async function main() {
   const medals = JSON.parse(readFileSync(MEDALS_PATH, 'utf8')) as ParisMedalsData
   const existing = JSON.parse(readFileSync(SPORT_FACTS_PATH, 'utf8')) as SportFactsFile
 
-  // Build per-sport venues + events from sessions.json
-  const bySport = new Map<string, { venues: Set<string>; events: Set<string> }>()
+  const bySport = new Map<string, { events: Set<string> }>()
   for (const s of sessions) {
     if (!s.sport) continue
     let entry = bySport.get(s.sport)
     if (!entry) {
-      entry = { venues: new Set(), events: new Set() }
+      entry = { events: new Set() }
       bySport.set(s.sport, entry)
     }
-    if (s.venue) entry.venues.add(s.venue)
-    // Pull event phrases from desc. Keep all distinct phrases; the model can
-    // pick which to highlight.
     if (s.desc) {
       for (const phrase of s.desc
         .split(/[,;]/)
@@ -253,7 +213,7 @@ async function main() {
   if (dryRun) {
     for (const sport of targets) {
       const entry = bySport.get(sport)!
-      console.log(`  [dry-run] ${sport}: venues=${entry.venues.size} events=${entry.events.size}`)
+      console.log(`  [dry-run] ${sport}: events=${entry.events.size}`)
     }
     return
   }
@@ -267,18 +227,15 @@ async function main() {
     targets.map((sport) =>
       limit(async () => {
         const entry = bySport.get(sport)!
-        const venues = [...entry.venues].sort()
         const events = [...entry.events].sort()
-        const facts = await fetchSportFacts(apiKey!, sport, venues, events, medals, model)
+        const facts = await fetchSportFacts(apiKey!, sport, events, medals, model)
         done += 1
         if (!facts) {
           console.log(`  [${done}/${targets.length}] ${sport} ✗ failed`)
           return
         }
         updated[sport] = facts
-        console.log(
-          `  [${done}/${targets.length}] ${sport} ✓ venues=${Object.keys(facts.venueNotes).length} events=${Object.keys(facts.eventHighlights).length}`,
-        )
+        console.log(`  [${done}/${targets.length}] ${sport} ✓`)
       }),
     ),
   )

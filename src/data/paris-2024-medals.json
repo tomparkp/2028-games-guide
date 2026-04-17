@@ -1,14 +1,18 @@
 {
   "_meta": {
     "source": "https://www.olympedia.org/editions/63",
-    "fetchedAt": "2026-04-13T07:17:12.622Z",
-    "note": "Paris 2024 medal results keyed by sport name. Used as deterministic grounding in scripts/generate-session-content.ts."
+    "fetchedAt": "2026-04-17T05:16:36.094Z",
+    "note": "Paris 2024 medal results keyed by sport name. Used as deterministic grounding for the session-content pipeline."
   },
   "3x3 Basketball": [
     {
-      "event": "Men's 3x3 Basketball",
+      "event": "Men's 3 × 3 Basketball",
       "gender": "m",
-      "normalizedTokens": ["m", "3x3m", "basketball"],
+      "normalizedTokens": [
+        "m",
+        "3x3m",
+        "basketball"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -23,9 +27,13 @@
       }
     },
     {
-      "event": "Women's 3x3 Basketball",
+      "event": "Women's 3 × 3 Basketball",
       "gender": "w",
-      "normalizedTokens": ["w", "3x3m", "basketball"],
+      "normalizedTokens": [
+        "w",
+        "3x3m",
+        "basketball"
+      ],
       "gold": {
         "name": "Germany",
         "country": "GER"
@@ -42,9 +50,12 @@
   ],
   "Archery": [
     {
-      "event": "Men's Individual",
+      "event": "Men's Individual, Recurve",
       "gender": "m",
-      "normalizedTokens": ["m"],
+      "normalizedTokens": [
+        "m",
+        "recurve"
+      ],
       "gold": {
         "name": "Kim Wu-Jin",
         "country": "KOR"
@@ -59,9 +70,13 @@
       }
     },
     {
-      "event": "Men's Team",
+      "event": "Men's Team, Recurve",
       "gender": "m",
-      "normalizedTokens": ["m", "team"],
+      "normalizedTokens": [
+        "m",
+        "team",
+        "recurve"
+      ],
       "gold": {
         "name": "Republic of Korea",
         "country": "KOR"
@@ -76,9 +91,12 @@
       }
     },
     {
-      "event": "Women's Individual",
+      "event": "Women's Individual, Recurve",
       "gender": "w",
-      "normalizedTokens": ["w"],
+      "normalizedTokens": [
+        "w",
+        "recurve"
+      ],
       "gold": {
         "name": "Im Si-Hyeon",
         "country": "KOR"
@@ -93,9 +111,13 @@
       }
     },
     {
-      "event": "Women's Team",
+      "event": "Women's Team, Recurve",
       "gender": "w",
-      "normalizedTokens": ["w", "team"],
+      "normalizedTokens": [
+        "w",
+        "team",
+        "recurve"
+      ],
       "gold": {
         "name": "Republic of Korea",
         "country": "KOR"
@@ -110,9 +132,13 @@
       }
     },
     {
-      "event": "Mixed Team",
+      "event": "Mixed Team, Recurve",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "team",
+        "recurve"
+      ],
       "gold": {
         "name": "Republic of Korea",
         "country": "KOR"
@@ -129,9 +155,12 @@
   ],
   "Artistic Gymnastics": [
     {
-      "event": "Men's Individual All-Around",
+      "event": "Men's All-Around, Individual",
       "gender": "m",
-      "normalizedTokens": ["m", "all-around"],
+      "normalizedTokens": [
+        "m",
+        "all-around"
+      ],
       "gold": {
         "name": "Shinnosuke Oka",
         "country": "JPN"
@@ -146,9 +175,12 @@
       }
     },
     {
-      "event": "Men's Team All-Around",
+      "event": "Men's Team",
       "gender": "m",
-      "normalizedTokens": ["m", "team", "all-around"],
+      "normalizedTokens": [
+        "m",
+        "team"
+      ],
       "gold": {
         "name": "Japan",
         "country": "JPN"
@@ -165,7 +197,11 @@
     {
       "event": "Men's Floor Exercise",
       "gender": "m",
-      "normalizedTokens": ["m", "floor", "exercise"],
+      "normalizedTokens": [
+        "m",
+        "floor",
+        "exercise"
+      ],
       "gold": {
         "name": "Carlos Yulo",
         "country": "PHI"
@@ -182,7 +218,10 @@
     {
       "event": "Men's Vault",
       "gender": "m",
-      "normalizedTokens": ["m", "vault"],
+      "normalizedTokens": [
+        "m",
+        "vault"
+      ],
       "gold": {
         "name": "Carlos Yulo",
         "country": "PHI"
@@ -199,7 +238,11 @@
     {
       "event": "Men's Parallel Bars",
       "gender": "m",
-      "normalizedTokens": ["m", "parallel", "bars"],
+      "normalizedTokens": [
+        "m",
+        "parallel",
+        "bars"
+      ],
       "gold": {
         "name": "Zou Jingyuan",
         "country": "CHN"
@@ -216,7 +259,11 @@
     {
       "event": "Men's Horizontal Bar",
       "gender": "m",
-      "normalizedTokens": ["m", "horizontal", "bar"],
+      "normalizedTokens": [
+        "m",
+        "horizontal",
+        "bar"
+      ],
       "gold": {
         "name": "Shinnosuke Oka",
         "country": "JPN"
@@ -233,7 +280,10 @@
     {
       "event": "Men's Rings",
       "gender": "m",
-      "normalizedTokens": ["m", "rings"],
+      "normalizedTokens": [
+        "m",
+        "rings"
+      ],
       "gold": {
         "name": "Liu Yang",
         "country": "CHN"
@@ -248,9 +298,13 @@
       }
     },
     {
-      "event": "Men's Pommelled Horse",
+      "event": "Men's Pommel Horse",
       "gender": "m",
-      "normalizedTokens": ["m", "pommelled", "horse"],
+      "normalizedTokens": [
+        "m",
+        "pommel",
+        "horse"
+      ],
       "gold": {
         "name": "Rhys McClenaghan",
         "country": "IRL"
@@ -265,9 +319,12 @@
       }
     },
     {
-      "event": "Women's Individual All-Around",
+      "event": "Women's All-Around, Individual",
       "gender": "w",
-      "normalizedTokens": ["w", "all-around"],
+      "normalizedTokens": [
+        "w",
+        "all-around"
+      ],
       "gold": {
         "name": "Simone Biles",
         "country": "USA"
@@ -282,9 +339,12 @@
       }
     },
     {
-      "event": "Women's Team All-Around",
+      "event": "Women's Team",
       "gender": "w",
-      "normalizedTokens": ["w", "team", "all-around"],
+      "normalizedTokens": [
+        "w",
+        "team"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -301,7 +361,11 @@
     {
       "event": "Women's Floor Exercise",
       "gender": "w",
-      "normalizedTokens": ["w", "floor", "exercise"],
+      "normalizedTokens": [
+        "w",
+        "floor",
+        "exercise"
+      ],
       "gold": {
         "name": "Rebeca Andrade",
         "country": "BRA"
@@ -318,7 +382,10 @@
     {
       "event": "Women's Vault",
       "gender": "w",
-      "normalizedTokens": ["w", "vault"],
+      "normalizedTokens": [
+        "w",
+        "vault"
+      ],
       "gold": {
         "name": "Simone Biles",
         "country": "USA"
@@ -335,7 +402,11 @@
     {
       "event": "Women's Uneven Bars",
       "gender": "w",
-      "normalizedTokens": ["w", "uneven", "bars"],
+      "normalizedTokens": [
+        "w",
+        "uneven",
+        "bars"
+      ],
       "gold": {
         "name": "Kaylia Nemour",
         "country": "ALG"
@@ -352,7 +423,11 @@
     {
       "event": "Women's Balance Beam",
       "gender": "w",
-      "normalizedTokens": ["w", "balance", "beam"],
+      "normalizedTokens": [
+        "w",
+        "balance",
+        "beam"
+      ],
       "gold": {
         "name": "Alice D'Amato",
         "country": "ITA"
@@ -369,26 +444,12 @@
   ],
   "Artistic Swimming": [
     {
-      "event": "Open Team",
-      "gender": "open",
-      "normalizedTokens": ["open", "team"],
-      "gold": {
-        "name": "People's Republic of China",
-        "country": "CHN"
-      },
-      "silver": {
-        "name": "United States",
-        "country": "USA"
-      },
-      "bronze": {
-        "name": "Spain",
-        "country": "ESP"
-      }
-    },
-    {
       "event": "Women's Duet",
       "gender": "w",
-      "normalizedTokens": ["w", "duet"],
+      "normalizedTokens": [
+        "w",
+        "duet"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -407,7 +468,10 @@
     {
       "event": "Men's 100 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "100m"],
+      "normalizedTokens": [
+        "m",
+        "100m"
+      ],
       "gold": {
         "name": "Noah Lyles",
         "country": "USA"
@@ -424,7 +488,10 @@
     {
       "event": "Men's 200 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "200m"],
+      "normalizedTokens": [
+        "m",
+        "200m"
+      ],
       "gold": {
         "name": "Letsile Tebogo",
         "country": "BOT"
@@ -441,7 +508,10 @@
     {
       "event": "Men's 400 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "400m"],
+      "normalizedTokens": [
+        "m",
+        "400m"
+      ],
       "gold": {
         "name": "Quincy Hall",
         "country": "USA"
@@ -458,7 +528,10 @@
     {
       "event": "Men's 800 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "800m"],
+      "normalizedTokens": [
+        "m",
+        "800m"
+      ],
       "gold": {
         "name": "Emmanuel Wanyonyi",
         "country": "KEN"
@@ -475,7 +548,10 @@
     {
       "event": "Men's 1, 500 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "500m"],
+      "normalizedTokens": [
+        "m",
+        "500m"
+      ],
       "gold": {
         "name": "Cole Hocker",
         "country": "USA"
@@ -492,7 +568,10 @@
     {
       "event": "Men's 5, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "000m"],
+      "normalizedTokens": [
+        "m",
+        "000m"
+      ],
       "gold": {
         "name": "Jakob Ingebrigtsen",
         "country": "NOR"
@@ -509,7 +588,11 @@
     {
       "event": "Men's 10, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "10", "000m"],
+      "normalizedTokens": [
+        "m",
+        "10",
+        "000m"
+      ],
       "gold": {
         "name": "Joshua Cheptegei",
         "country": "UGA"
@@ -526,7 +609,10 @@
     {
       "event": "Men's Marathon",
       "gender": "m",
-      "normalizedTokens": ["m", "marathon"],
+      "normalizedTokens": [
+        "m",
+        "marathon"
+      ],
       "gold": {
         "name": "Tamirat Tola",
         "country": "ETH"
@@ -543,7 +629,11 @@
     {
       "event": "Men's 110 metres Hurdles",
       "gender": "m",
-      "normalizedTokens": ["m", "110m", "hurdles"],
+      "normalizedTokens": [
+        "m",
+        "110m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Grant Holloway",
         "country": "USA"
@@ -560,7 +650,11 @@
     {
       "event": "Men's 400 metres Hurdles",
       "gender": "m",
-      "normalizedTokens": ["m", "400m", "hurdles"],
+      "normalizedTokens": [
+        "m",
+        "400m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Rai Benjamin",
         "country": "USA"
@@ -575,9 +669,12 @@
       }
     },
     {
-      "event": "Men's 3, 000 metres Steeplechase",
+      "event": "Men's Steeplechase",
       "gender": "m",
-      "normalizedTokens": ["m", "000m", "steeplechase"],
+      "normalizedTokens": [
+        "m",
+        "steeplechase"
+      ],
       "gold": {
         "name": "Soufiane El-Bakkali",
         "country": "MAR"
@@ -594,7 +691,11 @@
     {
       "event": "Men's 4 × 100 metres Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x100m", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x100m",
+        "relay"
+      ],
       "gold": {
         "name": "Canada",
         "country": "CAN"
@@ -611,7 +712,11 @@
     {
       "event": "Men's 4 × 400 metres Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x400m", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -628,7 +733,12 @@
     {
       "event": "Men's 20 kilometres Race Walk",
       "gender": "m",
-      "normalizedTokens": ["m", "20km", "race", "walk"],
+      "normalizedTokens": [
+        "m",
+        "20km",
+        "race",
+        "walk"
+      ],
       "gold": {
         "name": "Brian Pintado",
         "country": "ECU"
@@ -645,7 +755,11 @@
     {
       "event": "Men's High Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "high", "jump"],
+      "normalizedTokens": [
+        "m",
+        "high",
+        "jump"
+      ],
       "gold": {
         "name": "Hamish Kerr",
         "country": "NZL"
@@ -660,26 +774,13 @@
       }
     },
     {
-      "event": "Men's Pole Vault",
-      "gender": "m",
-      "normalizedTokens": ["m", "pole", "vault"],
-      "gold": {
-        "name": "Mondo Duplantis",
-        "country": "SWE"
-      },
-      "silver": {
-        "name": "Sam Kendricks",
-        "country": "USA"
-      },
-      "bronze": {
-        "name": "Emmanouil Karalis",
-        "country": "GRE"
-      }
-    },
-    {
       "event": "Men's Long Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "long", "jump"],
+      "normalizedTokens": [
+        "m",
+        "long",
+        "jump"
+      ],
       "gold": {
         "name": "Miltiadis Tentoglou",
         "country": "GRE"
@@ -696,7 +797,11 @@
     {
       "event": "Men's Triple Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "triple", "jump"],
+      "normalizedTokens": [
+        "m",
+        "triple",
+        "jump"
+      ],
       "gold": {
         "name": "Jordan Díaz",
         "country": "ESP"
@@ -713,7 +818,11 @@
     {
       "event": "Men's Shot Put",
       "gender": "m",
-      "normalizedTokens": ["m", "shot", "put"],
+      "normalizedTokens": [
+        "m",
+        "shot",
+        "put"
+      ],
       "gold": {
         "name": "Ryan Crouser",
         "country": "USA"
@@ -730,7 +839,11 @@
     {
       "event": "Men's Discus Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "discus", "throw"],
+      "normalizedTokens": [
+        "m",
+        "discus",
+        "throw"
+      ],
       "gold": {
         "name": "Rojé Stona",
         "country": "JAM"
@@ -747,7 +860,11 @@
     {
       "event": "Men's Hammer Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "hammer", "throw"],
+      "normalizedTokens": [
+        "m",
+        "hammer",
+        "throw"
+      ],
       "gold": {
         "name": "Ethan Katzberg",
         "country": "CAN"
@@ -764,7 +881,11 @@
     {
       "event": "Men's Javelin Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "javelin", "throw"],
+      "normalizedTokens": [
+        "m",
+        "javelin",
+        "throw"
+      ],
       "gold": {
         "name": "Arshad Nadeem",
         "country": "PAK"
@@ -781,7 +902,10 @@
     {
       "event": "Men's Decathlon",
       "gender": "m",
-      "normalizedTokens": ["m", "decathlon"],
+      "normalizedTokens": [
+        "m",
+        "decathlon"
+      ],
       "gold": {
         "name": "Markus Rooth",
         "country": "NOR"
@@ -796,9 +920,35 @@
       }
     },
     {
+      "event": "Men's Pole Vault (Special Scratch)",
+      "gender": "m",
+      "normalizedTokens": [
+        "m",
+        "pole",
+        "vault",
+        "special",
+        "scratch"
+      ],
+      "gold": {
+        "name": "Mondo Duplantis",
+        "country": "SWE"
+      },
+      "silver": {
+        "name": "Sam Kendricks",
+        "country": "USA"
+      },
+      "bronze": {
+        "name": "Emmanouil Karalis",
+        "country": "GRE"
+      }
+    },
+    {
       "event": "Women's 100 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "100m"],
+      "normalizedTokens": [
+        "w",
+        "100m"
+      ],
       "gold": {
         "name": "Julien Alfred",
         "country": "LCA"
@@ -815,7 +965,10 @@
     {
       "event": "Women's 200 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "200m"],
+      "normalizedTokens": [
+        "w",
+        "200m"
+      ],
       "gold": {
         "name": "Gabby Thomas",
         "country": "USA"
@@ -832,7 +985,10 @@
     {
       "event": "Women's 400 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "400m"],
+      "normalizedTokens": [
+        "w",
+        "400m"
+      ],
       "gold": {
         "name": "Marileidy Paulino",
         "country": "DOM"
@@ -849,7 +1005,10 @@
     {
       "event": "Women's 800 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "800m"],
+      "normalizedTokens": [
+        "w",
+        "800m"
+      ],
       "gold": {
         "name": "Keely Hodgkinson",
         "country": "GBR"
@@ -866,7 +1025,10 @@
     {
       "event": "Women's 1, 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "500m"],
+      "normalizedTokens": [
+        "w",
+        "500m"
+      ],
       "gold": {
         "name": "Faith Kipyegon",
         "country": "KEN"
@@ -883,7 +1045,10 @@
     {
       "event": "Women's 5, 000 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "000m"],
+      "normalizedTokens": [
+        "w",
+        "000m"
+      ],
       "gold": {
         "name": "Beatrice Chebet",
         "country": "KEN"
@@ -900,7 +1065,11 @@
     {
       "event": "Women's 10, 000 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "10", "000m"],
+      "normalizedTokens": [
+        "w",
+        "10",
+        "000m"
+      ],
       "gold": {
         "name": "Beatrice Chebet",
         "country": "KEN"
@@ -917,7 +1086,10 @@
     {
       "event": "Women's Marathon",
       "gender": "w",
-      "normalizedTokens": ["w", "marathon"],
+      "normalizedTokens": [
+        "w",
+        "marathon"
+      ],
       "gold": {
         "name": "Sifan Hassan",
         "country": "NED"
@@ -932,9 +1104,14 @@
       }
     },
     {
-      "event": "Women's 100 metres Hurdles",
+      "event": "Women's 100 / 80 metres Hurdles",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "hurdles"],
+      "normalizedTokens": [
+        "w",
+        "100",
+        "80m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Masai Russell",
         "country": "USA"
@@ -951,7 +1128,11 @@
     {
       "event": "Women's 400 metres Hurdles",
       "gender": "w",
-      "normalizedTokens": ["w", "400m", "hurdles"],
+      "normalizedTokens": [
+        "w",
+        "400m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Sydney McLaughlin-Levrone",
         "country": "USA"
@@ -968,7 +1149,11 @@
     {
       "event": "Women's 3, 000 metres Steeplechase",
       "gender": "w",
-      "normalizedTokens": ["w", "000m", "steeplechase"],
+      "normalizedTokens": [
+        "w",
+        "000m",
+        "steeplechase"
+      ],
       "gold": {
         "name": "Winfred Yavi",
         "country": "BRN"
@@ -985,7 +1170,11 @@
     {
       "event": "Women's 4 × 100 metres Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x100m", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x100m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -1002,7 +1191,11 @@
     {
       "event": "Women's 4 × 400 metres Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x400m", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -1019,7 +1212,12 @@
     {
       "event": "Women's 20 kilometres Race Walk",
       "gender": "w",
-      "normalizedTokens": ["w", "20km", "race", "walk"],
+      "normalizedTokens": [
+        "w",
+        "20km",
+        "race",
+        "walk"
+      ],
       "gold": {
         "name": "Yang Jiayu",
         "country": "CHN"
@@ -1036,7 +1234,11 @@
     {
       "event": "Women's High Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "high", "jump"],
+      "normalizedTokens": [
+        "w",
+        "high",
+        "jump"
+      ],
       "gold": {
         "name": "Yaroslava Mahuchikh",
         "country": "UKR"
@@ -1053,7 +1255,11 @@
     {
       "event": "Women's Pole Vault",
       "gender": "w",
-      "normalizedTokens": ["w", "pole", "vault"],
+      "normalizedTokens": [
+        "w",
+        "pole",
+        "vault"
+      ],
       "gold": {
         "name": "Nina Kennedy",
         "country": "AUS"
@@ -1070,7 +1276,11 @@
     {
       "event": "Women's Long Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "long", "jump"],
+      "normalizedTokens": [
+        "w",
+        "long",
+        "jump"
+      ],
       "gold": {
         "name": "Tara Davis-Woodhall",
         "country": "USA"
@@ -1087,7 +1297,11 @@
     {
       "event": "Women's Triple Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "triple", "jump"],
+      "normalizedTokens": [
+        "w",
+        "triple",
+        "jump"
+      ],
       "gold": {
         "name": "Thea LaFond",
         "country": "DMA"
@@ -1104,7 +1318,11 @@
     {
       "event": "Women's Shot Put",
       "gender": "w",
-      "normalizedTokens": ["w", "shot", "put"],
+      "normalizedTokens": [
+        "w",
+        "shot",
+        "put"
+      ],
       "gold": {
         "name": "Yemisi Ogunleye",
         "country": "GER"
@@ -1121,7 +1339,11 @@
     {
       "event": "Women's Discus Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "discus", "throw"],
+      "normalizedTokens": [
+        "w",
+        "discus",
+        "throw"
+      ],
       "gold": {
         "name": "Valarie Allman",
         "country": "USA"
@@ -1138,7 +1360,11 @@
     {
       "event": "Women's Hammer Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "hammer", "throw"],
+      "normalizedTokens": [
+        "w",
+        "hammer",
+        "throw"
+      ],
       "gold": {
         "name": "Camryn Rogers",
         "country": "CAN"
@@ -1155,7 +1381,11 @@
     {
       "event": "Women's Javelin Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "javelin", "throw"],
+      "normalizedTokens": [
+        "w",
+        "javelin",
+        "throw"
+      ],
       "gold": {
         "name": "Haruka Kitaguchi",
         "country": "JPN"
@@ -1172,7 +1402,10 @@
     {
       "event": "Women's Heptathlon",
       "gender": "w",
-      "normalizedTokens": ["w", "heptathlon"],
+      "normalizedTokens": [
+        "w",
+        "heptathlon"
+      ],
       "gold": {
         "name": "Nafi Thiam",
         "country": "BEL"
@@ -1189,7 +1422,11 @@
     {
       "event": "Mixed 4 × 400 metres Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "4x400m", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -1206,7 +1443,13 @@
     {
       "event": "Mixed Marathon Race Walk Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "marathon", "race", "walk", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "marathon",
+        "race",
+        "walk",
+        "relay"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -1225,7 +1468,10 @@
     {
       "event": "Men's 100 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "100m"],
+      "normalizedTokens": [
+        "m",
+        "100m"
+      ],
       "gold": {
         "name": "Noah Lyles",
         "country": "USA"
@@ -1242,7 +1488,10 @@
     {
       "event": "Men's 200 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "200m"],
+      "normalizedTokens": [
+        "m",
+        "200m"
+      ],
       "gold": {
         "name": "Letsile Tebogo",
         "country": "BOT"
@@ -1259,7 +1508,10 @@
     {
       "event": "Men's 400 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "400m"],
+      "normalizedTokens": [
+        "m",
+        "400m"
+      ],
       "gold": {
         "name": "Quincy Hall",
         "country": "USA"
@@ -1276,7 +1528,10 @@
     {
       "event": "Men's 800 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "800m"],
+      "normalizedTokens": [
+        "m",
+        "800m"
+      ],
       "gold": {
         "name": "Emmanuel Wanyonyi",
         "country": "KEN"
@@ -1293,7 +1548,10 @@
     {
       "event": "Men's 1, 500 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "500m"],
+      "normalizedTokens": [
+        "m",
+        "500m"
+      ],
       "gold": {
         "name": "Cole Hocker",
         "country": "USA"
@@ -1310,7 +1568,10 @@
     {
       "event": "Men's 5, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "000m"],
+      "normalizedTokens": [
+        "m",
+        "000m"
+      ],
       "gold": {
         "name": "Jakob Ingebrigtsen",
         "country": "NOR"
@@ -1327,7 +1588,11 @@
     {
       "event": "Men's 10, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "10", "000m"],
+      "normalizedTokens": [
+        "m",
+        "10",
+        "000m"
+      ],
       "gold": {
         "name": "Joshua Cheptegei",
         "country": "UGA"
@@ -1344,7 +1609,10 @@
     {
       "event": "Men's Marathon",
       "gender": "m",
-      "normalizedTokens": ["m", "marathon"],
+      "normalizedTokens": [
+        "m",
+        "marathon"
+      ],
       "gold": {
         "name": "Tamirat Tola",
         "country": "ETH"
@@ -1361,7 +1629,11 @@
     {
       "event": "Men's 110 metres Hurdles",
       "gender": "m",
-      "normalizedTokens": ["m", "110m", "hurdles"],
+      "normalizedTokens": [
+        "m",
+        "110m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Grant Holloway",
         "country": "USA"
@@ -1378,7 +1650,11 @@
     {
       "event": "Men's 400 metres Hurdles",
       "gender": "m",
-      "normalizedTokens": ["m", "400m", "hurdles"],
+      "normalizedTokens": [
+        "m",
+        "400m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Rai Benjamin",
         "country": "USA"
@@ -1393,9 +1669,12 @@
       }
     },
     {
-      "event": "Men's 3, 000 metres Steeplechase",
+      "event": "Men's Steeplechase",
       "gender": "m",
-      "normalizedTokens": ["m", "000m", "steeplechase"],
+      "normalizedTokens": [
+        "m",
+        "steeplechase"
+      ],
       "gold": {
         "name": "Soufiane El-Bakkali",
         "country": "MAR"
@@ -1412,7 +1691,11 @@
     {
       "event": "Men's 4 × 100 metres Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x100m", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x100m",
+        "relay"
+      ],
       "gold": {
         "name": "Canada",
         "country": "CAN"
@@ -1429,7 +1712,11 @@
     {
       "event": "Men's 4 × 400 metres Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x400m", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -1446,7 +1733,12 @@
     {
       "event": "Men's 20 kilometres Race Walk",
       "gender": "m",
-      "normalizedTokens": ["m", "20km", "race", "walk"],
+      "normalizedTokens": [
+        "m",
+        "20km",
+        "race",
+        "walk"
+      ],
       "gold": {
         "name": "Brian Pintado",
         "country": "ECU"
@@ -1463,7 +1755,11 @@
     {
       "event": "Men's High Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "high", "jump"],
+      "normalizedTokens": [
+        "m",
+        "high",
+        "jump"
+      ],
       "gold": {
         "name": "Hamish Kerr",
         "country": "NZL"
@@ -1478,26 +1774,13 @@
       }
     },
     {
-      "event": "Men's Pole Vault",
-      "gender": "m",
-      "normalizedTokens": ["m", "pole", "vault"],
-      "gold": {
-        "name": "Mondo Duplantis",
-        "country": "SWE"
-      },
-      "silver": {
-        "name": "Sam Kendricks",
-        "country": "USA"
-      },
-      "bronze": {
-        "name": "Emmanouil Karalis",
-        "country": "GRE"
-      }
-    },
-    {
       "event": "Men's Long Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "long", "jump"],
+      "normalizedTokens": [
+        "m",
+        "long",
+        "jump"
+      ],
       "gold": {
         "name": "Miltiadis Tentoglou",
         "country": "GRE"
@@ -1514,7 +1797,11 @@
     {
       "event": "Men's Triple Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "triple", "jump"],
+      "normalizedTokens": [
+        "m",
+        "triple",
+        "jump"
+      ],
       "gold": {
         "name": "Jordan Díaz",
         "country": "ESP"
@@ -1531,7 +1818,11 @@
     {
       "event": "Men's Shot Put",
       "gender": "m",
-      "normalizedTokens": ["m", "shot", "put"],
+      "normalizedTokens": [
+        "m",
+        "shot",
+        "put"
+      ],
       "gold": {
         "name": "Ryan Crouser",
         "country": "USA"
@@ -1548,7 +1839,11 @@
     {
       "event": "Men's Discus Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "discus", "throw"],
+      "normalizedTokens": [
+        "m",
+        "discus",
+        "throw"
+      ],
       "gold": {
         "name": "Rojé Stona",
         "country": "JAM"
@@ -1565,7 +1860,11 @@
     {
       "event": "Men's Hammer Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "hammer", "throw"],
+      "normalizedTokens": [
+        "m",
+        "hammer",
+        "throw"
+      ],
       "gold": {
         "name": "Ethan Katzberg",
         "country": "CAN"
@@ -1582,7 +1881,11 @@
     {
       "event": "Men's Javelin Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "javelin", "throw"],
+      "normalizedTokens": [
+        "m",
+        "javelin",
+        "throw"
+      ],
       "gold": {
         "name": "Arshad Nadeem",
         "country": "PAK"
@@ -1599,7 +1902,10 @@
     {
       "event": "Men's Decathlon",
       "gender": "m",
-      "normalizedTokens": ["m", "decathlon"],
+      "normalizedTokens": [
+        "m",
+        "decathlon"
+      ],
       "gold": {
         "name": "Markus Rooth",
         "country": "NOR"
@@ -1614,9 +1920,35 @@
       }
     },
     {
+      "event": "Men's Pole Vault (Special Scratch)",
+      "gender": "m",
+      "normalizedTokens": [
+        "m",
+        "pole",
+        "vault",
+        "special",
+        "scratch"
+      ],
+      "gold": {
+        "name": "Mondo Duplantis",
+        "country": "SWE"
+      },
+      "silver": {
+        "name": "Sam Kendricks",
+        "country": "USA"
+      },
+      "bronze": {
+        "name": "Emmanouil Karalis",
+        "country": "GRE"
+      }
+    },
+    {
       "event": "Women's 100 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "100m"],
+      "normalizedTokens": [
+        "w",
+        "100m"
+      ],
       "gold": {
         "name": "Julien Alfred",
         "country": "LCA"
@@ -1633,7 +1965,10 @@
     {
       "event": "Women's 200 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "200m"],
+      "normalizedTokens": [
+        "w",
+        "200m"
+      ],
       "gold": {
         "name": "Gabby Thomas",
         "country": "USA"
@@ -1650,7 +1985,10 @@
     {
       "event": "Women's 400 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "400m"],
+      "normalizedTokens": [
+        "w",
+        "400m"
+      ],
       "gold": {
         "name": "Marileidy Paulino",
         "country": "DOM"
@@ -1667,7 +2005,10 @@
     {
       "event": "Women's 800 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "800m"],
+      "normalizedTokens": [
+        "w",
+        "800m"
+      ],
       "gold": {
         "name": "Keely Hodgkinson",
         "country": "GBR"
@@ -1684,7 +2025,10 @@
     {
       "event": "Women's 1, 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "500m"],
+      "normalizedTokens": [
+        "w",
+        "500m"
+      ],
       "gold": {
         "name": "Faith Kipyegon",
         "country": "KEN"
@@ -1701,7 +2045,10 @@
     {
       "event": "Women's 5, 000 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "000m"],
+      "normalizedTokens": [
+        "w",
+        "000m"
+      ],
       "gold": {
         "name": "Beatrice Chebet",
         "country": "KEN"
@@ -1718,7 +2065,11 @@
     {
       "event": "Women's 10, 000 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "10", "000m"],
+      "normalizedTokens": [
+        "w",
+        "10",
+        "000m"
+      ],
       "gold": {
         "name": "Beatrice Chebet",
         "country": "KEN"
@@ -1735,7 +2086,10 @@
     {
       "event": "Women's Marathon",
       "gender": "w",
-      "normalizedTokens": ["w", "marathon"],
+      "normalizedTokens": [
+        "w",
+        "marathon"
+      ],
       "gold": {
         "name": "Sifan Hassan",
         "country": "NED"
@@ -1750,9 +2104,14 @@
       }
     },
     {
-      "event": "Women's 100 metres Hurdles",
+      "event": "Women's 100 / 80 metres Hurdles",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "hurdles"],
+      "normalizedTokens": [
+        "w",
+        "100",
+        "80m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Masai Russell",
         "country": "USA"
@@ -1769,7 +2128,11 @@
     {
       "event": "Women's 400 metres Hurdles",
       "gender": "w",
-      "normalizedTokens": ["w", "400m", "hurdles"],
+      "normalizedTokens": [
+        "w",
+        "400m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Sydney McLaughlin-Levrone",
         "country": "USA"
@@ -1786,7 +2149,11 @@
     {
       "event": "Women's 3, 000 metres Steeplechase",
       "gender": "w",
-      "normalizedTokens": ["w", "000m", "steeplechase"],
+      "normalizedTokens": [
+        "w",
+        "000m",
+        "steeplechase"
+      ],
       "gold": {
         "name": "Winfred Yavi",
         "country": "BRN"
@@ -1803,7 +2170,11 @@
     {
       "event": "Women's 4 × 100 metres Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x100m", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x100m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -1820,7 +2191,11 @@
     {
       "event": "Women's 4 × 400 metres Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x400m", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -1837,7 +2212,12 @@
     {
       "event": "Women's 20 kilometres Race Walk",
       "gender": "w",
-      "normalizedTokens": ["w", "20km", "race", "walk"],
+      "normalizedTokens": [
+        "w",
+        "20km",
+        "race",
+        "walk"
+      ],
       "gold": {
         "name": "Yang Jiayu",
         "country": "CHN"
@@ -1854,7 +2234,11 @@
     {
       "event": "Women's High Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "high", "jump"],
+      "normalizedTokens": [
+        "w",
+        "high",
+        "jump"
+      ],
       "gold": {
         "name": "Yaroslava Mahuchikh",
         "country": "UKR"
@@ -1871,7 +2255,11 @@
     {
       "event": "Women's Pole Vault",
       "gender": "w",
-      "normalizedTokens": ["w", "pole", "vault"],
+      "normalizedTokens": [
+        "w",
+        "pole",
+        "vault"
+      ],
       "gold": {
         "name": "Nina Kennedy",
         "country": "AUS"
@@ -1888,7 +2276,11 @@
     {
       "event": "Women's Long Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "long", "jump"],
+      "normalizedTokens": [
+        "w",
+        "long",
+        "jump"
+      ],
       "gold": {
         "name": "Tara Davis-Woodhall",
         "country": "USA"
@@ -1905,7 +2297,11 @@
     {
       "event": "Women's Triple Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "triple", "jump"],
+      "normalizedTokens": [
+        "w",
+        "triple",
+        "jump"
+      ],
       "gold": {
         "name": "Thea LaFond",
         "country": "DMA"
@@ -1922,7 +2318,11 @@
     {
       "event": "Women's Shot Put",
       "gender": "w",
-      "normalizedTokens": ["w", "shot", "put"],
+      "normalizedTokens": [
+        "w",
+        "shot",
+        "put"
+      ],
       "gold": {
         "name": "Yemisi Ogunleye",
         "country": "GER"
@@ -1939,7 +2339,11 @@
     {
       "event": "Women's Discus Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "discus", "throw"],
+      "normalizedTokens": [
+        "w",
+        "discus",
+        "throw"
+      ],
       "gold": {
         "name": "Valarie Allman",
         "country": "USA"
@@ -1956,7 +2360,11 @@
     {
       "event": "Women's Hammer Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "hammer", "throw"],
+      "normalizedTokens": [
+        "w",
+        "hammer",
+        "throw"
+      ],
       "gold": {
         "name": "Camryn Rogers",
         "country": "CAN"
@@ -1973,7 +2381,11 @@
     {
       "event": "Women's Javelin Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "javelin", "throw"],
+      "normalizedTokens": [
+        "w",
+        "javelin",
+        "throw"
+      ],
       "gold": {
         "name": "Haruka Kitaguchi",
         "country": "JPN"
@@ -1990,7 +2402,10 @@
     {
       "event": "Women's Heptathlon",
       "gender": "w",
-      "normalizedTokens": ["w", "heptathlon"],
+      "normalizedTokens": [
+        "w",
+        "heptathlon"
+      ],
       "gold": {
         "name": "Nafi Thiam",
         "country": "BEL"
@@ -2007,7 +2422,11 @@
     {
       "event": "Mixed 4 × 400 metres Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "4x400m", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -2024,7 +2443,13 @@
     {
       "event": "Mixed Marathon Race Walk Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "marathon", "race", "walk", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "marathon",
+        "race",
+        "walk",
+        "relay"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -2043,7 +2468,10 @@
     {
       "event": "Men's 100 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "100m"],
+      "normalizedTokens": [
+        "m",
+        "100m"
+      ],
       "gold": {
         "name": "Noah Lyles",
         "country": "USA"
@@ -2060,7 +2488,10 @@
     {
       "event": "Men's 200 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "200m"],
+      "normalizedTokens": [
+        "m",
+        "200m"
+      ],
       "gold": {
         "name": "Letsile Tebogo",
         "country": "BOT"
@@ -2077,7 +2508,10 @@
     {
       "event": "Men's 400 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "400m"],
+      "normalizedTokens": [
+        "m",
+        "400m"
+      ],
       "gold": {
         "name": "Quincy Hall",
         "country": "USA"
@@ -2094,7 +2528,10 @@
     {
       "event": "Men's 800 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "800m"],
+      "normalizedTokens": [
+        "m",
+        "800m"
+      ],
       "gold": {
         "name": "Emmanuel Wanyonyi",
         "country": "KEN"
@@ -2111,7 +2548,10 @@
     {
       "event": "Men's 1, 500 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "500m"],
+      "normalizedTokens": [
+        "m",
+        "500m"
+      ],
       "gold": {
         "name": "Cole Hocker",
         "country": "USA"
@@ -2128,7 +2568,10 @@
     {
       "event": "Men's 5, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "000m"],
+      "normalizedTokens": [
+        "m",
+        "000m"
+      ],
       "gold": {
         "name": "Jakob Ingebrigtsen",
         "country": "NOR"
@@ -2145,7 +2588,11 @@
     {
       "event": "Men's 10, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "10", "000m"],
+      "normalizedTokens": [
+        "m",
+        "10",
+        "000m"
+      ],
       "gold": {
         "name": "Joshua Cheptegei",
         "country": "UGA"
@@ -2162,7 +2609,10 @@
     {
       "event": "Men's Marathon",
       "gender": "m",
-      "normalizedTokens": ["m", "marathon"],
+      "normalizedTokens": [
+        "m",
+        "marathon"
+      ],
       "gold": {
         "name": "Tamirat Tola",
         "country": "ETH"
@@ -2179,7 +2629,11 @@
     {
       "event": "Men's 110 metres Hurdles",
       "gender": "m",
-      "normalizedTokens": ["m", "110m", "hurdles"],
+      "normalizedTokens": [
+        "m",
+        "110m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Grant Holloway",
         "country": "USA"
@@ -2196,7 +2650,11 @@
     {
       "event": "Men's 400 metres Hurdles",
       "gender": "m",
-      "normalizedTokens": ["m", "400m", "hurdles"],
+      "normalizedTokens": [
+        "m",
+        "400m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Rai Benjamin",
         "country": "USA"
@@ -2211,9 +2669,12 @@
       }
     },
     {
-      "event": "Men's 3, 000 metres Steeplechase",
+      "event": "Men's Steeplechase",
       "gender": "m",
-      "normalizedTokens": ["m", "000m", "steeplechase"],
+      "normalizedTokens": [
+        "m",
+        "steeplechase"
+      ],
       "gold": {
         "name": "Soufiane El-Bakkali",
         "country": "MAR"
@@ -2230,7 +2691,11 @@
     {
       "event": "Men's 4 × 100 metres Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x100m", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x100m",
+        "relay"
+      ],
       "gold": {
         "name": "Canada",
         "country": "CAN"
@@ -2247,7 +2712,11 @@
     {
       "event": "Men's 4 × 400 metres Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x400m", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -2264,7 +2733,12 @@
     {
       "event": "Men's 20 kilometres Race Walk",
       "gender": "m",
-      "normalizedTokens": ["m", "20km", "race", "walk"],
+      "normalizedTokens": [
+        "m",
+        "20km",
+        "race",
+        "walk"
+      ],
       "gold": {
         "name": "Brian Pintado",
         "country": "ECU"
@@ -2281,7 +2755,11 @@
     {
       "event": "Men's High Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "high", "jump"],
+      "normalizedTokens": [
+        "m",
+        "high",
+        "jump"
+      ],
       "gold": {
         "name": "Hamish Kerr",
         "country": "NZL"
@@ -2296,26 +2774,13 @@
       }
     },
     {
-      "event": "Men's Pole Vault",
-      "gender": "m",
-      "normalizedTokens": ["m", "pole", "vault"],
-      "gold": {
-        "name": "Mondo Duplantis",
-        "country": "SWE"
-      },
-      "silver": {
-        "name": "Sam Kendricks",
-        "country": "USA"
-      },
-      "bronze": {
-        "name": "Emmanouil Karalis",
-        "country": "GRE"
-      }
-    },
-    {
       "event": "Men's Long Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "long", "jump"],
+      "normalizedTokens": [
+        "m",
+        "long",
+        "jump"
+      ],
       "gold": {
         "name": "Miltiadis Tentoglou",
         "country": "GRE"
@@ -2332,7 +2797,11 @@
     {
       "event": "Men's Triple Jump",
       "gender": "m",
-      "normalizedTokens": ["m", "triple", "jump"],
+      "normalizedTokens": [
+        "m",
+        "triple",
+        "jump"
+      ],
       "gold": {
         "name": "Jordan Díaz",
         "country": "ESP"
@@ -2349,7 +2818,11 @@
     {
       "event": "Men's Shot Put",
       "gender": "m",
-      "normalizedTokens": ["m", "shot", "put"],
+      "normalizedTokens": [
+        "m",
+        "shot",
+        "put"
+      ],
       "gold": {
         "name": "Ryan Crouser",
         "country": "USA"
@@ -2366,7 +2839,11 @@
     {
       "event": "Men's Discus Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "discus", "throw"],
+      "normalizedTokens": [
+        "m",
+        "discus",
+        "throw"
+      ],
       "gold": {
         "name": "Rojé Stona",
         "country": "JAM"
@@ -2383,7 +2860,11 @@
     {
       "event": "Men's Hammer Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "hammer", "throw"],
+      "normalizedTokens": [
+        "m",
+        "hammer",
+        "throw"
+      ],
       "gold": {
         "name": "Ethan Katzberg",
         "country": "CAN"
@@ -2400,7 +2881,11 @@
     {
       "event": "Men's Javelin Throw",
       "gender": "m",
-      "normalizedTokens": ["m", "javelin", "throw"],
+      "normalizedTokens": [
+        "m",
+        "javelin",
+        "throw"
+      ],
       "gold": {
         "name": "Arshad Nadeem",
         "country": "PAK"
@@ -2417,7 +2902,10 @@
     {
       "event": "Men's Decathlon",
       "gender": "m",
-      "normalizedTokens": ["m", "decathlon"],
+      "normalizedTokens": [
+        "m",
+        "decathlon"
+      ],
       "gold": {
         "name": "Markus Rooth",
         "country": "NOR"
@@ -2432,9 +2920,35 @@
       }
     },
     {
+      "event": "Men's Pole Vault (Special Scratch)",
+      "gender": "m",
+      "normalizedTokens": [
+        "m",
+        "pole",
+        "vault",
+        "special",
+        "scratch"
+      ],
+      "gold": {
+        "name": "Mondo Duplantis",
+        "country": "SWE"
+      },
+      "silver": {
+        "name": "Sam Kendricks",
+        "country": "USA"
+      },
+      "bronze": {
+        "name": "Emmanouil Karalis",
+        "country": "GRE"
+      }
+    },
+    {
       "event": "Women's 100 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "100m"],
+      "normalizedTokens": [
+        "w",
+        "100m"
+      ],
       "gold": {
         "name": "Julien Alfred",
         "country": "LCA"
@@ -2451,7 +2965,10 @@
     {
       "event": "Women's 200 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "200m"],
+      "normalizedTokens": [
+        "w",
+        "200m"
+      ],
       "gold": {
         "name": "Gabby Thomas",
         "country": "USA"
@@ -2468,7 +2985,10 @@
     {
       "event": "Women's 400 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "400m"],
+      "normalizedTokens": [
+        "w",
+        "400m"
+      ],
       "gold": {
         "name": "Marileidy Paulino",
         "country": "DOM"
@@ -2485,7 +3005,10 @@
     {
       "event": "Women's 800 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "800m"],
+      "normalizedTokens": [
+        "w",
+        "800m"
+      ],
       "gold": {
         "name": "Keely Hodgkinson",
         "country": "GBR"
@@ -2502,7 +3025,10 @@
     {
       "event": "Women's 1, 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "500m"],
+      "normalizedTokens": [
+        "w",
+        "500m"
+      ],
       "gold": {
         "name": "Faith Kipyegon",
         "country": "KEN"
@@ -2519,7 +3045,10 @@
     {
       "event": "Women's 5, 000 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "000m"],
+      "normalizedTokens": [
+        "w",
+        "000m"
+      ],
       "gold": {
         "name": "Beatrice Chebet",
         "country": "KEN"
@@ -2536,7 +3065,11 @@
     {
       "event": "Women's 10, 000 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "10", "000m"],
+      "normalizedTokens": [
+        "w",
+        "10",
+        "000m"
+      ],
       "gold": {
         "name": "Beatrice Chebet",
         "country": "KEN"
@@ -2553,7 +3086,10 @@
     {
       "event": "Women's Marathon",
       "gender": "w",
-      "normalizedTokens": ["w", "marathon"],
+      "normalizedTokens": [
+        "w",
+        "marathon"
+      ],
       "gold": {
         "name": "Sifan Hassan",
         "country": "NED"
@@ -2568,9 +3104,14 @@
       }
     },
     {
-      "event": "Women's 100 metres Hurdles",
+      "event": "Women's 100 / 80 metres Hurdles",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "hurdles"],
+      "normalizedTokens": [
+        "w",
+        "100",
+        "80m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Masai Russell",
         "country": "USA"
@@ -2587,7 +3128,11 @@
     {
       "event": "Women's 400 metres Hurdles",
       "gender": "w",
-      "normalizedTokens": ["w", "400m", "hurdles"],
+      "normalizedTokens": [
+        "w",
+        "400m",
+        "hurdles"
+      ],
       "gold": {
         "name": "Sydney McLaughlin-Levrone",
         "country": "USA"
@@ -2604,7 +3149,11 @@
     {
       "event": "Women's 3, 000 metres Steeplechase",
       "gender": "w",
-      "normalizedTokens": ["w", "000m", "steeplechase"],
+      "normalizedTokens": [
+        "w",
+        "000m",
+        "steeplechase"
+      ],
       "gold": {
         "name": "Winfred Yavi",
         "country": "BRN"
@@ -2621,7 +3170,11 @@
     {
       "event": "Women's 4 × 100 metres Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x100m", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x100m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -2638,7 +3191,11 @@
     {
       "event": "Women's 4 × 400 metres Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x400m", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -2655,7 +3212,12 @@
     {
       "event": "Women's 20 kilometres Race Walk",
       "gender": "w",
-      "normalizedTokens": ["w", "20km", "race", "walk"],
+      "normalizedTokens": [
+        "w",
+        "20km",
+        "race",
+        "walk"
+      ],
       "gold": {
         "name": "Yang Jiayu",
         "country": "CHN"
@@ -2672,7 +3234,11 @@
     {
       "event": "Women's High Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "high", "jump"],
+      "normalizedTokens": [
+        "w",
+        "high",
+        "jump"
+      ],
       "gold": {
         "name": "Yaroslava Mahuchikh",
         "country": "UKR"
@@ -2689,7 +3255,11 @@
     {
       "event": "Women's Pole Vault",
       "gender": "w",
-      "normalizedTokens": ["w", "pole", "vault"],
+      "normalizedTokens": [
+        "w",
+        "pole",
+        "vault"
+      ],
       "gold": {
         "name": "Nina Kennedy",
         "country": "AUS"
@@ -2706,7 +3276,11 @@
     {
       "event": "Women's Long Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "long", "jump"],
+      "normalizedTokens": [
+        "w",
+        "long",
+        "jump"
+      ],
       "gold": {
         "name": "Tara Davis-Woodhall",
         "country": "USA"
@@ -2723,7 +3297,11 @@
     {
       "event": "Women's Triple Jump",
       "gender": "w",
-      "normalizedTokens": ["w", "triple", "jump"],
+      "normalizedTokens": [
+        "w",
+        "triple",
+        "jump"
+      ],
       "gold": {
         "name": "Thea LaFond",
         "country": "DMA"
@@ -2740,7 +3318,11 @@
     {
       "event": "Women's Shot Put",
       "gender": "w",
-      "normalizedTokens": ["w", "shot", "put"],
+      "normalizedTokens": [
+        "w",
+        "shot",
+        "put"
+      ],
       "gold": {
         "name": "Yemisi Ogunleye",
         "country": "GER"
@@ -2757,7 +3339,11 @@
     {
       "event": "Women's Discus Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "discus", "throw"],
+      "normalizedTokens": [
+        "w",
+        "discus",
+        "throw"
+      ],
       "gold": {
         "name": "Valarie Allman",
         "country": "USA"
@@ -2774,7 +3360,11 @@
     {
       "event": "Women's Hammer Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "hammer", "throw"],
+      "normalizedTokens": [
+        "w",
+        "hammer",
+        "throw"
+      ],
       "gold": {
         "name": "Camryn Rogers",
         "country": "CAN"
@@ -2791,7 +3381,11 @@
     {
       "event": "Women's Javelin Throw",
       "gender": "w",
-      "normalizedTokens": ["w", "javelin", "throw"],
+      "normalizedTokens": [
+        "w",
+        "javelin",
+        "throw"
+      ],
       "gold": {
         "name": "Haruka Kitaguchi",
         "country": "JPN"
@@ -2808,7 +3402,10 @@
     {
       "event": "Women's Heptathlon",
       "gender": "w",
-      "normalizedTokens": ["w", "heptathlon"],
+      "normalizedTokens": [
+        "w",
+        "heptathlon"
+      ],
       "gold": {
         "name": "Nafi Thiam",
         "country": "BEL"
@@ -2825,7 +3422,11 @@
     {
       "event": "Mixed 4 × 400 metres Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "4x400m", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "4x400m",
+        "relay"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -2842,7 +3443,13 @@
     {
       "event": "Mixed Marathon Race Walk Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "marathon", "race", "walk", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "marathon",
+        "race",
+        "walk",
+        "relay"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -2861,7 +3468,10 @@
     {
       "event": "Men's Park",
       "gender": "m",
-      "normalizedTokens": ["m", "park"],
+      "normalizedTokens": [
+        "m",
+        "park"
+      ],
       "gold": {
         "name": "José Torres Gil",
         "country": "ARG"
@@ -2878,7 +3488,10 @@
     {
       "event": "Women's Park",
       "gender": "w",
-      "normalizedTokens": ["w", "park"],
+      "normalizedTokens": [
+        "w",
+        "park"
+      ],
       "gold": {
         "name": "Deng Yawen",
         "country": "CHN"
@@ -2897,7 +3510,10 @@
     {
       "event": "Men's BMX",
       "gender": "m",
-      "normalizedTokens": ["m", "bmx"],
+      "normalizedTokens": [
+        "m",
+        "bmx"
+      ],
       "gold": {
         "name": "Joris Daudet",
         "country": "FRA"
@@ -2914,7 +3530,10 @@
     {
       "event": "Women's BMX",
       "gender": "w",
-      "normalizedTokens": ["w", "bmx"],
+      "normalizedTokens": [
+        "w",
+        "bmx"
+      ],
       "gold": {
         "name": "Saya Sakakibara",
         "country": "AUS"
@@ -2933,7 +3552,10 @@
     {
       "event": "Men's Singles",
       "gender": "m",
-      "normalizedTokens": ["m", "singles"],
+      "normalizedTokens": [
+        "m",
+        "singles"
+      ],
       "gold": {
         "name": "Viktor Axelsen",
         "country": "DEN"
@@ -2950,7 +3572,10 @@
     {
       "event": "Men's Doubles",
       "gender": "m",
-      "normalizedTokens": ["m", "doubles"],
+      "normalizedTokens": [
+        "m",
+        "doubles"
+      ],
       "gold": {
         "name": "Chinese Taipei",
         "country": "TPE"
@@ -2967,7 +3592,10 @@
     {
       "event": "Women's Singles",
       "gender": "w",
-      "normalizedTokens": ["w", "singles"],
+      "normalizedTokens": [
+        "w",
+        "singles"
+      ],
       "gold": {
         "name": "An Se-Yeong",
         "country": "KOR"
@@ -2984,7 +3612,10 @@
     {
       "event": "Women's Doubles",
       "gender": "w",
-      "normalizedTokens": ["w", "doubles"],
+      "normalizedTokens": [
+        "w",
+        "doubles"
+      ],
       "gold": {
         "name": "People's Republic of China 1",
         "country": "CHN"
@@ -3001,7 +3632,10 @@
     {
       "event": "Mixed Doubles",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "doubles"],
+      "normalizedTokens": [
+        "mixed",
+        "doubles"
+      ],
       "gold": {
         "name": "People's Republic of China 1",
         "country": "CHN"
@@ -3023,7 +3657,10 @@
     {
       "event": "Men's Basketball",
       "gender": "m",
-      "normalizedTokens": ["m", "basketball"],
+      "normalizedTokens": [
+        "m",
+        "basketball"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -3040,7 +3677,10 @@
     {
       "event": "Women's Basketball",
       "gender": "w",
-      "normalizedTokens": ["w", "basketball"],
+      "normalizedTokens": [
+        "w",
+        "basketball"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -3059,7 +3699,11 @@
     {
       "event": "Men's Beach Volleyball",
       "gender": "m",
-      "normalizedTokens": ["m", "beach", "volleyball"],
+      "normalizedTokens": [
+        "m",
+        "beach",
+        "volleyball"
+      ],
       "gold": {
         "name": "Sweden",
         "country": "SWE"
@@ -3076,7 +3720,11 @@
     {
       "event": "Women's Beach Volleyball",
       "gender": "w",
-      "normalizedTokens": ["w", "beach", "volleyball"],
+      "normalizedTokens": [
+        "w",
+        "beach",
+        "volleyball"
+      ],
       "gold": {
         "name": "Brazil 1",
         "country": "BRA"
@@ -3095,7 +3743,10 @@
     {
       "event": "Men's Flyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "flyweight"],
+      "normalizedTokens": [
+        "m",
+        "flyweight"
+      ],
       "gold": {
         "name": "Hasanboy Dusmatov",
         "country": "UZB"
@@ -3112,7 +3763,10 @@
     {
       "event": "Men's Featherweight",
       "gender": "m",
-      "normalizedTokens": ["m", "featherweight"],
+      "normalizedTokens": [
+        "m",
+        "featherweight"
+      ],
       "gold": {
         "name": "Abdumalik Khalokov",
         "country": "UZB"
@@ -3129,7 +3783,10 @@
     {
       "event": "Men's Lightweight",
       "gender": "m",
-      "normalizedTokens": ["m", "lightweight"],
+      "normalizedTokens": [
+        "m",
+        "lightweight"
+      ],
       "gold": {
         "name": "Erislandy Álvarez",
         "country": "CUB"
@@ -3146,7 +3803,10 @@
     {
       "event": "Men's Welterweight",
       "gender": "m",
-      "normalizedTokens": ["m", "welterweight"],
+      "normalizedTokens": [
+        "m",
+        "welterweight"
+      ],
       "gold": {
         "name": "Asadkhuja Muydinkhujaev",
         "country": "UZB"
@@ -3163,7 +3823,10 @@
     {
       "event": "Men's Light-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "light-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "light-heavyweight"
+      ],
       "gold": {
         "name": "Oleksandr Khyzhniak",
         "country": "UKR"
@@ -3180,7 +3843,10 @@
     {
       "event": "Men's Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Lazizbek Mullojonov",
         "country": "UZB"
@@ -3197,7 +3863,10 @@
     {
       "event": "Men's Super-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "super-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "super-heavyweight"
+      ],
       "gold": {
         "name": "Bakhodir Jalolov",
         "country": "UZB"
@@ -3214,7 +3883,10 @@
     {
       "event": "Women's Flyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "flyweight"],
+      "normalizedTokens": [
+        "w",
+        "flyweight"
+      ],
       "gold": {
         "name": "Wu Yu",
         "country": "CHN"
@@ -3231,7 +3903,10 @@
     {
       "event": "Women's Bantamweight",
       "gender": "w",
-      "normalizedTokens": ["w", "bantamweight"],
+      "normalizedTokens": [
+        "w",
+        "bantamweight"
+      ],
       "gold": {
         "name": "Chang Yuan",
         "country": "CHN"
@@ -3248,7 +3923,10 @@
     {
       "event": "Women's Featherweight",
       "gender": "w",
-      "normalizedTokens": ["w", "featherweight"],
+      "normalizedTokens": [
+        "w",
+        "featherweight"
+      ],
       "gold": {
         "name": "Lin Yu-Ting",
         "country": "TPE"
@@ -3265,7 +3943,10 @@
     {
       "event": "Women's Lightweight",
       "gender": "w",
-      "normalizedTokens": ["w", "lightweight"],
+      "normalizedTokens": [
+        "w",
+        "lightweight"
+      ],
       "gold": {
         "name": "Kellie Harrington",
         "country": "IRL"
@@ -3282,7 +3963,10 @@
     {
       "event": "Women's Welterweight",
       "gender": "w",
-      "normalizedTokens": ["w", "welterweight"],
+      "normalizedTokens": [
+        "w",
+        "welterweight"
+      ],
       "gold": {
         "name": "Imane Khelif",
         "country": "ALG"
@@ -3299,7 +3983,10 @@
     {
       "event": "Women's Middleweight",
       "gender": "w",
-      "normalizedTokens": ["w", "middleweight"],
+      "normalizedTokens": [
+        "w",
+        "middleweight"
+      ],
       "gold": {
         "name": "Li Qian",
         "country": "CHN"
@@ -3318,7 +4005,10 @@
     {
       "event": "Men's Flyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "flyweight"],
+      "normalizedTokens": [
+        "m",
+        "flyweight"
+      ],
       "gold": {
         "name": "Hasanboy Dusmatov",
         "country": "UZB"
@@ -3335,7 +4025,10 @@
     {
       "event": "Men's Featherweight",
       "gender": "m",
-      "normalizedTokens": ["m", "featherweight"],
+      "normalizedTokens": [
+        "m",
+        "featherweight"
+      ],
       "gold": {
         "name": "Abdumalik Khalokov",
         "country": "UZB"
@@ -3352,7 +4045,10 @@
     {
       "event": "Men's Lightweight",
       "gender": "m",
-      "normalizedTokens": ["m", "lightweight"],
+      "normalizedTokens": [
+        "m",
+        "lightweight"
+      ],
       "gold": {
         "name": "Erislandy Álvarez",
         "country": "CUB"
@@ -3369,7 +4065,10 @@
     {
       "event": "Men's Welterweight",
       "gender": "m",
-      "normalizedTokens": ["m", "welterweight"],
+      "normalizedTokens": [
+        "m",
+        "welterweight"
+      ],
       "gold": {
         "name": "Asadkhuja Muydinkhujaev",
         "country": "UZB"
@@ -3386,7 +4085,10 @@
     {
       "event": "Men's Light-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "light-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "light-heavyweight"
+      ],
       "gold": {
         "name": "Oleksandr Khyzhniak",
         "country": "UKR"
@@ -3403,7 +4105,10 @@
     {
       "event": "Men's Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Lazizbek Mullojonov",
         "country": "UZB"
@@ -3420,7 +4125,10 @@
     {
       "event": "Men's Super-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "super-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "super-heavyweight"
+      ],
       "gold": {
         "name": "Bakhodir Jalolov",
         "country": "UZB"
@@ -3437,7 +4145,10 @@
     {
       "event": "Women's Flyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "flyweight"],
+      "normalizedTokens": [
+        "w",
+        "flyweight"
+      ],
       "gold": {
         "name": "Wu Yu",
         "country": "CHN"
@@ -3454,7 +4165,10 @@
     {
       "event": "Women's Bantamweight",
       "gender": "w",
-      "normalizedTokens": ["w", "bantamweight"],
+      "normalizedTokens": [
+        "w",
+        "bantamweight"
+      ],
       "gold": {
         "name": "Chang Yuan",
         "country": "CHN"
@@ -3471,7 +4185,10 @@
     {
       "event": "Women's Featherweight",
       "gender": "w",
-      "normalizedTokens": ["w", "featherweight"],
+      "normalizedTokens": [
+        "w",
+        "featherweight"
+      ],
       "gold": {
         "name": "Lin Yu-Ting",
         "country": "TPE"
@@ -3488,7 +4205,10 @@
     {
       "event": "Women's Lightweight",
       "gender": "w",
-      "normalizedTokens": ["w", "lightweight"],
+      "normalizedTokens": [
+        "w",
+        "lightweight"
+      ],
       "gold": {
         "name": "Kellie Harrington",
         "country": "IRL"
@@ -3505,7 +4225,10 @@
     {
       "event": "Women's Welterweight",
       "gender": "w",
-      "normalizedTokens": ["w", "welterweight"],
+      "normalizedTokens": [
+        "w",
+        "welterweight"
+      ],
       "gold": {
         "name": "Imane Khelif",
         "country": "ALG"
@@ -3522,7 +4245,10 @@
     {
       "event": "Women's Middleweight",
       "gender": "w",
-      "normalizedTokens": ["w", "middleweight"],
+      "normalizedTokens": [
+        "w",
+        "middleweight"
+      ],
       "gold": {
         "name": "Li Qian",
         "country": "CHN"
@@ -3539,9 +4265,15 @@
   ],
   "Canoe Slalom": [
     {
-      "event": "Men's Kayak Cross, Slalom",
+      "event": "Men's Kayak Cross (KX), Slalom",
       "gender": "m",
-      "normalizedTokens": ["m", "k", "cross", "slalom"],
+      "normalizedTokens": [
+        "m",
+        "k",
+        "cross",
+        "kx",
+        "slalom"
+      ],
       "gold": {
         "name": "Finn Butcher",
         "country": "NZL"
@@ -3556,9 +4288,15 @@
       }
     },
     {
-      "event": "Men's Kayak Singles, Slalom",
+      "event": "Men's Kayak Singles (K1), Slalom",
       "gender": "m",
-      "normalizedTokens": ["m", "k", "singles", "slalom"],
+      "normalizedTokens": [
+        "m",
+        "k",
+        "singles",
+        "k1",
+        "slalom"
+      ],
       "gold": {
         "name": "Giovanni De Gennaro",
         "country": "ITA"
@@ -3573,9 +4311,15 @@
       }
     },
     {
-      "event": "Men's Canadian Singles, Slalom",
+      "event": "Men's Canoe Singles (C1), Slalom",
       "gender": "m",
-      "normalizedTokens": ["m", "canadian", "singles", "slalom"],
+      "normalizedTokens": [
+        "m",
+        "c",
+        "singles",
+        "c1",
+        "slalom"
+      ],
       "gold": {
         "name": "Nicolas Gestin",
         "country": "FRA"
@@ -3590,9 +4334,15 @@
       }
     },
     {
-      "event": "Women's Kayak Singles, Slalom",
+      "event": "Women's Kayak Singles (K1), Slalom",
       "gender": "w",
-      "normalizedTokens": ["w", "k", "singles", "slalom"],
+      "normalizedTokens": [
+        "w",
+        "k",
+        "singles",
+        "k1",
+        "slalom"
+      ],
       "gold": {
         "name": "Jess Fox",
         "country": "AUS"
@@ -3607,9 +4357,15 @@
       }
     },
     {
-      "event": "Women's Canadian Singles, Slalom",
+      "event": "Women's Canoe Singles (C1), Slalom",
       "gender": "w",
-      "normalizedTokens": ["w", "canadian", "singles", "slalom"],
+      "normalizedTokens": [
+        "w",
+        "c",
+        "singles",
+        "c1",
+        "slalom"
+      ],
       "gold": {
         "name": "Jess Fox",
         "country": "AUS"
@@ -3624,9 +4380,15 @@
       }
     },
     {
-      "event": "Women's Kayak Cross, Slalom",
+      "event": "Women's Kayak Cross (KX), Slalom",
       "gender": "w",
-      "normalizedTokens": ["w", "k", "cross", "slalom"],
+      "normalizedTokens": [
+        "w",
+        "k",
+        "cross",
+        "kx",
+        "slalom"
+      ],
       "gold": {
         "name": "Noemie Fox",
         "country": "AUS"
@@ -3643,9 +4405,15 @@
   ],
   "Canoe Sprint": [
     {
-      "event": "Men's Kayak Singles, 1, 000 metres",
+      "event": "Men's Kayak Singles (K1), 1, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "k", "singles", "000m"],
+      "normalizedTokens": [
+        "m",
+        "k",
+        "singles",
+        "k1",
+        "000m"
+      ],
       "gold": {
         "name": "Josef Dostál",
         "country": "CZE"
@@ -3660,9 +4428,15 @@
       }
     },
     {
-      "event": "Men's Kayak Doubles, 500 metres",
+      "event": "Men's Kayak Doubles (K2), 500 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "k", "doubles", "500m"],
+      "normalizedTokens": [
+        "m",
+        "k",
+        "doubles",
+        "k2",
+        "500m"
+      ],
       "gold": {
         "name": "Germany 1",
         "country": "GER"
@@ -3677,9 +4451,15 @@
       }
     },
     {
-      "event": "Men's Kayak Fours, 500 metres",
+      "event": "Men's Kayak Fours (K4), 500 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "k", "fours", "500m"],
+      "normalizedTokens": [
+        "m",
+        "k",
+        "fours",
+        "k4",
+        "500m"
+      ],
       "gold": {
         "name": "Germany",
         "country": "GER"
@@ -3694,9 +4474,15 @@
       }
     },
     {
-      "event": "Men's Canadian Singles, 1, 000 metres",
+      "event": "Men's Canoe Singles (C1), 1, 000 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "canadian", "singles", "000m"],
+      "normalizedTokens": [
+        "m",
+        "c",
+        "singles",
+        "c1",
+        "000m"
+      ],
       "gold": {
         "name": "Martin Fuksa",
         "country": "CZE"
@@ -3711,9 +4497,15 @@
       }
     },
     {
-      "event": "Men's Canadian Doubles, 500 metres",
+      "event": "Men's Canoe Doubles (C2), 500 metres",
       "gender": "m",
-      "normalizedTokens": ["m", "canadian", "doubles", "500m"],
+      "normalizedTokens": [
+        "m",
+        "c",
+        "doubles",
+        "c2",
+        "500m"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -3728,9 +4520,15 @@
       }
     },
     {
-      "event": "Women's Kayak Singles, 500 metres",
+      "event": "Women's Kayak Singles (K1), 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "k", "singles", "500m"],
+      "normalizedTokens": [
+        "w",
+        "k",
+        "singles",
+        "k1",
+        "500m"
+      ],
       "gold": {
         "name": "Lisa Carrington",
         "country": "NZL"
@@ -3745,9 +4543,15 @@
       }
     },
     {
-      "event": "Women's Kayak Doubles, 500 metres",
+      "event": "Women's Kayak Doubles (K2), 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "k", "doubles", "500m"],
+      "normalizedTokens": [
+        "w",
+        "k",
+        "doubles",
+        "k2",
+        "500m"
+      ],
       "gold": {
         "name": "New Zealand 1",
         "country": "NZL"
@@ -3762,9 +4566,15 @@
       }
     },
     {
-      "event": "Women's Kayak Fours, 500 metres",
+      "event": "Women's Kayak Fours (K4), 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "k", "fours", "500m"],
+      "normalizedTokens": [
+        "w",
+        "k",
+        "fours",
+        "k4",
+        "500m"
+      ],
       "gold": {
         "name": "New Zealand",
         "country": "NZL"
@@ -3779,9 +4589,15 @@
       }
     },
     {
-      "event": "Women's Canadian Singles, 200 metres",
+      "event": "Women's Canoe Singles (C1), 200 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "canadian", "singles", "200m"],
+      "normalizedTokens": [
+        "w",
+        "c",
+        "singles",
+        "c1",
+        "200m"
+      ],
       "gold": {
         "name": "Katie Vincent",
         "country": "CAN"
@@ -3796,9 +4612,15 @@
       }
     },
     {
-      "event": "Women's Canadian Doubles, 500 metres",
+      "event": "Women's Canoe Doubles (C2), 500 metres",
       "gender": "w",
-      "normalizedTokens": ["w", "canadian", "doubles", "500m"],
+      "normalizedTokens": [
+        "w",
+        "c",
+        "doubles",
+        "c2",
+        "500m"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -3817,7 +4639,11 @@
     {
       "event": "Men's Boulder and Lead",
       "gender": "m",
-      "normalizedTokens": ["m", "boulder", "lead"],
+      "normalizedTokens": [
+        "m",
+        "boulder",
+        "lead"
+      ],
       "gold": {
         "name": "Toby Roberts",
         "country": "GBR"
@@ -3834,7 +4660,10 @@
     {
       "event": "Men's Speed",
       "gender": "m",
-      "normalizedTokens": ["m", "speed"],
+      "normalizedTokens": [
+        "m",
+        "speed"
+      ],
       "gold": {
         "name": "Veddriq Leonardo",
         "country": "INA"
@@ -3851,7 +4680,11 @@
     {
       "event": "Women's Boulder and Lead",
       "gender": "w",
-      "normalizedTokens": ["w", "boulder", "lead"],
+      "normalizedTokens": [
+        "w",
+        "boulder",
+        "lead"
+      ],
       "gold": {
         "name": "Janja Garnbret",
         "country": "SLO"
@@ -3868,7 +4701,10 @@
     {
       "event": "Women's Speed",
       "gender": "w",
-      "normalizedTokens": ["w", "speed"],
+      "normalizedTokens": [
+        "w",
+        "speed"
+      ],
       "gold": {
         "name": "Aleksandra Mirosław",
         "country": "POL"
@@ -3888,9 +4724,13 @@
   },
   "Cycling Road (Road Race)": [
     {
-      "event": "Men's Road Race, Individual",
+      "event": "Men's Road Race",
       "gender": "m",
-      "normalizedTokens": ["m", "road", "race"],
+      "normalizedTokens": [
+        "m",
+        "road",
+        "race"
+      ],
       "gold": {
         "name": "Remco Evenepoel",
         "country": "BEL"
@@ -3905,9 +4745,13 @@
       }
     },
     {
-      "event": "Men's Individual Time Trial",
+      "event": "Men's Time Trial, Individual",
       "gender": "m",
-      "normalizedTokens": ["m", "time", "trial"],
+      "normalizedTokens": [
+        "m",
+        "time",
+        "trial"
+      ],
       "gold": {
         "name": "Remco Evenepoel",
         "country": "BEL"
@@ -3922,9 +4766,13 @@
       }
     },
     {
-      "event": "Women's Road Race, Individual",
+      "event": "Women's Road Race",
       "gender": "w",
-      "normalizedTokens": ["w", "road", "race"],
+      "normalizedTokens": [
+        "w",
+        "road",
+        "race"
+      ],
       "gold": {
         "name": "Kristen Faulkner",
         "country": "USA"
@@ -3939,9 +4787,13 @@
       }
     },
     {
-      "event": "Women's Individual Time Trial",
+      "event": "Women's Time Trial, Individual",
       "gender": "w",
-      "normalizedTokens": ["w", "time", "trial"],
+      "normalizedTokens": [
+        "w",
+        "time",
+        "trial"
+      ],
       "gold": {
         "name": "Grace Brown",
         "country": "AUS"
@@ -3958,9 +4810,13 @@
   ],
   "Cycling Road (Time Trial)": [
     {
-      "event": "Men's Road Race, Individual",
+      "event": "Men's Road Race",
       "gender": "m",
-      "normalizedTokens": ["m", "road", "race"],
+      "normalizedTokens": [
+        "m",
+        "road",
+        "race"
+      ],
       "gold": {
         "name": "Remco Evenepoel",
         "country": "BEL"
@@ -3975,9 +4831,13 @@
       }
     },
     {
-      "event": "Men's Individual Time Trial",
+      "event": "Men's Time Trial, Individual",
       "gender": "m",
-      "normalizedTokens": ["m", "time", "trial"],
+      "normalizedTokens": [
+        "m",
+        "time",
+        "trial"
+      ],
       "gold": {
         "name": "Remco Evenepoel",
         "country": "BEL"
@@ -3992,9 +4852,13 @@
       }
     },
     {
-      "event": "Women's Road Race, Individual",
+      "event": "Women's Road Race",
       "gender": "w",
-      "normalizedTokens": ["w", "road", "race"],
+      "normalizedTokens": [
+        "w",
+        "road",
+        "race"
+      ],
       "gold": {
         "name": "Kristen Faulkner",
         "country": "USA"
@@ -4009,9 +4873,13 @@
       }
     },
     {
-      "event": "Women's Individual Time Trial",
+      "event": "Women's Time Trial, Individual",
       "gender": "w",
-      "normalizedTokens": ["w", "time", "trial"],
+      "normalizedTokens": [
+        "w",
+        "time",
+        "trial"
+      ],
       "gold": {
         "name": "Grace Brown",
         "country": "AUS"
@@ -4030,7 +4898,10 @@
     {
       "event": "Men's Sprint",
       "gender": "m",
-      "normalizedTokens": ["m", "sprint"],
+      "normalizedTokens": [
+        "m",
+        "sprint"
+      ],
       "gold": {
         "name": "Harrie Lavreysen",
         "country": "NED"
@@ -4047,7 +4918,10 @@
     {
       "event": "Men's Keirin",
       "gender": "m",
-      "normalizedTokens": ["m", "keirin"],
+      "normalizedTokens": [
+        "m",
+        "keirin"
+      ],
       "gold": {
         "name": "Harrie Lavreysen",
         "country": "NED"
@@ -4064,7 +4938,11 @@
     {
       "event": "Men's Team Sprint",
       "gender": "m",
-      "normalizedTokens": ["m", "team", "sprint"],
+      "normalizedTokens": [
+        "m",
+        "team",
+        "sprint"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -4079,9 +4957,13 @@
       }
     },
     {
-      "event": "Men's Team Pursuit, 4, 000 metres",
+      "event": "Men's Team Pursuit",
       "gender": "m",
-      "normalizedTokens": ["m", "team", "pursuit", "000m"],
+      "normalizedTokens": [
+        "m",
+        "team",
+        "pursuit"
+      ],
       "gold": {
         "name": "Australia",
         "country": "AUS"
@@ -4098,7 +4980,10 @@
     {
       "event": "Men's Madison",
       "gender": "m",
-      "normalizedTokens": ["m", "madison"],
+      "normalizedTokens": [
+        "m",
+        "madison"
+      ],
       "gold": {
         "name": "Portugal",
         "country": "POR"
@@ -4115,7 +5000,10 @@
     {
       "event": "Men's Omnium",
       "gender": "m",
-      "normalizedTokens": ["m", "omnium"],
+      "normalizedTokens": [
+        "m",
+        "omnium"
+      ],
       "gold": {
         "name": "Benjamin Thomas",
         "country": "FRA"
@@ -4132,7 +5020,10 @@
     {
       "event": "Women's Sprint",
       "gender": "w",
-      "normalizedTokens": ["w", "sprint"],
+      "normalizedTokens": [
+        "w",
+        "sprint"
+      ],
       "gold": {
         "name": "Ellesse Andrews",
         "country": "NZL"
@@ -4149,7 +5040,10 @@
     {
       "event": "Women's Keirin",
       "gender": "w",
-      "normalizedTokens": ["w", "keirin"],
+      "normalizedTokens": [
+        "w",
+        "keirin"
+      ],
       "gold": {
         "name": "Ellesse Andrews",
         "country": "NZL"
@@ -4166,7 +5060,11 @@
     {
       "event": "Women's Team Sprint",
       "gender": "w",
-      "normalizedTokens": ["w", "team", "sprint"],
+      "normalizedTokens": [
+        "w",
+        "team",
+        "sprint"
+      ],
       "gold": {
         "name": "Great Britain",
         "country": "GBR"
@@ -4183,7 +5081,11 @@
     {
       "event": "Women's Team Pursuit",
       "gender": "w",
-      "normalizedTokens": ["w", "team", "pursuit"],
+      "normalizedTokens": [
+        "w",
+        "team",
+        "pursuit"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -4200,7 +5102,10 @@
     {
       "event": "Women's Madison",
       "gender": "w",
-      "normalizedTokens": ["w", "madison"],
+      "normalizedTokens": [
+        "w",
+        "madison"
+      ],
       "gold": {
         "name": "Italy",
         "country": "ITA"
@@ -4217,7 +5122,10 @@
     {
       "event": "Women's Omnium",
       "gender": "w",
-      "normalizedTokens": ["w", "omnium"],
+      "normalizedTokens": [
+        "w",
+        "omnium"
+      ],
       "gold": {
         "name": "Jennifer Valente",
         "country": "USA"
@@ -4236,7 +5144,10 @@
     {
       "event": "Men's Springboard",
       "gender": "m",
-      "normalizedTokens": ["m", "springboard"],
+      "normalizedTokens": [
+        "m",
+        "springboard"
+      ],
       "gold": {
         "name": "Xie Siyi",
         "country": "CHN"
@@ -4253,7 +5164,10 @@
     {
       "event": "Men's Platform",
       "gender": "m",
-      "normalizedTokens": ["m", "platform"],
+      "normalizedTokens": [
+        "m",
+        "platform"
+      ],
       "gold": {
         "name": "Cao Yuan",
         "country": "CHN"
@@ -4270,7 +5184,11 @@
     {
       "event": "Men's Synchronized Springboard",
       "gender": "m",
-      "normalizedTokens": ["m", "synchronized", "springboard"],
+      "normalizedTokens": [
+        "m",
+        "synchronized",
+        "springboard"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -4287,7 +5205,11 @@
     {
       "event": "Men's Synchronized Platform",
       "gender": "m",
-      "normalizedTokens": ["m", "synchronized", "platform"],
+      "normalizedTokens": [
+        "m",
+        "synchronized",
+        "platform"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -4304,7 +5226,10 @@
     {
       "event": "Women's Springboard",
       "gender": "w",
-      "normalizedTokens": ["w", "springboard"],
+      "normalizedTokens": [
+        "w",
+        "springboard"
+      ],
       "gold": {
         "name": "Chen Yiwen",
         "country": "CHN"
@@ -4321,7 +5246,10 @@
     {
       "event": "Women's Platform",
       "gender": "w",
-      "normalizedTokens": ["w", "platform"],
+      "normalizedTokens": [
+        "w",
+        "platform"
+      ],
       "gold": {
         "name": "Quan Hongchan",
         "country": "CHN"
@@ -4338,7 +5266,11 @@
     {
       "event": "Women's Synchronized Springboard",
       "gender": "w",
-      "normalizedTokens": ["w", "synchronized", "springboard"],
+      "normalizedTokens": [
+        "w",
+        "synchronized",
+        "springboard"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -4355,7 +5287,11 @@
     {
       "event": "Women's Synchronized Platform",
       "gender": "w",
-      "normalizedTokens": ["w", "synchronized", "platform"],
+      "normalizedTokens": [
+        "w",
+        "synchronized",
+        "platform"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -4374,7 +5310,9 @@
     {
       "event": "Open Individual",
       "gender": "open",
-      "normalizedTokens": ["open"],
+      "normalizedTokens": [
+        "open"
+      ],
       "gold": {
         "name": "Jessica von Bredow-Werndl",
         "country": "GER"
@@ -4391,7 +5329,10 @@
     {
       "event": "Open Team",
       "gender": "open",
-      "normalizedTokens": ["open", "team"],
+      "normalizedTokens": [
+        "open",
+        "team"
+      ],
       "gold": {
         "name": "Germany",
         "country": "GER"
@@ -4408,7 +5349,9 @@
     {
       "event": "Open Individual",
       "gender": "open",
-      "normalizedTokens": ["open"],
+      "normalizedTokens": [
+        "open"
+      ],
       "gold": {
         "name": "Christian Kukuk",
         "country": "GER"
@@ -4425,7 +5368,10 @@
     {
       "event": "Open Team",
       "gender": "open",
-      "normalizedTokens": ["open", "team"],
+      "normalizedTokens": [
+        "open",
+        "team"
+      ],
       "gold": {
         "name": "Great Britain",
         "country": "GBR"
@@ -4442,7 +5388,9 @@
     {
       "event": "Open Individual",
       "gender": "open",
-      "normalizedTokens": ["open"],
+      "normalizedTokens": [
+        "open"
+      ],
       "gold": {
         "name": "Michael Jung",
         "country": "GER"
@@ -4459,7 +5407,10 @@
     {
       "event": "Open Team",
       "gender": "open",
-      "normalizedTokens": ["open", "team"],
+      "normalizedTokens": [
+        "open",
+        "team"
+      ],
       "gold": {
         "name": "Great Britain",
         "country": "GBR"
@@ -4476,26 +5427,13 @@
   ],
   "Fencing": [
     {
-      "event": "Men's Foil, Individual",
-      "gender": "m",
-      "normalizedTokens": ["m", "foil"],
-      "gold": {
-        "name": "Edgar Cheung",
-        "country": "HKG"
-      },
-      "silver": {
-        "name": "Filippo Macchi",
-        "country": "ITA"
-      },
-      "bronze": {
-        "name": "Nick Itkin",
-        "country": "USA"
-      }
-    },
-    {
       "event": "Men's Foil, Team",
       "gender": "m",
-      "normalizedTokens": ["m", "foil", "team"],
+      "normalizedTokens": [
+        "m",
+        "foil",
+        "team"
+      ],
       "gold": {
         "name": "Japan",
         "country": "JPN"
@@ -4512,7 +5450,10 @@
     {
       "event": "Men's Épée, Individual",
       "gender": "m",
-      "normalizedTokens": ["m", "epee"],
+      "normalizedTokens": [
+        "m",
+        "epee"
+      ],
       "gold": {
         "name": "Koki Kano",
         "country": "JPN"
@@ -4529,7 +5470,11 @@
     {
       "event": "Men's Épée, Team",
       "gender": "m",
-      "normalizedTokens": ["m", "epee", "team"],
+      "normalizedTokens": [
+        "m",
+        "epee",
+        "team"
+      ],
       "gold": {
         "name": "Hungary",
         "country": "HUN"
@@ -4546,7 +5491,10 @@
     {
       "event": "Men's Sabre, Individual",
       "gender": "m",
-      "normalizedTokens": ["m", "sabre"],
+      "normalizedTokens": [
+        "m",
+        "sabre"
+      ],
       "gold": {
         "name": "Oh Sang-Uk",
         "country": "KOR"
@@ -4563,7 +5511,11 @@
     {
       "event": "Men's Sabre, Team",
       "gender": "m",
-      "normalizedTokens": ["m", "sabre", "team"],
+      "normalizedTokens": [
+        "m",
+        "sabre",
+        "team"
+      ],
       "gold": {
         "name": "Republic of Korea",
         "country": "KOR"
@@ -4578,9 +5530,32 @@
       }
     },
     {
+      "event": "Open Foil, Individual",
+      "gender": "open",
+      "normalizedTokens": [
+        "open",
+        "foil"
+      ],
+      "gold": {
+        "name": "Edgar Cheung",
+        "country": "HKG"
+      },
+      "silver": {
+        "name": "Filippo Macchi",
+        "country": "ITA"
+      },
+      "bronze": {
+        "name": "Nick Itkin",
+        "country": "USA"
+      }
+    },
+    {
       "event": "Women's Foil, Individual",
       "gender": "w",
-      "normalizedTokens": ["w", "foil"],
+      "normalizedTokens": [
+        "w",
+        "foil"
+      ],
       "gold": {
         "name": "Lee Kiefer",
         "country": "USA"
@@ -4597,7 +5572,11 @@
     {
       "event": "Women's Foil, Team",
       "gender": "w",
-      "normalizedTokens": ["w", "foil", "team"],
+      "normalizedTokens": [
+        "w",
+        "foil",
+        "team"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -4614,7 +5593,10 @@
     {
       "event": "Women's Épée, Individual",
       "gender": "w",
-      "normalizedTokens": ["w", "epee"],
+      "normalizedTokens": [
+        "w",
+        "epee"
+      ],
       "gold": {
         "name": "Vivian Kong",
         "country": "HKG"
@@ -4631,7 +5613,11 @@
     {
       "event": "Women's Épée, Team",
       "gender": "w",
-      "normalizedTokens": ["w", "epee", "team"],
+      "normalizedTokens": [
+        "w",
+        "epee",
+        "team"
+      ],
       "gold": {
         "name": "Italy",
         "country": "ITA"
@@ -4648,7 +5634,10 @@
     {
       "event": "Women's Sabre, Individual",
       "gender": "w",
-      "normalizedTokens": ["w", "sabre"],
+      "normalizedTokens": [
+        "w",
+        "sabre"
+      ],
       "gold": {
         "name": "Manon Apithy-Brunet",
         "country": "FRA"
@@ -4665,7 +5654,11 @@
     {
       "event": "Women's Sabre, Team",
       "gender": "w",
-      "normalizedTokens": ["w", "sabre", "team"],
+      "normalizedTokens": [
+        "w",
+        "sabre",
+        "team"
+      ],
       "gold": {
         "name": "Ukraine",
         "country": "UKR"
@@ -4687,7 +5680,10 @@
     {
       "event": "Men's Football",
       "gender": "m",
-      "normalizedTokens": ["m", "football"],
+      "normalizedTokens": [
+        "m",
+        "football"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -4704,7 +5700,10 @@
     {
       "event": "Women's Football",
       "gender": "w",
-      "normalizedTokens": ["w", "football"],
+      "normalizedTokens": [
+        "w",
+        "football"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -4723,7 +5722,9 @@
     {
       "event": "Men's Individual",
       "gender": "m",
-      "normalizedTokens": ["m"],
+      "normalizedTokens": [
+        "m"
+      ],
       "gold": {
         "name": "Scottie Scheffler",
         "country": "USA"
@@ -4740,7 +5741,9 @@
     {
       "event": "Women's Individual",
       "gender": "w",
-      "normalizedTokens": ["w"],
+      "normalizedTokens": [
+        "w"
+      ],
       "gold": {
         "name": "Lydia Ko",
         "country": "NZL"
@@ -4759,7 +5762,10 @@
     {
       "event": "Men's Handball",
       "gender": "m",
-      "normalizedTokens": ["m", "handball"],
+      "normalizedTokens": [
+        "m",
+        "handball"
+      ],
       "gold": {
         "name": "Denmark",
         "country": "DEN"
@@ -4776,7 +5782,10 @@
     {
       "event": "Women's Handball",
       "gender": "w",
-      "normalizedTokens": ["w", "handball"],
+      "normalizedTokens": [
+        "w",
+        "handball"
+      ],
       "gold": {
         "name": "Norway",
         "country": "NOR"
@@ -4795,7 +5804,10 @@
     {
       "event": "Men's Hockey",
       "gender": "m",
-      "normalizedTokens": ["m", "hockey"],
+      "normalizedTokens": [
+        "m",
+        "hockey"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -4812,7 +5824,10 @@
     {
       "event": "Women's Hockey",
       "gender": "w",
-      "normalizedTokens": ["w", "hockey"],
+      "normalizedTokens": [
+        "w",
+        "hockey"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -4831,7 +5846,10 @@
     {
       "event": "Men's Extra-Lightweight",
       "gender": "m",
-      "normalizedTokens": ["m", "extra-lightweight"],
+      "normalizedTokens": [
+        "m",
+        "extra-lightweight"
+      ],
       "gold": {
         "name": "Yeldos Smetov",
         "country": "KAZ"
@@ -4848,7 +5866,10 @@
     {
       "event": "Men's Half-Lightweight",
       "gender": "m",
-      "normalizedTokens": ["m", "half-lightweight"],
+      "normalizedTokens": [
+        "m",
+        "half-lightweight"
+      ],
       "gold": {
         "name": "Hifumi Abe",
         "country": "JPN"
@@ -4865,7 +5886,10 @@
     {
       "event": "Men's Lightweight",
       "gender": "m",
-      "normalizedTokens": ["m", "lightweight"],
+      "normalizedTokens": [
+        "m",
+        "lightweight"
+      ],
       "gold": {
         "name": "Hidayət Heydərov",
         "country": "AZE"
@@ -4882,7 +5906,10 @@
     {
       "event": "Men's Half-Middleweight",
       "gender": "m",
-      "normalizedTokens": ["m", "half-middleweight"],
+      "normalizedTokens": [
+        "m",
+        "half-middleweight"
+      ],
       "gold": {
         "name": "Takanori Nagase",
         "country": "JPN"
@@ -4899,7 +5926,10 @@
     {
       "event": "Men's Middleweight",
       "gender": "m",
-      "normalizedTokens": ["m", "middleweight"],
+      "normalizedTokens": [
+        "m",
+        "middleweight"
+      ],
       "gold": {
         "name": "Lasha Bekauri",
         "country": "GEO"
@@ -4916,7 +5946,10 @@
     {
       "event": "Men's Half-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "half-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "half-heavyweight"
+      ],
       "gold": {
         "name": "Zelym Kotsoiev",
         "country": "AZE"
@@ -4933,7 +5966,10 @@
     {
       "event": "Men's Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Teddy Riner",
         "country": "FRA"
@@ -4950,7 +5986,10 @@
     {
       "event": "Women's Extra-Lightweight",
       "gender": "w",
-      "normalizedTokens": ["w", "extra-lightweight"],
+      "normalizedTokens": [
+        "w",
+        "extra-lightweight"
+      ],
       "gold": {
         "name": "Natsumi Tsunoda",
         "country": "JPN"
@@ -4967,7 +6006,10 @@
     {
       "event": "Women's Half-Lightweight",
       "gender": "w",
-      "normalizedTokens": ["w", "half-lightweight"],
+      "normalizedTokens": [
+        "w",
+        "half-lightweight"
+      ],
       "gold": {
         "name": "Diyora Keldiyorova",
         "country": "UZB"
@@ -4984,7 +6026,10 @@
     {
       "event": "Women's Lightweight",
       "gender": "w",
-      "normalizedTokens": ["w", "lightweight"],
+      "normalizedTokens": [
+        "w",
+        "lightweight"
+      ],
       "gold": {
         "name": "Christa Deguchi",
         "country": "CAN"
@@ -5001,7 +6046,10 @@
     {
       "event": "Women's Half-Middleweight",
       "gender": "w",
-      "normalizedTokens": ["w", "half-middleweight"],
+      "normalizedTokens": [
+        "w",
+        "half-middleweight"
+      ],
       "gold": {
         "name": "Andreja Leški",
         "country": "SLO"
@@ -5018,7 +6066,10 @@
     {
       "event": "Women's Middleweight",
       "gender": "w",
-      "normalizedTokens": ["w", "middleweight"],
+      "normalizedTokens": [
+        "w",
+        "middleweight"
+      ],
       "gold": {
         "name": "Barbara Matić",
         "country": "CRO"
@@ -5035,7 +6086,10 @@
     {
       "event": "Women's Half-Heavyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "half-heavyweight"],
+      "normalizedTokens": [
+        "w",
+        "half-heavyweight"
+      ],
       "gold": {
         "name": "Alice Bellandi",
         "country": "ITA"
@@ -5052,7 +6106,10 @@
     {
       "event": "Women's Heavyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "heavyweight"],
+      "normalizedTokens": [
+        "w",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Beatriz Souza",
         "country": "BRA"
@@ -5069,7 +6126,10 @@
     {
       "event": "Mixed Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "team"
+      ],
       "gold": {
         "name": "France",
         "country": "FRA"
@@ -5091,7 +6151,9 @@
     {
       "event": "Men's Individual",
       "gender": "m",
-      "normalizedTokens": ["m"],
+      "normalizedTokens": [
+        "m"
+      ],
       "gold": {
         "name": "Ahmed El-Gendy",
         "country": "EGY"
@@ -5108,7 +6170,9 @@
     {
       "event": "Women's Individual",
       "gender": "w",
-      "normalizedTokens": ["w"],
+      "normalizedTokens": [
+        "w"
+      ],
       "gold": {
         "name": "Michelle Gulyás",
         "country": "HUN"
@@ -5127,7 +6191,10 @@
     {
       "event": "Men's Cross-Country",
       "gender": "m",
-      "normalizedTokens": ["m", "cross-country"],
+      "normalizedTokens": [
+        "m",
+        "cross-country"
+      ],
       "gold": {
         "name": "Tom Pidcock",
         "country": "GBR"
@@ -5144,7 +6211,10 @@
     {
       "event": "Women's Cross-Country",
       "gender": "w",
-      "normalizedTokens": ["w", "cross-country"],
+      "normalizedTokens": [
+        "w",
+        "cross-country"
+      ],
       "gold": {
         "name": "Pauline Ferrand-Prévot",
         "country": "FRA"
@@ -5161,9 +6231,12 @@
   ],
   "Open Water Swimming": [
     {
-      "event": "Men's 10 kilometres Open Water",
+      "event": "Men's 10 kilometres",
       "gender": "m",
-      "normalizedTokens": ["m", "10km", "open", "water"],
+      "normalizedTokens": [
+        "m",
+        "10km"
+      ],
       "gold": {
         "name": "Kristóf Rasovszky",
         "country": "HUN"
@@ -5178,9 +6251,12 @@
       }
     },
     {
-      "event": "Women's 10 kilometres Open Water",
+      "event": "Women's 10 kilometres",
       "gender": "w",
-      "normalizedTokens": ["w", "10km", "open", "water"],
+      "normalizedTokens": [
+        "w",
+        "10km"
+      ],
       "gold": {
         "name": "Sharon van Rouwendaal",
         "country": "NED"
@@ -5199,7 +6275,9 @@
     {
       "event": "Women's Individual",
       "gender": "w",
-      "normalizedTokens": ["w"],
+      "normalizedTokens": [
+        "w"
+      ],
       "gold": {
         "name": "Darja Varfolomeev",
         "country": "GER"
@@ -5216,7 +6294,9 @@
     {
       "event": "Women's Group",
       "gender": "w",
-      "normalizedTokens": ["w"],
+      "normalizedTokens": [
+        "w"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -5235,7 +6315,11 @@
     {
       "event": "Men's Single Sculls",
       "gender": "m",
-      "normalizedTokens": ["m", "single", "sculls"],
+      "normalizedTokens": [
+        "m",
+        "single",
+        "sculls"
+      ],
       "gold": {
         "name": "Oliver Zeidler",
         "country": "GER"
@@ -5252,7 +6336,11 @@
     {
       "event": "Men's Double Sculls",
       "gender": "m",
-      "normalizedTokens": ["m", "double", "sculls"],
+      "normalizedTokens": [
+        "m",
+        "double",
+        "sculls"
+      ],
       "gold": {
         "name": "Romania",
         "country": "ROU"
@@ -5269,7 +6357,11 @@
     {
       "event": "Men's Quadruple Sculls",
       "gender": "m",
-      "normalizedTokens": ["m", "quadruple", "sculls"],
+      "normalizedTokens": [
+        "m",
+        "quadruple",
+        "sculls"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -5286,7 +6378,11 @@
     {
       "event": "Men's Coxless Pairs",
       "gender": "m",
-      "normalizedTokens": ["m", "coxless", "pairs"],
+      "normalizedTokens": [
+        "m",
+        "coxless",
+        "pairs"
+      ],
       "gold": {
         "name": "Croatia",
         "country": "CRO"
@@ -5303,7 +6399,11 @@
     {
       "event": "Men's Coxless Fours",
       "gender": "m",
-      "normalizedTokens": ["m", "coxless", "fours"],
+      "normalizedTokens": [
+        "m",
+        "coxless",
+        "fours"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -5320,7 +6420,10 @@
     {
       "event": "Men's Eights",
       "gender": "m",
-      "normalizedTokens": ["m", "eights"],
+      "normalizedTokens": [
+        "m",
+        "eights"
+      ],
       "gold": {
         "name": "Great Britain",
         "country": "GBR"
@@ -5337,7 +6440,12 @@
     {
       "event": "Men's Lightweight Double Sculls",
       "gender": "m",
-      "normalizedTokens": ["m", "lightweight", "double", "sculls"],
+      "normalizedTokens": [
+        "m",
+        "lightweight",
+        "double",
+        "sculls"
+      ],
       "gold": {
         "name": "Ireland",
         "country": "IRL"
@@ -5354,7 +6462,11 @@
     {
       "event": "Women's Single Sculls",
       "gender": "w",
-      "normalizedTokens": ["w", "single", "sculls"],
+      "normalizedTokens": [
+        "w",
+        "single",
+        "sculls"
+      ],
       "gold": {
         "name": "Karolien Florijn",
         "country": "NED"
@@ -5371,7 +6483,11 @@
     {
       "event": "Women's Double Sculls",
       "gender": "w",
-      "normalizedTokens": ["w", "double", "sculls"],
+      "normalizedTokens": [
+        "w",
+        "double",
+        "sculls"
+      ],
       "gold": {
         "name": "New Zealand",
         "country": "NZL"
@@ -5386,26 +6502,13 @@
       }
     },
     {
-      "event": "Women's Quadruple Sculls",
-      "gender": "w",
-      "normalizedTokens": ["w", "quadruple", "sculls"],
-      "gold": {
-        "name": "Great Britain",
-        "country": "GBR"
-      },
-      "silver": {
-        "name": "Netherlands",
-        "country": "NED"
-      },
-      "bronze": {
-        "name": "Germany",
-        "country": "GER"
-      }
-    },
-    {
       "event": "Women's Coxless Pairs",
       "gender": "w",
-      "normalizedTokens": ["w", "coxless", "pairs"],
+      "normalizedTokens": [
+        "w",
+        "coxless",
+        "pairs"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -5422,7 +6525,11 @@
     {
       "event": "Women's Coxless Fours",
       "gender": "w",
-      "normalizedTokens": ["w", "coxless", "fours"],
+      "normalizedTokens": [
+        "w",
+        "coxless",
+        "fours"
+      ],
       "gold": {
         "name": "Netherlands",
         "country": "NED"
@@ -5437,9 +6544,34 @@
       }
     },
     {
+      "event": "Women's Coxed Quadruple Sculls",
+      "gender": "w",
+      "normalizedTokens": [
+        "w",
+        "coxed",
+        "quadruple",
+        "sculls"
+      ],
+      "gold": {
+        "name": "Great Britain",
+        "country": "GBR"
+      },
+      "silver": {
+        "name": "Netherlands",
+        "country": "NED"
+      },
+      "bronze": {
+        "name": "Germany",
+        "country": "GER"
+      }
+    },
+    {
       "event": "Women's Eights",
       "gender": "w",
-      "normalizedTokens": ["w", "eights"],
+      "normalizedTokens": [
+        "w",
+        "eights"
+      ],
       "gold": {
         "name": "Romania",
         "country": "ROU"
@@ -5456,7 +6588,12 @@
     {
       "event": "Women's Lightweight Double Sculls",
       "gender": "w",
-      "normalizedTokens": ["w", "lightweight", "double", "sculls"],
+      "normalizedTokens": [
+        "w",
+        "lightweight",
+        "double",
+        "sculls"
+      ],
       "gold": {
         "name": "Great Britain",
         "country": "GBR"
@@ -5478,7 +6615,11 @@
     {
       "event": "Men's Rugby Sevens",
       "gender": "m",
-      "normalizedTokens": ["m", "rugby", "sevens"],
+      "normalizedTokens": [
+        "m",
+        "rugby",
+        "sevens"
+      ],
       "gold": {
         "name": "France",
         "country": "FRA"
@@ -5495,7 +6636,11 @@
     {
       "event": "Women's Rugby Sevens",
       "gender": "w",
-      "normalizedTokens": ["w", "rugby", "sevens"],
+      "normalizedTokens": [
+        "w",
+        "rugby",
+        "sevens"
+      ],
       "gold": {
         "name": "New Zealand",
         "country": "NZL"
@@ -5514,7 +6659,10 @@
     {
       "event": "Men's Windsurfer",
       "gender": "m",
-      "normalizedTokens": ["m", "windsurfer"],
+      "normalizedTokens": [
+        "m",
+        "windsurfer"
+      ],
       "gold": {
         "name": "Tom Reuveny",
         "country": "ISR"
@@ -5529,9 +6677,13 @@
       }
     },
     {
-      "event": "Men's One Person Dinghy",
+      "event": "Men's One-Person Dinghy",
       "gender": "m",
-      "normalizedTokens": ["m", "one", "person", "dinghy"],
+      "normalizedTokens": [
+        "m",
+        "one-person",
+        "dinghy"
+      ],
       "gold": {
         "name": "Matt Wearn",
         "country": "AUS"
@@ -5548,7 +6700,10 @@
     {
       "event": "Men's Skiff",
       "gender": "m",
-      "normalizedTokens": ["m", "skiff"],
+      "normalizedTokens": [
+        "m",
+        "skiff"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -5565,7 +6720,10 @@
     {
       "event": "Men's Kiteboarding",
       "gender": "m",
-      "normalizedTokens": ["m", "kiteboarding"],
+      "normalizedTokens": [
+        "m",
+        "kiteboarding"
+      ],
       "gold": {
         "name": "Valentin Bontus",
         "country": "AUT"
@@ -5582,7 +6740,10 @@
     {
       "event": "Women's Windsurfer",
       "gender": "w",
-      "normalizedTokens": ["w", "windsurfer"],
+      "normalizedTokens": [
+        "w",
+        "windsurfer"
+      ],
       "gold": {
         "name": "Marta Maggetti",
         "country": "ITA"
@@ -5597,9 +6758,13 @@
       }
     },
     {
-      "event": "Women's One Person Dinghy",
+      "event": "Women's One-Person Dinghy",
       "gender": "w",
-      "normalizedTokens": ["w", "one", "person", "dinghy"],
+      "normalizedTokens": [
+        "w",
+        "one-person",
+        "dinghy"
+      ],
       "gold": {
         "name": "Marit Bouwmeester",
         "country": "NED"
@@ -5616,7 +6781,10 @@
     {
       "event": "Women's Kiteboarding",
       "gender": "w",
-      "normalizedTokens": ["w", "kiteboarding"],
+      "normalizedTokens": [
+        "w",
+        "kiteboarding"
+      ],
       "gold": {
         "name": "Ellie Aldridge",
         "country": "GBR"
@@ -5633,7 +6801,10 @@
     {
       "event": "Mixed Multihull",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "multihull"],
+      "normalizedTokens": [
+        "mixed",
+        "multihull"
+      ],
       "gold": {
         "name": "Italy",
         "country": "ITA"
@@ -5648,9 +6819,13 @@
       }
     },
     {
-      "event": "Mixed Two Person Dinghy",
+      "event": "Mixed Two-Person Dinghy",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "two", "person", "dinghy"],
+      "normalizedTokens": [
+        "mixed",
+        "two-person",
+        "dinghy"
+      ],
       "gold": {
         "name": "Austria",
         "country": "AUT"
@@ -5669,7 +6844,10 @@
     {
       "event": "Men's Windsurfer",
       "gender": "m",
-      "normalizedTokens": ["m", "windsurfer"],
+      "normalizedTokens": [
+        "m",
+        "windsurfer"
+      ],
       "gold": {
         "name": "Tom Reuveny",
         "country": "ISR"
@@ -5684,9 +6862,13 @@
       }
     },
     {
-      "event": "Men's One Person Dinghy",
+      "event": "Men's One-Person Dinghy",
       "gender": "m",
-      "normalizedTokens": ["m", "one", "person", "dinghy"],
+      "normalizedTokens": [
+        "m",
+        "one-person",
+        "dinghy"
+      ],
       "gold": {
         "name": "Matt Wearn",
         "country": "AUS"
@@ -5703,7 +6885,10 @@
     {
       "event": "Men's Skiff",
       "gender": "m",
-      "normalizedTokens": ["m", "skiff"],
+      "normalizedTokens": [
+        "m",
+        "skiff"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -5720,7 +6905,10 @@
     {
       "event": "Men's Kiteboarding",
       "gender": "m",
-      "normalizedTokens": ["m", "kiteboarding"],
+      "normalizedTokens": [
+        "m",
+        "kiteboarding"
+      ],
       "gold": {
         "name": "Valentin Bontus",
         "country": "AUT"
@@ -5737,7 +6925,10 @@
     {
       "event": "Women's Windsurfer",
       "gender": "w",
-      "normalizedTokens": ["w", "windsurfer"],
+      "normalizedTokens": [
+        "w",
+        "windsurfer"
+      ],
       "gold": {
         "name": "Marta Maggetti",
         "country": "ITA"
@@ -5752,9 +6943,13 @@
       }
     },
     {
-      "event": "Women's One Person Dinghy",
+      "event": "Women's One-Person Dinghy",
       "gender": "w",
-      "normalizedTokens": ["w", "one", "person", "dinghy"],
+      "normalizedTokens": [
+        "w",
+        "one-person",
+        "dinghy"
+      ],
       "gold": {
         "name": "Marit Bouwmeester",
         "country": "NED"
@@ -5771,7 +6966,10 @@
     {
       "event": "Women's Kiteboarding",
       "gender": "w",
-      "normalizedTokens": ["w", "kiteboarding"],
+      "normalizedTokens": [
+        "w",
+        "kiteboarding"
+      ],
       "gold": {
         "name": "Ellie Aldridge",
         "country": "GBR"
@@ -5788,7 +6986,10 @@
     {
       "event": "Mixed Multihull",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "multihull"],
+      "normalizedTokens": [
+        "mixed",
+        "multihull"
+      ],
       "gold": {
         "name": "Italy",
         "country": "ITA"
@@ -5803,9 +7004,13 @@
       }
     },
     {
-      "event": "Mixed Two Person Dinghy",
+      "event": "Mixed Two-Person Dinghy",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "two", "person", "dinghy"],
+      "normalizedTokens": [
+        "mixed",
+        "two-person",
+        "dinghy"
+      ],
       "gold": {
         "name": "Austria",
         "country": "AUT"
@@ -5822,9 +7027,13 @@
   ],
   "Shooting (R/P)": [
     {
-      "event": "Men's Air Pistol, 10 metres",
+      "event": "Men's Air Pistol",
       "gender": "m",
-      "normalizedTokens": ["m", "air", "pistol", "10m"],
+      "normalizedTokens": [
+        "m",
+        "air",
+        "pistol"
+      ],
       "gold": {
         "name": "Xie Yu",
         "country": "CHN"
@@ -5839,9 +7048,13 @@
       }
     },
     {
-      "event": "Men's Rapid-Fire Pistol, 25 metres",
+      "event": "Men's Rapid-Fire Pistol",
       "gender": "m",
-      "normalizedTokens": ["m", "rapid-fire", "pistol", "25m"],
+      "normalizedTokens": [
+        "m",
+        "rapid-fire",
+        "pistol"
+      ],
       "gold": {
         "name": "Li Yuehong",
         "country": "CHN"
@@ -5856,9 +7069,13 @@
       }
     },
     {
-      "event": "Men's Air Rifle, 10 metres",
+      "event": "Men's Air Rifle",
       "gender": "m",
-      "normalizedTokens": ["m", "air", "rifle", "10m"],
+      "normalizedTokens": [
+        "m",
+        "air",
+        "rifle"
+      ],
       "gold": {
         "name": "Sheng Lihao",
         "country": "CHN"
@@ -5873,9 +7090,15 @@
       }
     },
     {
-      "event": "Men's Small-Bore Rifle, Three Positions, 50 metres",
+      "event": "Men's Small-Bore Rifle, Any Position",
       "gender": "m",
-      "normalizedTokens": ["m", "small-bore", "rifle", "three", "positions", "50m"],
+      "normalizedTokens": [
+        "m",
+        "small-bore",
+        "rifle",
+        "any",
+        "position"
+      ],
       "gold": {
         "name": "Liu Yukun",
         "country": "CHN"
@@ -5890,9 +7113,12 @@
       }
     },
     {
-      "event": "Men's Trap",
-      "gender": "m",
-      "normalizedTokens": ["m", "trap"],
+      "event": "Open Trap",
+      "gender": "open",
+      "normalizedTokens": [
+        "open",
+        "trap"
+      ],
       "gold": {
         "name": "Nathan Hales",
         "country": "GBR"
@@ -5907,9 +7133,12 @@
       }
     },
     {
-      "event": "Men's Skeet",
-      "gender": "m",
-      "normalizedTokens": ["m", "skeet"],
+      "event": "Open Skeet",
+      "gender": "open",
+      "normalizedTokens": [
+        "open",
+        "skeet"
+      ],
       "gold": {
         "name": "Vincent Hancock",
         "country": "USA"
@@ -5924,9 +7153,13 @@
       }
     },
     {
-      "event": "Women's Air Pistol, 10 metres",
+      "event": "Women's Air Pistol",
       "gender": "w",
-      "normalizedTokens": ["w", "air", "pistol", "10m"],
+      "normalizedTokens": [
+        "w",
+        "air",
+        "pistol"
+      ],
       "gold": {
         "name": "Oh Ye-Jin",
         "country": "KOR"
@@ -5941,9 +7174,13 @@
       }
     },
     {
-      "event": "Women's Sporting Pistol, 25 metres",
+      "event": "Women's Sporting Pistol",
       "gender": "w",
-      "normalizedTokens": ["w", "sporting", "pistol", "25m"],
+      "normalizedTokens": [
+        "w",
+        "sporting",
+        "pistol"
+      ],
       "gold": {
         "name": "Yang Ji-In",
         "country": "KOR"
@@ -5958,9 +7195,13 @@
       }
     },
     {
-      "event": "Women's Air Rifle, 10 metres",
+      "event": "Women's Air Rifle",
       "gender": "w",
-      "normalizedTokens": ["w", "air", "rifle", "10m"],
+      "normalizedTokens": [
+        "w",
+        "air",
+        "rifle"
+      ],
       "gold": {
         "name": "Ban Hyo-Jin",
         "country": "KOR"
@@ -5975,9 +7216,15 @@
       }
     },
     {
-      "event": "Women's Small-Bore Rifle, Three Positions, 50 metres",
+      "event": "Women's Small-Bore Rifle, Three Positions",
       "gender": "w",
-      "normalizedTokens": ["w", "small-bore", "rifle", "three", "positions", "50m"],
+      "normalizedTokens": [
+        "w",
+        "small-bore",
+        "rifle",
+        "three",
+        "positions"
+      ],
       "gold": {
         "name": "Chiara Leone",
         "country": "SUI"
@@ -5994,7 +7241,10 @@
     {
       "event": "Women's Trap",
       "gender": "w",
-      "normalizedTokens": ["w", "trap"],
+      "normalizedTokens": [
+        "w",
+        "trap"
+      ],
       "gold": {
         "name": "Adriana Ruano",
         "country": "GUA"
@@ -6011,7 +7261,10 @@
     {
       "event": "Women's Skeet",
       "gender": "w",
-      "normalizedTokens": ["w", "skeet"],
+      "normalizedTokens": [
+        "w",
+        "skeet"
+      ],
       "gold": {
         "name": "Francisca Crovetto",
         "country": "CHI"
@@ -6026,9 +7279,14 @@
       }
     },
     {
-      "event": "Mixed Air Pistol, 10 metres, Team",
+      "event": "Mixed Air Pistol, Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "air", "pistol", "10m", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "air",
+        "pistol",
+        "team"
+      ],
       "gold": {
         "name": "Serbia",
         "country": "SRB"
@@ -6043,9 +7301,14 @@
       }
     },
     {
-      "event": "Mixed Air Rifle, 10 metres, Team",
+      "event": "Mixed Air Rifle, Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "air", "rifle", "10m", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "air",
+        "rifle",
+        "team"
+      ],
       "gold": {
         "name": "People's Republic of China 1",
         "country": "CHN"
@@ -6062,7 +7325,11 @@
     {
       "event": "Mixed Skeet, Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "skeet", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "skeet",
+        "team"
+      ],
       "gold": {
         "name": "Italy 1",
         "country": "ITA"
@@ -6079,9 +7346,13 @@
   ],
   "Shooting (Shotgun)": [
     {
-      "event": "Men's Air Pistol, 10 metres",
+      "event": "Men's Air Pistol",
       "gender": "m",
-      "normalizedTokens": ["m", "air", "pistol", "10m"],
+      "normalizedTokens": [
+        "m",
+        "air",
+        "pistol"
+      ],
       "gold": {
         "name": "Xie Yu",
         "country": "CHN"
@@ -6096,9 +7367,13 @@
       }
     },
     {
-      "event": "Men's Rapid-Fire Pistol, 25 metres",
+      "event": "Men's Rapid-Fire Pistol",
       "gender": "m",
-      "normalizedTokens": ["m", "rapid-fire", "pistol", "25m"],
+      "normalizedTokens": [
+        "m",
+        "rapid-fire",
+        "pistol"
+      ],
       "gold": {
         "name": "Li Yuehong",
         "country": "CHN"
@@ -6113,9 +7388,13 @@
       }
     },
     {
-      "event": "Men's Air Rifle, 10 metres",
+      "event": "Men's Air Rifle",
       "gender": "m",
-      "normalizedTokens": ["m", "air", "rifle", "10m"],
+      "normalizedTokens": [
+        "m",
+        "air",
+        "rifle"
+      ],
       "gold": {
         "name": "Sheng Lihao",
         "country": "CHN"
@@ -6130,9 +7409,15 @@
       }
     },
     {
-      "event": "Men's Small-Bore Rifle, Three Positions, 50 metres",
+      "event": "Men's Small-Bore Rifle, Any Position",
       "gender": "m",
-      "normalizedTokens": ["m", "small-bore", "rifle", "three", "positions", "50m"],
+      "normalizedTokens": [
+        "m",
+        "small-bore",
+        "rifle",
+        "any",
+        "position"
+      ],
       "gold": {
         "name": "Liu Yukun",
         "country": "CHN"
@@ -6147,9 +7432,12 @@
       }
     },
     {
-      "event": "Men's Trap",
-      "gender": "m",
-      "normalizedTokens": ["m", "trap"],
+      "event": "Open Trap",
+      "gender": "open",
+      "normalizedTokens": [
+        "open",
+        "trap"
+      ],
       "gold": {
         "name": "Nathan Hales",
         "country": "GBR"
@@ -6164,9 +7452,12 @@
       }
     },
     {
-      "event": "Men's Skeet",
-      "gender": "m",
-      "normalizedTokens": ["m", "skeet"],
+      "event": "Open Skeet",
+      "gender": "open",
+      "normalizedTokens": [
+        "open",
+        "skeet"
+      ],
       "gold": {
         "name": "Vincent Hancock",
         "country": "USA"
@@ -6181,9 +7472,13 @@
       }
     },
     {
-      "event": "Women's Air Pistol, 10 metres",
+      "event": "Women's Air Pistol",
       "gender": "w",
-      "normalizedTokens": ["w", "air", "pistol", "10m"],
+      "normalizedTokens": [
+        "w",
+        "air",
+        "pistol"
+      ],
       "gold": {
         "name": "Oh Ye-Jin",
         "country": "KOR"
@@ -6198,9 +7493,13 @@
       }
     },
     {
-      "event": "Women's Sporting Pistol, 25 metres",
+      "event": "Women's Sporting Pistol",
       "gender": "w",
-      "normalizedTokens": ["w", "sporting", "pistol", "25m"],
+      "normalizedTokens": [
+        "w",
+        "sporting",
+        "pistol"
+      ],
       "gold": {
         "name": "Yang Ji-In",
         "country": "KOR"
@@ -6215,9 +7514,13 @@
       }
     },
     {
-      "event": "Women's Air Rifle, 10 metres",
+      "event": "Women's Air Rifle",
       "gender": "w",
-      "normalizedTokens": ["w", "air", "rifle", "10m"],
+      "normalizedTokens": [
+        "w",
+        "air",
+        "rifle"
+      ],
       "gold": {
         "name": "Ban Hyo-Jin",
         "country": "KOR"
@@ -6232,9 +7535,15 @@
       }
     },
     {
-      "event": "Women's Small-Bore Rifle, Three Positions, 50 metres",
+      "event": "Women's Small-Bore Rifle, Three Positions",
       "gender": "w",
-      "normalizedTokens": ["w", "small-bore", "rifle", "three", "positions", "50m"],
+      "normalizedTokens": [
+        "w",
+        "small-bore",
+        "rifle",
+        "three",
+        "positions"
+      ],
       "gold": {
         "name": "Chiara Leone",
         "country": "SUI"
@@ -6251,7 +7560,10 @@
     {
       "event": "Women's Trap",
       "gender": "w",
-      "normalizedTokens": ["w", "trap"],
+      "normalizedTokens": [
+        "w",
+        "trap"
+      ],
       "gold": {
         "name": "Adriana Ruano",
         "country": "GUA"
@@ -6268,7 +7580,10 @@
     {
       "event": "Women's Skeet",
       "gender": "w",
-      "normalizedTokens": ["w", "skeet"],
+      "normalizedTokens": [
+        "w",
+        "skeet"
+      ],
       "gold": {
         "name": "Francisca Crovetto",
         "country": "CHI"
@@ -6283,9 +7598,14 @@
       }
     },
     {
-      "event": "Mixed Air Pistol, 10 metres, Team",
+      "event": "Mixed Air Pistol, Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "air", "pistol", "10m", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "air",
+        "pistol",
+        "team"
+      ],
       "gold": {
         "name": "Serbia",
         "country": "SRB"
@@ -6300,9 +7620,14 @@
       }
     },
     {
-      "event": "Mixed Air Rifle, 10 metres, Team",
+      "event": "Mixed Air Rifle, Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "air", "rifle", "10m", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "air",
+        "rifle",
+        "team"
+      ],
       "gold": {
         "name": "People's Republic of China 1",
         "country": "CHN"
@@ -6319,7 +7644,11 @@
     {
       "event": "Mixed Skeet, Team",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "skeet", "team"],
+      "normalizedTokens": [
+        "mixed",
+        "skeet",
+        "team"
+      ],
       "gold": {
         "name": "Italy 1",
         "country": "ITA"
@@ -6338,7 +7667,10 @@
     {
       "event": "Men's Street",
       "gender": "m",
-      "normalizedTokens": ["m", "street"],
+      "normalizedTokens": [
+        "m",
+        "street"
+      ],
       "gold": {
         "name": "Yuto Horigome",
         "country": "JPN"
@@ -6355,7 +7687,10 @@
     {
       "event": "Men's Park",
       "gender": "m",
-      "normalizedTokens": ["m", "park"],
+      "normalizedTokens": [
+        "m",
+        "park"
+      ],
       "gold": {
         "name": "Keegan Palmer",
         "country": "AUS"
@@ -6372,7 +7707,10 @@
     {
       "event": "Women's Street",
       "gender": "w",
-      "normalizedTokens": ["w", "street"],
+      "normalizedTokens": [
+        "w",
+        "street"
+      ],
       "gold": {
         "name": "Coco Yoshizawa",
         "country": "JPN"
@@ -6389,7 +7727,10 @@
     {
       "event": "Women's Park",
       "gender": "w",
-      "normalizedTokens": ["w", "park"],
+      "normalizedTokens": [
+        "w",
+        "park"
+      ],
       "gold": {
         "name": "Arisa Trew",
         "country": "AUS"
@@ -6408,7 +7749,10 @@
     {
       "event": "Men's Street",
       "gender": "m",
-      "normalizedTokens": ["m", "street"],
+      "normalizedTokens": [
+        "m",
+        "street"
+      ],
       "gold": {
         "name": "Yuto Horigome",
         "country": "JPN"
@@ -6425,7 +7769,10 @@
     {
       "event": "Men's Park",
       "gender": "m",
-      "normalizedTokens": ["m", "park"],
+      "normalizedTokens": [
+        "m",
+        "park"
+      ],
       "gold": {
         "name": "Keegan Palmer",
         "country": "AUS"
@@ -6442,7 +7789,10 @@
     {
       "event": "Women's Street",
       "gender": "w",
-      "normalizedTokens": ["w", "street"],
+      "normalizedTokens": [
+        "w",
+        "street"
+      ],
       "gold": {
         "name": "Coco Yoshizawa",
         "country": "JPN"
@@ -6459,7 +7809,10 @@
     {
       "event": "Women's Park",
       "gender": "w",
-      "normalizedTokens": ["w", "park"],
+      "normalizedTokens": [
+        "w",
+        "park"
+      ],
       "gold": {
         "name": "Arisa Trew",
         "country": "AUS"
@@ -6478,7 +7831,10 @@
     {
       "event": "Men's Street",
       "gender": "m",
-      "normalizedTokens": ["m", "street"],
+      "normalizedTokens": [
+        "m",
+        "street"
+      ],
       "gold": {
         "name": "Yuto Horigome",
         "country": "JPN"
@@ -6495,7 +7851,10 @@
     {
       "event": "Men's Park",
       "gender": "m",
-      "normalizedTokens": ["m", "park"],
+      "normalizedTokens": [
+        "m",
+        "park"
+      ],
       "gold": {
         "name": "Keegan Palmer",
         "country": "AUS"
@@ -6512,7 +7871,10 @@
     {
       "event": "Women's Street",
       "gender": "w",
-      "normalizedTokens": ["w", "street"],
+      "normalizedTokens": [
+        "w",
+        "street"
+      ],
       "gold": {
         "name": "Coco Yoshizawa",
         "country": "JPN"
@@ -6529,7 +7891,10 @@
     {
       "event": "Women's Park",
       "gender": "w",
-      "normalizedTokens": ["w", "park"],
+      "normalizedTokens": [
+        "w",
+        "park"
+      ],
       "gold": {
         "name": "Arisa Trew",
         "country": "AUS"
@@ -6554,7 +7919,10 @@
     {
       "event": "Men's Shortboard",
       "gender": "m",
-      "normalizedTokens": ["m", "shortboard"],
+      "normalizedTokens": [
+        "m",
+        "shortboard"
+      ],
       "gold": {
         "name": "Kauli Vaast",
         "country": "FRA"
@@ -6571,7 +7939,10 @@
     {
       "event": "Women's Shortboard",
       "gender": "w",
-      "normalizedTokens": ["w", "shortboard"],
+      "normalizedTokens": [
+        "w",
+        "shortboard"
+      ],
       "gold": {
         "name": "Caroline Marks",
         "country": "USA"
@@ -6590,7 +7961,11 @@
     {
       "event": "Men's 50 metres Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "50m", "free"],
+      "normalizedTokens": [
+        "m",
+        "50m",
+        "free"
+      ],
       "gold": {
         "name": "Cameron McEvoy",
         "country": "AUS"
@@ -6607,7 +7982,11 @@
     {
       "event": "Men's 100 metres Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "100m", "free"],
+      "normalizedTokens": [
+        "m",
+        "100m",
+        "free"
+      ],
       "gold": {
         "name": "Pan Zhanle",
         "country": "CHN"
@@ -6624,7 +8003,11 @@
     {
       "event": "Men's 200 metres Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "200m", "free"],
+      "normalizedTokens": [
+        "m",
+        "200m",
+        "free"
+      ],
       "gold": {
         "name": "David Popovici",
         "country": "ROU"
@@ -6641,7 +8024,11 @@
     {
       "event": "Men's 400 metres Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "400m", "free"],
+      "normalizedTokens": [
+        "m",
+        "400m",
+        "free"
+      ],
       "gold": {
         "name": "Lukas Märtens",
         "country": "GER"
@@ -6658,7 +8045,11 @@
     {
       "event": "Men's 800 metres Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "800m", "free"],
+      "normalizedTokens": [
+        "m",
+        "800m",
+        "free"
+      ],
       "gold": {
         "name": "Daniel Wiffen",
         "country": "IRL"
@@ -6675,7 +8066,11 @@
     {
       "event": "Men's 1, 500 metres Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "500m", "free"],
+      "normalizedTokens": [
+        "m",
+        "500m",
+        "free"
+      ],
       "gold": {
         "name": "Bobby Finke",
         "country": "USA"
@@ -6692,7 +8087,12 @@
     {
       "event": "Men's 4 × 100 metres Freestyle Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x100m", "free", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x100m",
+        "free",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -6709,7 +8109,12 @@
     {
       "event": "Men's 4 × 200 metres Freestyle Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x200m", "free", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x200m",
+        "free",
+        "relay"
+      ],
       "gold": {
         "name": "Great Britain",
         "country": "GBR"
@@ -6726,7 +8131,11 @@
     {
       "event": "Men's 100 metres Backstroke",
       "gender": "m",
-      "normalizedTokens": ["m", "100m", "back"],
+      "normalizedTokens": [
+        "m",
+        "100m",
+        "back"
+      ],
       "gold": {
         "name": "Thomas Ceccon",
         "country": "ITA"
@@ -6743,7 +8152,11 @@
     {
       "event": "Men's 200 metres Backstroke",
       "gender": "m",
-      "normalizedTokens": ["m", "200m", "back"],
+      "normalizedTokens": [
+        "m",
+        "200m",
+        "back"
+      ],
       "gold": {
         "name": "Hubert Kós",
         "country": "HUN"
@@ -6760,7 +8173,11 @@
     {
       "event": "Men's 100 metres Breaststroke",
       "gender": "m",
-      "normalizedTokens": ["m", "100m", "breast"],
+      "normalizedTokens": [
+        "m",
+        "100m",
+        "breast"
+      ],
       "gold": {
         "name": "Nicolò Martinenghi",
         "country": "ITA"
@@ -6774,7 +8191,11 @@
     {
       "event": "Men's 200 metres Breaststroke",
       "gender": "m",
-      "normalizedTokens": ["m", "200m", "breast"],
+      "normalizedTokens": [
+        "m",
+        "200m",
+        "breast"
+      ],
       "gold": {
         "name": "Léon Marchand",
         "country": "FRA"
@@ -6791,7 +8212,11 @@
     {
       "event": "Men's 100 metres Butterfly",
       "gender": "m",
-      "normalizedTokens": ["m", "100m", "fly"],
+      "normalizedTokens": [
+        "m",
+        "100m",
+        "fly"
+      ],
       "gold": {
         "name": "Kristóf Milák",
         "country": "HUN"
@@ -6808,7 +8233,11 @@
     {
       "event": "Men's 200 metres Butterfly",
       "gender": "m",
-      "normalizedTokens": ["m", "200m", "fly"],
+      "normalizedTokens": [
+        "m",
+        "200m",
+        "fly"
+      ],
       "gold": {
         "name": "Léon Marchand",
         "country": "FRA"
@@ -6825,7 +8254,11 @@
     {
       "event": "Men's 200 metres Individual Medley",
       "gender": "m",
-      "normalizedTokens": ["m", "200m", "im"],
+      "normalizedTokens": [
+        "m",
+        "200m",
+        "im"
+      ],
       "gold": {
         "name": "Léon Marchand",
         "country": "FRA"
@@ -6842,7 +8275,11 @@
     {
       "event": "Men's 400 metres Individual Medley",
       "gender": "m",
-      "normalizedTokens": ["m", "400m", "im"],
+      "normalizedTokens": [
+        "m",
+        "400m",
+        "im"
+      ],
       "gold": {
         "name": "Léon Marchand",
         "country": "FRA"
@@ -6859,7 +8296,12 @@
     {
       "event": "Men's 4 × 100 metres Medley Relay",
       "gender": "m",
-      "normalizedTokens": ["m", "4x100m", "im", "relay"],
+      "normalizedTokens": [
+        "m",
+        "4x100m",
+        "im",
+        "relay"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -6876,7 +8318,11 @@
     {
       "event": "Women's 50 metres Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "50m", "free"],
+      "normalizedTokens": [
+        "w",
+        "50m",
+        "free"
+      ],
       "gold": {
         "name": "Sarah Sjöström",
         "country": "SWE"
@@ -6893,7 +8339,11 @@
     {
       "event": "Women's 100 metres Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "free"],
+      "normalizedTokens": [
+        "w",
+        "100m",
+        "free"
+      ],
       "gold": {
         "name": "Sarah Sjöström",
         "country": "SWE"
@@ -6910,7 +8360,11 @@
     {
       "event": "Women's 200 metres Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "200m", "free"],
+      "normalizedTokens": [
+        "w",
+        "200m",
+        "free"
+      ],
       "gold": {
         "name": "Mollie O'Callaghan",
         "country": "AUS"
@@ -6927,7 +8381,11 @@
     {
       "event": "Women's 400 metres Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "400m", "free"],
+      "normalizedTokens": [
+        "w",
+        "400m",
+        "free"
+      ],
       "gold": {
         "name": "Ariarne Titmus",
         "country": "AUS"
@@ -6944,7 +8402,11 @@
     {
       "event": "Women's 800 metres Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "800m", "free"],
+      "normalizedTokens": [
+        "w",
+        "800m",
+        "free"
+      ],
       "gold": {
         "name": "Katie Ledecky",
         "country": "USA"
@@ -6961,7 +8423,11 @@
     {
       "event": "Women's 1, 500 metres Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "500m", "free"],
+      "normalizedTokens": [
+        "w",
+        "500m",
+        "free"
+      ],
       "gold": {
         "name": "Katie Ledecky",
         "country": "USA"
@@ -6978,7 +8444,12 @@
     {
       "event": "Women's 4 × 100 metres Freestyle Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x100m", "free", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x100m",
+        "free",
+        "relay"
+      ],
       "gold": {
         "name": "Australia",
         "country": "AUS"
@@ -6995,7 +8466,12 @@
     {
       "event": "Women's 4 × 200 metres Freestyle Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x200m", "free", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x200m",
+        "free",
+        "relay"
+      ],
       "gold": {
         "name": "Australia",
         "country": "AUS"
@@ -7012,7 +8488,11 @@
     {
       "event": "Women's 100 metres Backstroke",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "back"],
+      "normalizedTokens": [
+        "w",
+        "100m",
+        "back"
+      ],
       "gold": {
         "name": "Kaylee McKeown",
         "country": "AUS"
@@ -7029,7 +8509,11 @@
     {
       "event": "Women's 200 metres Backstroke",
       "gender": "w",
-      "normalizedTokens": ["w", "200m", "back"],
+      "normalizedTokens": [
+        "w",
+        "200m",
+        "back"
+      ],
       "gold": {
         "name": "Kaylee McKeown",
         "country": "AUS"
@@ -7046,7 +8530,11 @@
     {
       "event": "Women's 100 metres Breaststroke",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "breast"],
+      "normalizedTokens": [
+        "w",
+        "100m",
+        "breast"
+      ],
       "gold": {
         "name": "Tatjana Schoenmaker-Smith",
         "country": "RSA"
@@ -7063,7 +8551,11 @@
     {
       "event": "Women's 200 metres Breaststroke",
       "gender": "w",
-      "normalizedTokens": ["w", "200m", "breast"],
+      "normalizedTokens": [
+        "w",
+        "200m",
+        "breast"
+      ],
       "gold": {
         "name": "Kate Douglass",
         "country": "USA"
@@ -7080,7 +8572,11 @@
     {
       "event": "Women's 100 metres Butterfly",
       "gender": "w",
-      "normalizedTokens": ["w", "100m", "fly"],
+      "normalizedTokens": [
+        "w",
+        "100m",
+        "fly"
+      ],
       "gold": {
         "name": "Torri Huske",
         "country": "USA"
@@ -7097,7 +8593,11 @@
     {
       "event": "Women's 200 metres Butterfly",
       "gender": "w",
-      "normalizedTokens": ["w", "200m", "fly"],
+      "normalizedTokens": [
+        "w",
+        "200m",
+        "fly"
+      ],
       "gold": {
         "name": "Summer McIntosh",
         "country": "CAN"
@@ -7114,7 +8614,11 @@
     {
       "event": "Women's 200 metres Individual Medley",
       "gender": "w",
-      "normalizedTokens": ["w", "200m", "im"],
+      "normalizedTokens": [
+        "w",
+        "200m",
+        "im"
+      ],
       "gold": {
         "name": "Summer McIntosh",
         "country": "CAN"
@@ -7131,7 +8635,11 @@
     {
       "event": "Women's 400 metres Individual Medley",
       "gender": "w",
-      "normalizedTokens": ["w", "400m", "im"],
+      "normalizedTokens": [
+        "w",
+        "400m",
+        "im"
+      ],
       "gold": {
         "name": "Summer McIntosh",
         "country": "CAN"
@@ -7148,7 +8656,12 @@
     {
       "event": "Women's 4 × 100 metres Medley Relay",
       "gender": "w",
-      "normalizedTokens": ["w", "4x100m", "im", "relay"],
+      "normalizedTokens": [
+        "w",
+        "4x100m",
+        "im",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -7165,7 +8678,12 @@
     {
       "event": "Mixed 4 × 100 metres Medley Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "4x100m", "im", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "4x100m",
+        "im",
+        "relay"
+      ],
       "gold": {
         "name": "United States",
         "country": "USA"
@@ -7184,7 +8702,10 @@
     {
       "event": "Men's Singles",
       "gender": "m",
-      "normalizedTokens": ["m", "singles"],
+      "normalizedTokens": [
+        "m",
+        "singles"
+      ],
       "gold": {
         "name": "Fan Zhendong",
         "country": "CHN"
@@ -7201,7 +8722,10 @@
     {
       "event": "Men's Team",
       "gender": "m",
-      "normalizedTokens": ["m", "team"],
+      "normalizedTokens": [
+        "m",
+        "team"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -7218,7 +8742,10 @@
     {
       "event": "Women's Singles",
       "gender": "w",
-      "normalizedTokens": ["w", "singles"],
+      "normalizedTokens": [
+        "w",
+        "singles"
+      ],
       "gold": {
         "name": "Chen Meng",
         "country": "CHN"
@@ -7235,7 +8762,10 @@
     {
       "event": "Women's Team",
       "gender": "w",
-      "normalizedTokens": ["w", "team"],
+      "normalizedTokens": [
+        "w",
+        "team"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -7252,7 +8782,10 @@
     {
       "event": "Mixed Doubles",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "doubles"],
+      "normalizedTokens": [
+        "mixed",
+        "doubles"
+      ],
       "gold": {
         "name": "People's Republic of China",
         "country": "CHN"
@@ -7271,7 +8804,10 @@
     {
       "event": "Men's Flyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "flyweight"],
+      "normalizedTokens": [
+        "m",
+        "flyweight"
+      ],
       "gold": {
         "name": "Park Tae-Jun",
         "country": "KOR"
@@ -7288,7 +8824,10 @@
     {
       "event": "Men's Featherweight",
       "gender": "m",
-      "normalizedTokens": ["m", "featherweight"],
+      "normalizedTokens": [
+        "m",
+        "featherweight"
+      ],
       "gold": {
         "name": "Ulugbek Rashitov",
         "country": "UZB"
@@ -7305,7 +8844,10 @@
     {
       "event": "Men's Welterweight",
       "gender": "m",
-      "normalizedTokens": ["m", "welterweight"],
+      "normalizedTokens": [
+        "m",
+        "welterweight"
+      ],
       "gold": {
         "name": "Firas Katoussi",
         "country": "TUN"
@@ -7322,7 +8864,10 @@
     {
       "event": "Men's Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Arian Salimi",
         "country": "IRI"
@@ -7339,7 +8884,10 @@
     {
       "event": "Women's Flyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "flyweight"],
+      "normalizedTokens": [
+        "w",
+        "flyweight"
+      ],
       "gold": {
         "name": "Panipak Wongpattanakit",
         "country": "THA"
@@ -7356,7 +8904,10 @@
     {
       "event": "Women's Featherweight",
       "gender": "w",
-      "normalizedTokens": ["w", "featherweight"],
+      "normalizedTokens": [
+        "w",
+        "featherweight"
+      ],
       "gold": {
         "name": "Kim Yu-Jin",
         "country": "KOR"
@@ -7373,7 +8924,10 @@
     {
       "event": "Women's Welterweight",
       "gender": "w",
-      "normalizedTokens": ["w", "welterweight"],
+      "normalizedTokens": [
+        "w",
+        "welterweight"
+      ],
       "gold": {
         "name": "Viviana Márton",
         "country": "HUN"
@@ -7390,7 +8944,10 @@
     {
       "event": "Women's Heavyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "heavyweight"],
+      "normalizedTokens": [
+        "w",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Althéa Laurin",
         "country": "FRA"
@@ -7407,9 +8964,14 @@
   ],
   "Tennis": [
     {
-      "event": "Men's Singles",
+      "event": "Men's Singles, Covered Courts",
       "gender": "m",
-      "normalizedTokens": ["m", "singles"],
+      "normalizedTokens": [
+        "m",
+        "singles",
+        "covered",
+        "courts"
+      ],
       "gold": {
         "name": "Novak Đoković",
         "country": "SRB"
@@ -7424,9 +8986,14 @@
       }
     },
     {
-      "event": "Men's Doubles",
+      "event": "Men's Doubles, Covered Courts",
       "gender": "m",
-      "normalizedTokens": ["m", "doubles"],
+      "normalizedTokens": [
+        "m",
+        "doubles",
+        "covered",
+        "courts"
+      ],
       "gold": {
         "name": "Australia 2",
         "country": "AUS"
@@ -7441,26 +9008,12 @@
       }
     },
     {
-      "event": "Women's Singles",
-      "gender": "w",
-      "normalizedTokens": ["w", "singles"],
-      "gold": {
-        "name": "Zheng Qinwen",
-        "country": "CHN"
-      },
-      "silver": {
-        "name": "Donna Vekić",
-        "country": "CRO"
-      },
-      "bronze": {
-        "name": "Iga Świątek",
-        "country": "POL"
-      }
-    },
-    {
       "event": "Women's Doubles",
       "gender": "w",
-      "normalizedTokens": ["w", "doubles"],
+      "normalizedTokens": [
+        "w",
+        "doubles"
+      ],
       "gold": {
         "name": "Italy 1",
         "country": "ITA"
@@ -7475,9 +9028,36 @@
       }
     },
     {
-      "event": "Mixed Doubles",
+      "event": "Women's Singles, Covered Courts",
+      "gender": "w",
+      "normalizedTokens": [
+        "w",
+        "singles",
+        "covered",
+        "courts"
+      ],
+      "gold": {
+        "name": "Zheng Qinwen",
+        "country": "CHN"
+      },
+      "silver": {
+        "name": "Donna Vekić",
+        "country": "CRO"
+      },
+      "bronze": {
+        "name": "Iga Świątek",
+        "country": "POL"
+      }
+    },
+    {
+      "event": "Mixed Doubles, Covered Courts",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "doubles"],
+      "normalizedTokens": [
+        "mixed",
+        "doubles",
+        "covered",
+        "courts"
+      ],
       "gold": {
         "name": "Czechia",
         "country": "CZE"
@@ -7496,7 +9076,9 @@
     {
       "event": "Men's Individual",
       "gender": "m",
-      "normalizedTokens": ["m"],
+      "normalizedTokens": [
+        "m"
+      ],
       "gold": {
         "name": "Ivan Litvinovich",
         "country": "AIN"
@@ -7513,7 +9095,9 @@
     {
       "event": "Women's Individual",
       "gender": "w",
-      "normalizedTokens": ["w"],
+      "normalizedTokens": [
+        "w"
+      ],
       "gold": {
         "name": "Bryony Page",
         "country": "GBR"
@@ -7532,7 +9116,11 @@
     {
       "event": "Men's Olympic Distance",
       "gender": "m",
-      "normalizedTokens": ["m", "olympic", "distance"],
+      "normalizedTokens": [
+        "m",
+        "olympic",
+        "distance"
+      ],
       "gold": {
         "name": "Alex Yee",
         "country": "GBR"
@@ -7549,7 +9137,11 @@
     {
       "event": "Women's Olympic Distance",
       "gender": "w",
-      "normalizedTokens": ["w", "olympic", "distance"],
+      "normalizedTokens": [
+        "w",
+        "olympic",
+        "distance"
+      ],
       "gold": {
         "name": "Cassandre Beaugrand",
         "country": "FRA"
@@ -7566,7 +9158,10 @@
     {
       "event": "Mixed Relay",
       "gender": "mixed",
-      "normalizedTokens": ["mixed", "relay"],
+      "normalizedTokens": [
+        "mixed",
+        "relay"
+      ],
       "gold": {
         "name": "Germany",
         "country": "GER"
@@ -7585,7 +9180,10 @@
     {
       "event": "Men's Volleyball",
       "gender": "m",
-      "normalizedTokens": ["m", "volleyball"],
+      "normalizedTokens": [
+        "m",
+        "volleyball"
+      ],
       "gold": {
         "name": "France",
         "country": "FRA"
@@ -7602,7 +9200,10 @@
     {
       "event": "Women's Volleyball",
       "gender": "w",
-      "normalizedTokens": ["w", "volleyball"],
+      "normalizedTokens": [
+        "w",
+        "volleyball"
+      ],
       "gold": {
         "name": "Italy",
         "country": "ITA"
@@ -7621,7 +9222,11 @@
     {
       "event": "Men's Water Polo",
       "gender": "m",
-      "normalizedTokens": ["m", "water", "polo"],
+      "normalizedTokens": [
+        "m",
+        "water",
+        "polo"
+      ],
       "gold": {
         "name": "Serbia",
         "country": "SRB"
@@ -7638,7 +9243,11 @@
     {
       "event": "Women's Water Polo",
       "gender": "w",
-      "normalizedTokens": ["w", "water", "polo"],
+      "normalizedTokens": [
+        "w",
+        "water",
+        "polo"
+      ],
       "gold": {
         "name": "Spain",
         "country": "ESP"
@@ -7657,7 +9266,10 @@
     {
       "event": "Men's Featherweight",
       "gender": "m",
-      "normalizedTokens": ["m", "featherweight"],
+      "normalizedTokens": [
+        "m",
+        "featherweight"
+      ],
       "gold": {
         "name": "Li Fabin",
         "country": "CHN"
@@ -7674,7 +9286,10 @@
     {
       "event": "Men's Middleweight",
       "gender": "m",
-      "normalizedTokens": ["m", "middleweight"],
+      "normalizedTokens": [
+        "m",
+        "middleweight"
+      ],
       "gold": {
         "name": "Rizki Juniansyah",
         "country": "INA"
@@ -7691,7 +9306,10 @@
     {
       "event": "Men's Light-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "light-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "light-heavyweight"
+      ],
       "gold": {
         "name": "Karlos Nasar",
         "country": "BUL"
@@ -7708,7 +9326,10 @@
     {
       "event": "Men's Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Liu Huanhua",
         "country": "CHN"
@@ -7725,7 +9346,10 @@
     {
       "event": "Men's Super-Heavyweight",
       "gender": "m",
-      "normalizedTokens": ["m", "super-heavyweight"],
+      "normalizedTokens": [
+        "m",
+        "super-heavyweight"
+      ],
       "gold": {
         "name": "Lasha Talakhadze",
         "country": "GEO"
@@ -7742,7 +9366,10 @@
     {
       "event": "Women's Flyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "flyweight"],
+      "normalizedTokens": [
+        "w",
+        "flyweight"
+      ],
       "gold": {
         "name": "Hou Zhihui",
         "country": "CHN"
@@ -7759,7 +9386,10 @@
     {
       "event": "Women's Lightweight",
       "gender": "w",
-      "normalizedTokens": ["w", "lightweight"],
+      "normalizedTokens": [
+        "w",
+        "lightweight"
+      ],
       "gold": {
         "name": "Luo Shifang",
         "country": "CHN"
@@ -7776,7 +9406,10 @@
     {
       "event": "Women's Middleweight",
       "gender": "w",
-      "normalizedTokens": ["w", "middleweight"],
+      "normalizedTokens": [
+        "w",
+        "middleweight"
+      ],
       "gold": {
         "name": "Olivia Reeves",
         "country": "USA"
@@ -7793,7 +9426,10 @@
     {
       "event": "Women's Heavyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "heavyweight"],
+      "normalizedTokens": [
+        "w",
+        "heavyweight"
+      ],
       "gold": {
         "name": "Solfrid Koanda",
         "country": "NOR"
@@ -7810,7 +9446,10 @@
     {
       "event": "Women's Super-Heavyweight",
       "gender": "w",
-      "normalizedTokens": ["w", "super-heavyweight"],
+      "normalizedTokens": [
+        "w",
+        "super-heavyweight"
+      ],
       "gold": {
         "name": "Li Wenwen",
         "country": "CHN"
@@ -7829,7 +9468,11 @@
     {
       "event": "Men's Featherweight, Greco-Roman",
       "gender": "m",
-      "normalizedTokens": ["m", "featherweight", "greco-roman"],
+      "normalizedTokens": [
+        "m",
+        "featherweight",
+        "greco-roman"
+      ],
       "gold": {
         "name": "Kenichiro Fumita",
         "country": "JPN"
@@ -7846,7 +9489,11 @@
     {
       "event": "Men's Welterweight, Greco-Roman",
       "gender": "m",
-      "normalizedTokens": ["m", "welterweight", "greco-roman"],
+      "normalizedTokens": [
+        "m",
+        "welterweight",
+        "greco-roman"
+      ],
       "gold": {
         "name": "Saeid Esmaeili",
         "country": "IRI"
@@ -7861,9 +9508,13 @@
       }
     },
     {
-      "event": "Men's Middleweight, Greco-Roman",
+      "event": "Men's Middleweight A, Greco-Roman",
       "gender": "m",
-      "normalizedTokens": ["m", "middleweight", "greco-roman"],
+      "normalizedTokens": [
+        "m",
+        "middleweight",
+        "greco-roman"
+      ],
       "gold": {
         "name": "Nao Kusaka",
         "country": "JPN"
@@ -7878,9 +9529,14 @@
       }
     },
     {
-      "event": "Men's Light-Heavyweight, Greco-Roman",
+      "event": "Men's Middleweight B, Greco-Roman",
       "gender": "m",
-      "normalizedTokens": ["m", "light-heavyweight", "greco-roman"],
+      "normalizedTokens": [
+        "m",
+        "middleweight",
+        "b",
+        "greco-roman"
+      ],
       "gold": {
         "name": "Semen Novikov",
         "country": "BUL"
@@ -7897,7 +9553,11 @@
     {
       "event": "Men's Heavyweight, Greco-Roman",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight", "greco-roman"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight",
+        "greco-roman"
+      ],
       "gold": {
         "name": "Mohammadhadi Saravi",
         "country": "IRI"
@@ -7914,7 +9574,11 @@
     {
       "event": "Men's Super-Heavyweight, Greco-Roman",
       "gender": "m",
-      "normalizedTokens": ["m", "super-heavyweight", "greco-roman"],
+      "normalizedTokens": [
+        "m",
+        "super-heavyweight",
+        "greco-roman"
+      ],
       "gold": {
         "name": "Mijaín López",
         "country": "CUB"
@@ -7931,7 +9595,11 @@
     {
       "event": "Men's Featherweight, Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "featherweight", "free"],
+      "normalizedTokens": [
+        "m",
+        "featherweight",
+        "free"
+      ],
       "gold": {
         "name": "Rei Higuchi",
         "country": "JPN"
@@ -7948,7 +9616,11 @@
     {
       "event": "Men's Welterweight, Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "welterweight", "free"],
+      "normalizedTokens": [
+        "m",
+        "welterweight",
+        "free"
+      ],
       "gold": {
         "name": "Kotaro Kiyooka",
         "country": "JPN"
@@ -7965,7 +9637,11 @@
     {
       "event": "Men's Middleweight, Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "middleweight", "free"],
+      "normalizedTokens": [
+        "m",
+        "middleweight",
+        "free"
+      ],
       "gold": {
         "name": "Razambek Zhamalov",
         "country": "UZB"
@@ -7982,7 +9658,11 @@
     {
       "event": "Men's Light-Heavyweight, Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "light-heavyweight", "free"],
+      "normalizedTokens": [
+        "m",
+        "light-heavyweight",
+        "free"
+      ],
       "gold": {
         "name": "Magomed Ramazanov",
         "country": "BUL"
@@ -7999,7 +9679,11 @@
     {
       "event": "Men's Heavyweight, Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "heavyweight", "free"],
+      "normalizedTokens": [
+        "m",
+        "heavyweight",
+        "free"
+      ],
       "gold": {
         "name": "Akhmed Tazhudinov",
         "country": "BRN"
@@ -8016,7 +9700,11 @@
     {
       "event": "Men's Super-Heavyweight, Freestyle",
       "gender": "m",
-      "normalizedTokens": ["m", "super-heavyweight", "free"],
+      "normalizedTokens": [
+        "m",
+        "super-heavyweight",
+        "free"
+      ],
       "gold": {
         "name": "Geno Petriashvili",
         "country": "GEO"
@@ -8033,7 +9721,11 @@
     {
       "event": "Women's Flyweight, Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "flyweight", "free"],
+      "normalizedTokens": [
+        "w",
+        "flyweight",
+        "free"
+      ],
       "gold": {
         "name": "Sarah Hildebrandt",
         "country": "USA"
@@ -8050,7 +9742,11 @@
     {
       "event": "Women's Featherweight, Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "featherweight", "free"],
+      "normalizedTokens": [
+        "w",
+        "featherweight",
+        "free"
+      ],
       "gold": {
         "name": "Akari Fujinami",
         "country": "JPN"
@@ -8067,7 +9763,11 @@
     {
       "event": "Women's Lightweight, Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "lightweight", "free"],
+      "normalizedTokens": [
+        "w",
+        "lightweight",
+        "free"
+      ],
       "gold": {
         "name": "Tsugumi Sakurai",
         "country": "JPN"
@@ -8084,7 +9784,11 @@
     {
       "event": "Women's Middleweight, Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "middleweight", "free"],
+      "normalizedTokens": [
+        "w",
+        "middleweight",
+        "free"
+      ],
       "gold": {
         "name": "Sakura Motoki",
         "country": "JPN"
@@ -8101,7 +9805,11 @@
     {
       "event": "Women's Light-Heavyweight, Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "light-heavyweight", "free"],
+      "normalizedTokens": [
+        "w",
+        "light-heavyweight",
+        "free"
+      ],
       "gold": {
         "name": "Amit Elor",
         "country": "USA"
@@ -8118,7 +9826,11 @@
     {
       "event": "Women's Heavyweight, Freestyle",
       "gender": "w",
-      "normalizedTokens": ["w", "heavyweight", "free"],
+      "normalizedTokens": [
+        "w",
+        "heavyweight",
+        "free"
+      ],
       "gold": {
         "name": "Yuka Kagami",
         "country": "JPN"

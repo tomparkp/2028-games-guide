@@ -17,8 +17,8 @@ const DATA_DIR = resolve(process.cwd(), 'src/data')
 
 const SESSIONS_PATH = resolve(DATA_DIR, 'sessions.json')
 const SESSION_FACTS_PATH = resolve(DATA_DIR, 'session-facts.json')
-const WRITING_PATH = resolve(DATA_DIR, 'writing.json')
-const SCORING_PATH = resolve(DATA_DIR, 'scoring.json')
+const SESSION_CONTENT_PATH = resolve(DATA_DIR, 'session-content.json')
+const SESSION_SCORES_PATH = resolve(DATA_DIR, 'session-scores.json')
 
 export interface StageMetadata {
   model: string
@@ -54,7 +54,7 @@ export interface ScoringEntry {
   rUniq: number
   rDem: number
   // null for legacy entries migrated from the pre-scorecard D1 snapshot.
-  // generate-session-content always writes a full scorecard.
+  // generate-session-scores always writes a full scorecard.
   scorecard: Scorecard | null
   model: string
   promptVersion: number
@@ -124,13 +124,13 @@ function loadGrounding(): Record<string, GroundingEntry> {
 
 function loadWriting(): Record<string, WritingEntry> {
   if (writingCache) return writingCache
-  writingCache = readJsonFile<Record<string, WritingEntry>>(WRITING_PATH, {})
+  writingCache = readJsonFile<Record<string, WritingEntry>>(SESSION_CONTENT_PATH, {})
   return writingCache
 }
 
 function loadScoring(): Record<string, ScoringEntry> {
   if (scoringCache) return scoringCache
-  scoringCache = readJsonFile<Record<string, ScoringEntry>>(SCORING_PATH, {})
+  scoringCache = readJsonFile<Record<string, ScoringEntry>>(SESSION_SCORES_PATH, {})
   return scoringCache
 }
 
@@ -221,7 +221,7 @@ export function upsertWriting(rows: WritingUpsert[], meta: StageMetadata): Promi
       }
     }
     writingCache = sortedKeys(cache)
-    writeJsonAtomic(WRITING_PATH, writingCache)
+    writeJsonAtomic(SESSION_CONTENT_PATH, writingCache)
   })
 }
 
@@ -246,7 +246,7 @@ export function upsertScoring(rows: ScoringUpsert[], meta: StageMetadata): Promi
       }
     }
     scoringCache = sortedKeys(cache)
-    writeJsonAtomic(SCORING_PATH, scoringCache)
+    writeJsonAtomic(SESSION_SCORES_PATH, scoringCache)
   })
 }
 

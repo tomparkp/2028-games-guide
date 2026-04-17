@@ -15,11 +15,13 @@ The dev server runs on port 3000.
 - `pnpm build` — Production build
 - `pnpm preview` — Preview production build
 - `pnpm test` — Run tests with Vitest
-- `pnpm generate-content` — Run the three-stage AI content + scorecard pipeline (see [Data](#data))
-- `pnpm generate-sport-facts` — Regenerate per-sport reference facts in `src/data/sport-facts.json` (see [Regenerating sport facts](#regenerating-sport-facts))
-- `pnpm generate-venue-facts` — Regenerate per-venue reference facts in `src/data/venue-facts.json` (see [Regenerating venue facts](#regenerating-venue-facts))
-- `pnpm refresh <sessionId>` — Refresh a single session through the pipeline
-- `pnpm fetch:paris-medals` — Rescrape Olympedia for Paris 2024 medal data (rarely needed)
+- `pnpm generate:paris-medals` — Rescrape Olympedia for Paris 2024 medal data (rarely needed)
+- `pnpm generate:sport-facts` — Regenerate per-sport reference facts in `src/data/sport-facts.json` (see [Regenerating sport facts](#regenerating-sport-facts))
+- `pnpm generate:venue-facts` — Regenerate per-venue reference facts in `src/data/venue-facts.json` (see [Regenerating venue facts](#regenerating-venue-facts))
+- `pnpm generate:session-facts` — Per-session Perplexity grounding → `src/data/session-facts.json`
+- `pnpm generate:session-content` — Per-session Anthropic writing → `src/data/session-content.json`
+- `pnpm generate:session-scores` — Per-session Anthropic scoring → `src/data/session-scores.json`
+- `pnpm refresh <sessionId>` — Refresh a single session through all three session stages
 
 ## Data
 
@@ -27,53 +29,57 @@ Session data lives in JSON files under `src/data/`, committed to the repo and bu
 
 - `sessions.json` — hand-validated source data from the official Session Table (id, sport, venue, date, price, etc.). No generated content.
 - `paris-2024-medals.json` — Olympedia-scraped Paris 2024 results; authoritative history used as a grounding anchor.
-- `sport-facts.json` — per-sport Perplexity output (gamesContext, venueNotes, eventHighlights, parisRecap), keyed by sport.
+- `sport-facts.json` — per-sport Perplexity output (gamesContext, parisRecap), keyed by sport.
 - `venue-facts.json` — per-venue Perplexity output (capacity, yearBuilt, location, iconicMoments, spectatorExperience, changes2028), keyed by venue name.
 - `session-facts.json` — per-session Perplexity output (facts, related news, sources), keyed by session id.
-- `writing.json` — Anthropic-authored prose (blurb, contenders), keyed by session id.
-- `scoring.json` — ratings + optional full Scorecard (dimension scores with explanations), keyed by session id.
+- `session-content.json` — Anthropic-authored prose (blurb, contenders), keyed by session id.
+- `session-scores.json` — ratings + optional full Scorecard (dimension scores with explanations), keyed by session id.
 
-Runtime reads happen in `src/data/sessions.data.server.ts`, which merges sessions + session-facts + writing + scoring at module load.
+Runtime reads happen in `src/data/sessions.data.server.ts`, which merges sessions + session-facts + session-content + session-scores at module load.
 
 ### Regenerating session content and ratings
 
-`pnpm generate-content` runs the three-stage AI pipeline (grounding → writing → scoring) and updates `session-facts.json`, `writing.json`, and `scoring.json` in place. Each stage is independently gated by a `promptVersion` so unchanged sessions are skipped; use `--force` to regenerate everything:
+Three independent scripts, one per stage. Run them in order the first time; after that each can run on its own. Each is gated by `promptVersion`, so unchanged sessions are skipped; use `--force` to regenerate everything.
 
 ```bash
-# Scope to one sport while iterating
-pnpm generate-content --sport="Athletics (Track & Field)"
+# Stage 1: per-session Perplexity grounding → session-facts.json
+pnpm generate:session-facts --sport="Athletics (Track & Field)"
 
-# Keep existing facts/news, rewrite prose only
-pnpm generate-content --skip-grounding
+# Stage 2: Anthropic writing → session-content.json (requires session-facts)
+pnpm generate:session-content --sport=Archery
 
-# Force regen one sport (ignores promptVersion gates)
-pnpm generate-content --sport=Archery --force
+# Stage 3: Anthropic scoring → session-scores.json (requires session-content)
+pnpm generate:session-scores --sport=Archery
 
-# Use sync messages.create instead of Message Batches (faster turnaround
-# per request, forfeits the 50% batch discount — good for iterating)
-pnpm generate-content --sport=Archery --writing-no-batch --scoring-no-batch
+# Force regen (ignores promptVersion gates)
+pnpm generate:session-content --sport=Archery --force
 
-# Refresh a single session with a manual correction
+# Use sync messages.create instead of Message Batches (faster per-request,
+# forfeits the 50% batch discount — good for iterating)
+pnpm generate:session-content --sport=Archery --no-batch
+pnpm generate:session-scores --sport=Archery --no-batch
+
+# Refresh a single session end-to-end with a manual correction
 pnpm refresh ATH04 --skip-grounding --prompt "Tighten the blurb"
 ```
 
-The pipeline uses Anthropic prompt caching (system prompt + per-sport context are cached per run) and Messages Batches for writing/scoring by default. Stage 1 (grounding) batches 10 sessions per Perplexity call. Per-sport log lines report completion so you can watch the run.
+Writing and scoring use Anthropic prompt caching (system prompt + per-sport context) and Messages Batches by default. Stage 1 batches 10 sessions per Perplexity call. Per-sport log lines report completion so you can watch the run.
 
-Regenerated files are committed like any other source — there's no separate deploy step for data. Note that a full `--force` run makes paid API calls for every one of ~850 sessions and costs real money — scope with `--sport=...` while developing.
+Regenerated files are committed like any other source — there's no separate deploy step for data. A full `--force` run makes paid API calls for every one of ~850 sessions and costs real money — scope with `--sport=...` while developing.
 
 ### Regenerating sport facts
 
-`src/data/sport-facts.json` contains per-sport reference facts (background, venue notes, event highlights, Paris 2024 recap) used as cached context by the writing and scoring prompts. It's generated by Perplexity grounded on `paris-2024-medals.json`:
+`src/data/sport-facts.json` contains per-sport reference facts (background, Paris 2024 recap) used as cached context by the writing and scoring prompts. It's generated by Perplexity grounded on `paris-2024-medals.json`:
 
 ```bash
 # Regenerate one sport
-pnpm generate-sport-facts --sport=Archery --force
+pnpm generate:sport-facts --sport=Archery --force
 
-# Dry-run to inspect venues/events the script will pass
-pnpm generate-sport-facts --sport=Archery --dry-run
+# Dry-run to inspect events the script will pass
+pnpm generate:sport-facts --sport=Archery --dry-run
 
 # Regenerate everything with an empty parisRecap (incremental default)
-pnpm generate-sport-facts
+pnpm generate:sport-facts
 ```
 
 Without `--force`, the script only regenerates sports whose `parisRecap` field is empty — so running it repeatedly is cheap. The generator treats the Paris medal block as authoritative and the model is instructed never to substitute different medalists.
@@ -84,13 +90,13 @@ Without `--force`, the script only regenerates sports whose `parisRecap` field i
 
 ```bash
 # Regenerate one venue
-pnpm generate-venue-facts --venue="LA Memorial Coliseum" --force
+pnpm generate:venue-facts --venue="LA Memorial Coliseum" --force
 
 # Dry-run to see what the script would do
-pnpm generate-venue-facts --dry-run
+pnpm generate:venue-facts --dry-run
 
 # Fill in any venue still missing data (incremental default)
-pnpm generate-venue-facts
+pnpm generate:venue-facts
 ```
 
 Without `--force`, the script only regenerates venues whose `iconicMoments` field is empty. The runtime is tolerant of missing venue data — the venue-facts block is only added to the prompt when at least one venue has populated entries, so the pipeline keeps working while `venue-facts.json` is partially filled.

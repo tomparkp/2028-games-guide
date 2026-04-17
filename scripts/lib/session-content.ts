@@ -6,10 +6,12 @@ import type Anthropic from '@anthropic-ai/sdk'
 import type {
   ContentBlock,
   MessageCreateParamsNonStreaming,
+  TextBlockParam,
 } from '@anthropic-ai/sdk/resources/messages'
 import pLimit from 'p-limit'
 
-import type { SportKnowledge } from '../../src/data/sport-knowledge.js'
+import type { SportFacts } from '../../src/data/sport-facts.js'
+import type { VenueFacts } from '../../src/data/venue-facts.js'
 import type {
   Contender,
   ContentSource,
@@ -28,11 +30,13 @@ import {
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const ROOT = resolve(__dirname, '..', '..')
 
-const rawKnowledge = JSON.parse(
-  readFileSync(resolve(ROOT, 'src/data/sport-knowledge.json'), 'utf8'),
-)
-const { _meta: _, ...sportEntries } = rawKnowledge
-const SPORT_KNOWLEDGE = sportEntries as Record<string, SportKnowledge>
+const rawSportFacts = JSON.parse(readFileSync(resolve(ROOT, 'src/data/sport-facts.json'), 'utf8'))
+const { _meta: _, ...sportFactEntries } = rawSportFacts
+const SPORT_FACTS = sportFactEntries as Record<string, SportFacts>
+
+const rawVenueFacts = JSON.parse(readFileSync(resolve(ROOT, 'src/data/venue-facts.json'), 'utf8'))
+const { _meta: __, ...venueFactEntries } = rawVenueFacts
+const VENUE_FACTS = venueFactEntries as Record<string, VenueFacts>
 
 const PARIS_MEDALS = JSON.parse(
   readFileSync(resolve(ROOT, 'src/data/paris-2024-medals.json'), 'utf8'),
@@ -285,25 +289,60 @@ export function buildParisMedalsBlock(session: SessionSource): string {
 }
 
 export function buildSportContext(sport: string): string {
-  const knowledge = SPORT_KNOWLEDGE[sport]
+  const facts = SPORT_FACTS[sport]
   let out = `## Sport: ${sport}\n\n`
-  if (!knowledge) return out
-  out += `### Background\n${knowledge.gamesContext}\n\n`
-  const venueEntries = Object.entries(knowledge.venueNotes)
+  if (!facts) return out
+  if (facts.gamesContext) out += `### Background\n${facts.gamesContext}\n\n`
+  const venueEntries = Object.entries(facts.venueNotes ?? {})
   if (venueEntries.length > 0) {
-    out += `### Venues\n`
+    out += `### Sport-specific venue notes\n`
     for (const [venue, note] of venueEntries) out += `- ${venue}: ${note}\n`
     out += '\n'
   }
-  const eventEntries = Object.entries(knowledge.eventHighlights)
+  const eventEntries = Object.entries(facts.eventHighlights ?? {})
   if (eventEntries.length > 0) {
     out += `### Notable Events\n`
     for (const [event, note] of eventEntries) out += `- ${event}: ${note}\n`
     out += '\n'
   }
-  if (knowledge.potentialContenders.length > 0) {
-    out += `### Known Athletes/Teams\n`
-    for (const c of knowledge.potentialContenders) out += `- ${c.name} (${c.country}): ${c.note}\n`
+  if (facts.parisRecap) {
+    out += `### Paris 2024 Recap\n${facts.parisRecap}\n\n`
+  }
+  return out
+}
+
+// Emits stable venue metadata for the venues referenced by a batch of sessions.
+// Returns an empty string if no venue has populated data — callers should skip
+// the cached content block in that case. Kept separate from buildSportContext
+// so venue-facts.json stays the single source of truth for venue identity,
+// while sport-facts.json handles sport-scoped usage notes.
+export function buildVenueContext(sessions: SessionSource[]): string {
+  const venues = new Set<string>()
+  for (const s of sessions) if (s.venue) venues.add(s.venue)
+  const entries: [string, VenueFacts][] = []
+  for (const venue of [...venues].sort()) {
+    const facts = VENUE_FACTS[venue]
+    if (!facts) continue
+    const hasData =
+      facts.location ||
+      facts.iconicMoments ||
+      facts.spectatorExperience ||
+      facts.capacity ||
+      facts.yearBuilt ||
+      facts.changes2028
+    if (hasData) entries.push([venue, facts])
+  }
+  if (entries.length === 0) return ''
+
+  let out = `## Venues in this batch\n\n`
+  for (const [venue, f] of entries) {
+    out += `### ${venue}\n`
+    if (f.location) out += `- Location: ${f.location}\n`
+    if (f.capacity) out += `- Capacity: ~${f.capacity.toLocaleString()}\n`
+    if (f.yearBuilt) out += `- Built: ${f.yearBuilt}\n`
+    if (f.iconicMoments) out += `- History: ${f.iconicMoments}\n`
+    if (f.spectatorExperience) out += `- Experience: ${f.spectatorExperience}\n`
+    if (f.changes2028) out += `- 2028: ${f.changes2028}\n`
     out += '\n'
   }
   return out
@@ -353,14 +392,15 @@ export function buildBatchGroundingPrompt(
   return prompt
 }
 
-export function buildWritingPrompt(
+// Per-session body of the writing prompt. Kept separate from the sport-context
+// prefix so the request builder can emit the sport context as its own cached
+// content block while the session body (which varies per request) is not cached.
+function buildWritingSessionsBody(
   sessions: SessionSource[],
-  sport: string,
   grounding: Map<string, GroundingData>,
   extraInstructions?: string,
 ): string {
-  let prompt = buildSportContext(sport)
-  prompt += `### Sessions (${sessions.length}) — write for each\n\n`
+  let prompt = `### Sessions (${sessions.length}) — write for each\n\n`
   for (const s of sessions) {
     prompt += `#### ${s.id}: ${s.name}\n`
     prompt += `- Description: ${s.desc}\n`
@@ -384,6 +424,28 @@ export function buildWritingPrompt(
   prompt += augmentationBlock(extraInstructions)
   prompt += `Return a JSON array with ${sessions.length} objects, one for each session id above, with fields id, blurb, potentialContendersIntro, potentialContenders. No markdown fences.`
   return prompt
+}
+
+export function buildWritingPrompt(
+  sessions: SessionSource[],
+  sport: string,
+  grounding: Map<string, GroundingData>,
+  extraInstructions?: string,
+): string {
+  return buildSportContext(sport) + buildWritingSessionsBody(sessions, grounding, extraInstructions)
+}
+
+// Perplexity sonar-pro occasionally leaks inline citation markers like "[1]"
+// or "[1][5]" or "[1, 3]" into prose even when the system prompt forbids them.
+// Belt-and-suspenders strip, shared across the sport-facts and venue-facts
+// generators. Matches adjacent bracketed-digit groups with optional commas or
+// ranges inside, plus surrounding whitespace so we don't leave double spaces.
+export function stripCitationMarkers(text: string): string {
+  return text
+    .replace(/\s*(?:\[\s*\d+(?:\s*[-,]\s*\d+)*\s*\]\s*)+/g, ' ')
+    .replace(/\s+([.,;:!?])/g, '$1')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 }
 
 export function writeJson(path: string, data: unknown) {
@@ -595,6 +657,12 @@ export async function fetchGroundingBatch(
   return []
 }
 
+// Ephemeral cache marker. Applied to the system prompt (stable across the run)
+// and the per-sport context (stable within a sport across multiple batches) so
+// repeat requests in the same run hit the prompt cache instead of re-billing
+// the ~3k tokens of system prompt + ~1.5k tokens of sport knowledge.
+const EPHEMERAL_CACHE: TextBlockParam['cache_control'] = { type: 'ephemeral' }
+
 // Source of truth for the writing request shape. Sync (`messages.create`) and
 // batch (`messages.batches.create`) paths both build their request via this
 // helper so model/max_tokens/system/messages stay identical across paths.
@@ -605,16 +673,23 @@ function buildWritingRequest(
   model: string,
   extraInstructions?: string,
 ): MessageCreateParamsNonStreaming {
+  const content: TextBlockParam[] = [
+    { type: 'text', text: buildSportContext(sport), cache_control: EPHEMERAL_CACHE },
+  ]
+  const venueBlock = buildVenueContext(sessions)
+  if (venueBlock) {
+    content.push({ type: 'text', text: venueBlock, cache_control: EPHEMERAL_CACHE })
+  }
+  content.push({
+    type: 'text',
+    text: buildWritingSessionsBody(sessions, grounding, extraInstructions),
+  })
+
   return {
     model,
     max_tokens: 8192,
-    system: WRITING_SYSTEM_PROMPT,
-    messages: [
-      {
-        role: 'user',
-        content: buildWritingPrompt(sessions, sport, grounding, extraInstructions),
-      },
-    ],
+    system: [{ type: 'text', text: WRITING_SYSTEM_PROMPT, cache_control: EPHEMERAL_CACHE }],
+    messages: [{ role: 'user', content }],
   }
 }
 
@@ -734,17 +809,48 @@ async function anthropicWithRetry<T>(fn: () => Promise<T>, label: string): Promi
   }
 }
 
-export async function generateWritingViaBatches(
+export interface BatchOutcome<TJob, TResult> {
+  job: TJob
+  results: TResult[]
+  error?: string
+}
+
+export interface BatchProgress<TJob, TResult> {
+  sport: string
+  outcomes: BatchOutcome<TJob, TResult>[]
+  elapsedSec: number
+}
+
+export interface BatchesOptions<TJob, TResult> {
+  // Fires as each sport's batch completes so the caller can persist checkpoints
+  // incrementally and emit its own per-sport log line.
+  onSportComplete?: (progress: BatchProgress<TJob, TResult>) => void | Promise<void>
+  pollIntervalMs?: number
+}
+
+// Submits one Anthropic Message Batch per sport (one batch = all jobs for that
+// sport), polls all batches in parallel, and reports per-sport as each
+// finishes. Per-sport batching trades a small submission overhead for
+// meaningful progress visibility (each sport's closure is a visible event) and
+// incremental checkpoint persistence, which a single global batch doesn't
+// offer since the API only exposes aggregate counts.
+// Anthropic tier-1 request limit is 50 RPM. With 60+ sports in a single
+// `--force` run we have to fan out the batch create/poll calls carefully or
+// the org-level RPM cap trips. Cap to a conservative parallelism and retry
+// 429s using the server-suggested backoff.
+async function runMessageBatchesBySport<TJob extends { sport: string }, TResult>(
   client: Anthropic,
-  jobs: WritingJob[],
-  model: string,
-  options: WritingBatchesOptions = {},
-): Promise<WritingBatchOutcome[]> {
+  jobs: TJob[],
+  buildParams: (job: TJob) => MessageCreateParamsNonStreaming,
+  parseMessage: (content: ContentBlock[]) => TResult[],
+  label: string,
+  options: BatchesOptions<TJob, TResult>,
+): Promise<BatchOutcome<TJob, TResult>[]> {
   if (jobs.length === 0) return []
 
   // Group jobs by sport while remembering each job's original index so we can
   // return outcomes in the same order the caller passed them in.
-  const bySport = new Map<string, { jobs: WritingJob[]; indices: number[] }>()
+  const bySport = new Map<string, { jobs: TJob[]; indices: number[] }>()
   jobs.forEach((job, i) => {
     let group = bySport.get(job.sport)
     if (!group) {
@@ -756,11 +862,11 @@ export async function generateWritingViaBatches(
   })
 
   const sports = [...bySport.keys()]
-  console.log(`  Submitting ${sports.length} writing batch(es), one per sport…`)
+  console.log(`  Submitting ${sports.length} ${label} batch(es), one per sport…`)
 
   interface Pending {
     sport: string
-    group: { jobs: WritingJob[]; indices: number[] }
+    group: { jobs: TJob[]; indices: number[] }
     batchId: string
     startedAt: number
   }
@@ -772,14 +878,8 @@ export async function generateWritingViaBatches(
       createLimit(async () => {
         const group = bySport.get(sport)!
         const requests = group.jobs.map((job, idx) => ({
-          custom_id: `w-${idx}`,
-          params: buildWritingRequest(
-            job.batch,
-            job.sport,
-            job.grounding,
-            model,
-            options.extraInstructions,
-          ),
+          custom_id: `${label[0]}-${idx}`,
+          params: buildParams(job),
         }))
         const created = await anthropicWithRetry(
           () => client.messages.batches.create({ requests }),
@@ -792,8 +892,10 @@ export async function generateWritingViaBatches(
 
   console.log(`  ${pending.size} batch(es) in flight. Polling…`)
 
-  const allOutcomes: (WritingBatchOutcome | undefined)[] = Array.from({ length: jobs.length })
-  const pollIntervalMs = options.pollIntervalMs ?? 20_000
+  const allOutcomes: (BatchOutcome<TJob, TResult> | undefined)[] = Array.from({
+    length: jobs.length,
+  })
+  const pollIntervalMs = options.pollIntervalMs ?? 60_000
 
   while (pending.size > 0) {
     await new Promise((r) => setTimeout(r, pollIntervalMs))
@@ -811,21 +913,14 @@ export async function generateWritingViaBatches(
       ),
     )
 
-    const total = sports.length
-    const endedSoFar = total - pending.size
-    const pendingEnded = statuses.filter((s) => s.batch.processing_status === 'ended').length
-    const processing = statuses.reduce((acc, s) => acc + s.batch.request_counts.processing, 0)
-    const succeeded = statuses.reduce((acc, s) => acc + s.batch.request_counts.succeeded, 0)
-    const errored = statuses.reduce((acc, s) => acc + s.batch.request_counts.errored, 0)
-    console.log(
-      `    sports: ${endedSoFar + pendingEnded}/${total} ended; in-flight requests: processing=${processing} succeeded=${succeeded} errored=${errored}`,
-    )
-
     for (const { pending: p, batch } of statuses) {
       if (batch.processing_status !== 'ended') continue
 
-      const outcomes: WritingBatchOutcome[] = p.group.jobs.map((job) => ({ job, results: [] }))
-      const byId = new Map(outcomes.map((o, i) => [`w-${i}`, o]))
+      const outcomes: BatchOutcome<TJob, TResult>[] = p.group.jobs.map((job) => ({
+        job,
+        results: [],
+      }))
+      const byId = new Map(outcomes.map((o, i) => [`${label[0]}-${i}`, o]))
       const results = await anthropicWithRetry(
         () => client.messages.batches.results(p.batchId),
         `results ${p.sport}`,
@@ -838,7 +933,7 @@ export async function generateWritingViaBatches(
           continue
         }
         try {
-          outcome.results = parseWritingMessage(item.result.message.content)
+          outcome.results = parseMessage(item.result.message.content)
         } catch (err) {
           outcome.error = err instanceof Error ? err.message : String(err)
         }
@@ -857,7 +952,24 @@ export async function generateWritingViaBatches(
     }
   }
 
-  return allOutcomes as WritingBatchOutcome[]
+  return allOutcomes as BatchOutcome<TJob, TResult>[]
+}
+
+export async function generateWritingViaBatches(
+  client: Anthropic,
+  jobs: WritingJob[],
+  model: string,
+  options: WritingBatchesOptions = {},
+): Promise<WritingBatchOutcome[]> {
+  return runMessageBatchesBySport(
+    client,
+    jobs,
+    (job) =>
+      buildWritingRequest(job.batch, job.sport, job.grounding, model, options.extraInstructions),
+    parseWritingMessage,
+    'writing',
+    { onSportComplete: options.onSportComplete, pollIntervalMs: options.pollIntervalMs },
+  )
 }
 
 export const SCORING_SYSTEM_PROMPT = `You are scoring 2028 Los Angeles Summer Games sessions for a ticket-buying guide. For each session you assign integer 1-10 scores across five dimensions and write a short, specific explanation that justifies the SCORE you gave (not the venue or sport in general).
@@ -944,15 +1056,15 @@ Example object shape (do not copy values):
 }
 ${BANNED_TERMS_BLOCK}`
 
-export function buildScoringPrompt(
+// Per-session body of the scoring prompt; see buildWritingSessionsBody for the
+// caching rationale.
+function buildScoringSessionsBody(
   sessions: SessionSource[],
-  sport: string,
   grounding: Map<string, GroundingData>,
   writing: Map<string, WritingData>,
   extraInstructions?: string,
 ): string {
-  let prompt = buildSportContext(sport)
-  prompt += `### Sessions (${sessions.length}) — score each\n\n`
+  let prompt = `### Sessions (${sessions.length}) — score each\n\n`
   for (const s of sessions) {
     prompt += `#### ${s.id}: ${s.name}\n`
     prompt += `- Description: ${s.desc}\n`
@@ -981,6 +1093,47 @@ export function buildScoringPrompt(
   return prompt
 }
 
+export function buildScoringPrompt(
+  sessions: SessionSource[],
+  sport: string,
+  grounding: Map<string, GroundingData>,
+  writing: Map<string, WritingData>,
+  extraInstructions?: string,
+): string {
+  return (
+    buildSportContext(sport) +
+    buildScoringSessionsBody(sessions, grounding, writing, extraInstructions)
+  )
+}
+
+function buildScoringRequest(
+  sessions: SessionSource[],
+  sport: string,
+  grounding: Map<string, GroundingData>,
+  writing: Map<string, WritingData>,
+  model: string,
+  extraInstructions?: string,
+): MessageCreateParamsNonStreaming {
+  const content: TextBlockParam[] = [
+    { type: 'text', text: buildSportContext(sport), cache_control: EPHEMERAL_CACHE },
+  ]
+  const venueBlock = buildVenueContext(sessions)
+  if (venueBlock) {
+    content.push({ type: 'text', text: venueBlock, cache_control: EPHEMERAL_CACHE })
+  }
+  content.push({
+    type: 'text',
+    text: buildScoringSessionsBody(sessions, grounding, writing, extraInstructions),
+  })
+
+  return {
+    model,
+    max_tokens: 8192,
+    system: [{ type: 'text', text: SCORING_SYSTEM_PROMPT, cache_control: EPHEMERAL_CACHE }],
+    messages: [{ role: 'user', content }],
+  }
+}
+
 function parseDimension(raw: unknown): ScorecardDimension | null {
   if (!raw || typeof raw !== 'object') return null
   const obj = raw as Record<string, unknown>
@@ -989,6 +1142,54 @@ function parseDimension(raw: unknown): ScorecardDimension | null {
   if (!Number.isFinite(score) || score < 1 || score > 10) return null
   if (!explanation) return null
   return { score, explanation }
+}
+
+// Shared response decoder for scoring. Both sync and batch paths receive an
+// array of ContentBlocks; extract the first text block and validate the JSON.
+function parseScoringMessage(content: ContentBlock[]): ScoringData[] {
+  const textBlock = content.find((c) => c.type === 'text')
+  const text = textBlock && textBlock.type === 'text' ? textBlock.text : ''
+  const jsonMatch = text.match(/\[[\s\S]*\]/)
+  if (!jsonMatch) throw new Error('No JSON array in Anthropic response')
+  const parsed = JSON.parse(jsonMatch[0]) as unknown
+  if (!Array.isArray(parsed)) throw new Error('Expected array')
+  const results: ScoringData[] = []
+  for (const raw of parsed) {
+    if (!raw || typeof raw !== 'object') continue
+    const item = raw as Record<string, unknown>
+    if (typeof item.id !== 'string') continue
+    const sc = item.scorecard as Record<string, unknown> | undefined
+    if (!sc || typeof sc !== 'object') continue
+    const significance = parseDimension(sc.significance)
+    const experience = parseDimension(sc.experience)
+    const starPower = parseDimension(sc.starPower)
+    const uniqueness = parseDimension(sc.uniqueness)
+    const demand = parseDimension(sc.demand)
+    const overall = typeof sc.overall === 'string' ? sc.overall.trim() : ''
+    if (!significance || !experience || !starPower || !uniqueness || !demand || !overall) {
+      continue
+    }
+    const aggregate = computeAggregate(
+      significance.score,
+      experience.score,
+      starPower.score,
+      uniqueness.score,
+      demand.score,
+    )
+    results.push({
+      id: item.id,
+      scorecard: {
+        significance,
+        experience,
+        starPower,
+        uniqueness,
+        demand,
+        aggregate,
+        overall,
+      },
+    })
+  }
+  return results
 }
 
 export async function generateScoring(
@@ -1000,57 +1201,11 @@ export async function generateScoring(
   model: string,
   extraInstructions?: string,
 ): Promise<ScoringData[]> {
-  const prompt = buildScoringPrompt(sessions, sport, grounding, writing, extraInstructions)
+  const params = buildScoringRequest(sessions, sport, grounding, writing, model, extraInstructions)
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const response = await client.messages.create({
-        model,
-        max_tokens: 8192,
-        system: SCORING_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: prompt }],
-      })
-      const text = response.content[0].type === 'text' ? response.content[0].text : ''
-      const jsonMatch = text.match(/\[[\s\S]*\]/)
-      if (!jsonMatch) throw new Error('No JSON array in Anthropic response')
-      const parsed = JSON.parse(jsonMatch[0]) as unknown
-      if (!Array.isArray(parsed)) throw new Error('Expected array')
-      const results: ScoringData[] = []
-      for (const raw of parsed) {
-        if (!raw || typeof raw !== 'object') continue
-        const item = raw as Record<string, unknown>
-        if (typeof item.id !== 'string') continue
-        const sc = item.scorecard as Record<string, unknown> | undefined
-        if (!sc || typeof sc !== 'object') continue
-        const significance = parseDimension(sc.significance)
-        const experience = parseDimension(sc.experience)
-        const starPower = parseDimension(sc.starPower)
-        const uniqueness = parseDimension(sc.uniqueness)
-        const demand = parseDimension(sc.demand)
-        const overall = typeof sc.overall === 'string' ? sc.overall.trim() : ''
-        if (!significance || !experience || !starPower || !uniqueness || !demand || !overall) {
-          continue
-        }
-        const aggregate = computeAggregate(
-          significance.score,
-          experience.score,
-          starPower.score,
-          uniqueness.score,
-          demand.score,
-        )
-        results.push({
-          id: item.id,
-          scorecard: {
-            significance,
-            experience,
-            starPower,
-            uniqueness,
-            demand,
-            aggregate,
-            overall,
-          },
-        })
-      }
-      return results
+      const response = await client.messages.create(params)
+      return parseScoringMessage(response.content)
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       console.error(`    Scoring attempt ${attempt}/${MAX_RETRIES} failed: ${msg}`)
@@ -1059,4 +1214,44 @@ export async function generateScoring(
   }
   console.error(`    Scoring FAILED after ${MAX_RETRIES} attempts for ${sport} batch`)
   return []
+}
+
+export interface ScoringJob {
+  sport: string
+  batch: SessionSource[]
+  grounding: Map<string, GroundingData>
+  writing: Map<string, WritingData>
+}
+
+export type ScoringBatchOutcome = BatchOutcome<ScoringJob, ScoringData>
+export type ScoringBatchProgress = BatchProgress<ScoringJob, ScoringData>
+
+export interface ScoringBatchesOptions {
+  extraInstructions?: string
+  onSportComplete?: (progress: ScoringBatchProgress) => void | Promise<void>
+  pollIntervalMs?: number
+}
+
+export async function generateScoringViaBatches(
+  client: Anthropic,
+  jobs: ScoringJob[],
+  model: string,
+  options: ScoringBatchesOptions = {},
+): Promise<ScoringBatchOutcome[]> {
+  return runMessageBatchesBySport(
+    client,
+    jobs,
+    (job) =>
+      buildScoringRequest(
+        job.batch,
+        job.sport,
+        job.grounding,
+        job.writing,
+        model,
+        options.extraInstructions,
+      ),
+    parseScoringMessage,
+    'scoring',
+    { onSportComplete: options.onSportComplete, pollIntervalMs: options.pollIntervalMs },
+  )
 }

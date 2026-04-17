@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 
-import { parseDbTargetFromArgs, readAllSessions } from './lib/db'
+import { readAllSessions } from './lib/content-store'
 
 const csvPath =
   '/Users/Home/Downloads/LA 2028 Session Table - Shareable (Excel).xlsx - Session List with Current Price.csv'
@@ -169,7 +169,7 @@ const csvRaw = readFileSync(csvPath, 'utf-8')
 const csvSessions = parseCsv(csvRaw)
 const csvMap = new Map(csvSessions.map((s) => [s.code, s]))
 
-const appSessions: AppSession[] = (await readAllSessions(parseDbTargetFromArgs())) as AppSession[]
+const appSessions: AppSession[] = readAllSessions() as AppSession[]
 const appMap = new Map(appSessions.map((s) => [s.id, s]))
 
 console.log(`\n${'='.repeat(72)}`)

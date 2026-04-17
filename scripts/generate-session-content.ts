@@ -2,17 +2,18 @@ import 'dotenv/config'
 import Anthropic from '@anthropic-ai/sdk'
 import pLimit from 'p-limit'
 
-import type { Session } from '../src/types/session.js'
+import type { SessionSource } from '../src/types/session.js'
 import {
   chunk as chunkList,
-  parseDbTargetFromArgs,
   readAllSessions,
+  readGroundingForSession,
   readStageStatus,
+  readWritingForSession,
   upsertGrounding,
   upsertScoring,
   upsertWriting,
   type StageStatus,
-} from './lib/db.js'
+} from './lib/content-store.js'
 import {
   ANTHROPIC_SCORING_DEFAULT_MODEL,
   ANTHROPIC_WRITING_DEFAULT_MODEL,
@@ -126,17 +127,15 @@ async function main() {
     }
   }
 
-  const dbTarget = parseDbTargetFromArgs()
-  console.log(`D1 target: ${dbTarget}`)
   const writingMode = noWritingBatch ? `sync concurrency=${writingConcurrency}` : 'batches-api'
   console.log(`Grounding: perplexity ${perplexityModel}  concurrency=${groundingConcurrency}`)
   console.log(`Writing:   anthropic  ${writingModel}  ${writingMode}`)
   console.log(`Scoring:   anthropic  ${scoringModel}  concurrency=${scoringConcurrency}`)
 
-  const sessions = await readAllSessions(dbTarget)
-  const stageStatus = await readStageStatus(dbTarget)
+  const sessions = readAllSessions()
+  const stageStatus = readStageStatus()
   const sessionMap = new Map(sessions.map((s) => [s.id, s]))
-  console.log(`Loaded ${sessions.length} sessions from D1`)
+  console.log(`Loaded ${sessions.length} sessions from src/data/sessions.json`)
 
   const candidates = sessions.filter((s) => {
     if (sportFilter && s.sport !== sportFilter) return false
@@ -150,8 +149,8 @@ async function main() {
   console.log(`${candidates.length} session(s) have at least one stage outstanding`)
 
   // Track grounding results from this run so stage 2 can use them without a
-  // second DB read. Not required for resume (DB is source of truth) — just a
-  // hot cache for the in-progress run.
+  // second disk read. Not required for resume (JSON store is source of
+  // truth) — just a hot cache for the in-progress run.
   const groundingThisRun = new Map<string, GroundingData>()
 
   // Stage 1: Grounding (parallel, rate-limited)
@@ -193,7 +192,6 @@ async function main() {
                 promptVersion: GROUNDING_VERSION,
                 generatedAt: new Date().toISOString(),
               },
-              dbTarget,
             )
             console.log(
               `  [${done}/${groundingTargets.length}] ${session.id} ✓ facts:${g.groundingFacts.length} news:${g.relatedNews.length}`,
@@ -211,7 +209,7 @@ async function main() {
     if (skipWriting) console.log('\n=== Stage 2: Writing (skipped) ===')
   } else {
     // Re-read stage status so we pick up grounding rows written moments ago.
-    const freshStatus = await readStageStatus(dbTarget)
+    const freshStatus = readStageStatus()
     const writingTargets = candidates.filter((s) => {
       const st = freshStatus.get(s.id)
       const stageDone = !needsWriting(st, forceAll)
@@ -226,18 +224,15 @@ async function main() {
     if (!dryRun && writingTargets.length > 0) {
       // Preload grounding data for sessions that haven't been loaded this run.
       const missingGrounding = writingTargets.filter((s) => !groundingThisRun.has(s.id))
-      if (missingGrounding.length > 0) {
-        const { readGroundingForSession } = await import('./lib/db.js')
-        for (const s of missingGrounding) {
-          const g = await readGroundingForSession(s.id, dbTarget)
-          if (g && g.facts) {
-            groundingThisRun.set(s.id, {
-              id: s.id,
-              groundingFacts: g.facts,
-              relatedNews: g.relatedNews,
-              sources: g.sources,
-            })
-          }
+      for (const s of missingGrounding) {
+        const g = readGroundingForSession(s.id)
+        if (g && g.facts) {
+          groundingThisRun.set(s.id, {
+            id: s.id,
+            groundingFacts: g.facts,
+            relatedNews: g.relatedNews,
+            sources: g.sources ?? undefined,
+          })
         }
       }
     }
@@ -282,15 +277,11 @@ async function main() {
                 potentialContendersIntro: r.potentialContendersIntro || undefined,
                 potentialContenders: r.potentialContenders,
               }))
-            await upsertWriting(
-              toUpsert,
-              {
-                model: writingModel,
-                promptVersion: WRITING_VERSION,
-                generatedAt: new Date().toISOString(),
-              },
-              dbTarget,
-            )
+            await upsertWriting(toUpsert, {
+              model: writingModel,
+              promptVersion: WRITING_VERSION,
+              generatedAt: new Date().toISOString(),
+            })
             done += 1
             const missing = job.batch.filter((s) => !toUpsert.find((w) => w.sessionId === s.id))
             const tail =
@@ -330,15 +321,11 @@ async function main() {
             // Per-batch upsert so partial failures don't lose work from other
             // batches in the same sport.
             if (toUpsert.length > 0) {
-              await upsertWriting(
-                toUpsert.splice(0, toUpsert.length),
-                {
-                  model: writingModel,
-                  promptVersion: WRITING_VERSION,
-                  generatedAt: new Date().toISOString(),
-                },
-                dbTarget,
-              )
+              await upsertWriting(toUpsert.splice(0, toUpsert.length), {
+                model: writingModel,
+                promptVersion: WRITING_VERSION,
+                generatedAt: new Date().toISOString(),
+              })
             }
           }
           const tail = missing.length > 0 ? ` ✗ missing ${missing.join(',')}` : ''
@@ -353,7 +340,7 @@ async function main() {
   if (skipScoring || !anthropicClient) {
     if (skipScoring) console.log('\n=== Stage 3: Scoring (skipped) ===')
   } else {
-    const freshStatus = await readStageStatus(dbTarget)
+    const freshStatus = readStageStatus()
     const scoringTargets = candidates.filter((s) => {
       const st = freshStatus.get(s.id)
       const stageDone = !needsScoring(st, forceAll)
@@ -366,7 +353,7 @@ async function main() {
 
     const bySport = groupBySport(scoringTargets)
     const sports = [...bySport.keys()].sort()
-    type Job = { sport: string; batch: Session[] }
+    type Job = { sport: string; batch: SessionSource[] }
     const jobs: Job[] = []
     for (const sport of sports) {
       const list = bySport.get(sport)!
@@ -378,7 +365,6 @@ async function main() {
       for (const job of jobs)
         console.log(`  [dry-run] ${job.sport} batch (${job.batch.length} sessions)`)
     } else if (jobs.length > 0) {
-      const { readWritingForSession } = await import('./lib/db.js')
       const limit = pLimit(scoringConcurrency)
       let done = 0
       await Promise.all(
@@ -389,7 +375,7 @@ async function main() {
             for (const s of job.batch) {
               const g = groundingThisRun.get(s.id)
               if (g) grounding.set(s.id, g)
-              const w = await readWritingForSession(s.id, dbTarget)
+              const w = readWritingForSession(s.id)
               if (w) {
                 writing.set(s.id, {
                   id: s.id,
@@ -410,15 +396,11 @@ async function main() {
             const toUpsert = results
               .filter((r) => sessionMap.has(r.id))
               .map((r) => ({ sessionId: r.id, scorecard: r.scorecard }))
-            await upsertScoring(
-              toUpsert,
-              {
-                model: scoringModel,
-                promptVersion: SCORING_VERSION,
-                generatedAt: new Date().toISOString(),
-              },
-              dbTarget,
-            )
+            await upsertScoring(toUpsert, {
+              model: scoringModel,
+              promptVersion: SCORING_VERSION,
+              generatedAt: new Date().toISOString(),
+            })
             done += 1
             const missing = job.batch.filter((s) => !toUpsert.find((r) => r.sessionId === s.id))
             const tail =
@@ -433,7 +415,7 @@ async function main() {
   }
 
   // Report final stage coverage.
-  const finalStatus = await readStageStatus(dbTarget)
+  const finalStatus = readStageStatus()
   const grounded = [...finalStatus.values()].filter(
     (s) => (s.groundingPromptVersion ?? -1) >= GROUNDING_VERSION,
   ).length

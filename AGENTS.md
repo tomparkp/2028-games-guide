@@ -24,21 +24,22 @@ Production deploys happen automatically when Release Please cuts a release. `.gi
 
 ### Cloudflare operations
 
-Always ask the user before using any Cloudflare MCP tools or running `wrangler` commands that touch remote resources (D1 writes against `--remote`, DB create/delete, secret changes, etc.). Local-only commands (`--local` D1, `wrangler types`, `wrangler dev`) are fine without asking.
+Always ask the user before using any Cloudflare MCP tools or running `wrangler` commands that touch remote resources. Local-only commands (`wrangler types`, `wrangler dev`) are fine without asking.
 
 ## Architecture
 
 This is a **TanStack Start** (React 19) full-stack app with SSR, file-based routing, and Tailwind CSS v4.
 
-### Database
+### Data
 
-Session data lives in Cloudflare D1 (binding `DB`). Schema in `src/db/schema.ts` (Drizzle). Runtime reads via `drizzle(env.DB)` from `cloudflare:workers`; writer scripts (`generate-content`, `refresh`) shell out to `wrangler d1 execute` via `scripts/lib/db.ts` — default `--local`, pass `--remote` for prod.
+Session data lives in four JSON files under `src/data/`, committed to the repo and bundled into the worker at build time:
 
-- `pnpm db:migrate:local` / `pnpm db:migrate:remote` — apply migrations
-- `pnpm db:generate --name <desc>` — generate a new migration (omit `--name` and you get a random suffix like `needy_ma_gnuci`)
-- `pnpm db:studio` — browse local D1 at https://local.drizzle.studio (local only; for prod use the Cloudflare Dashboard D1 console)
+- `sessions.json` — hand-validated source data (id, sport, venue, date, price, etc.); no generated content
+- `grounding.json` — raw Perplexity output (facts, related news, sources), keyed by session id
+- `writing.json` — Anthropic prose (blurb, contenders), keyed by session id
+- `scoring.json` — ratings + optional Scorecard (dimension scores with explanations), keyed by session id
 
-Each worktree has its own local D1 under `.wrangler/state/`. A fresh worktree needs `pnpm db:migrate:local` plus data (run content scripts or dump remote with `wrangler d1 export la28 --remote --no-schema --output=/tmp/la28.sql && wrangler d1 execute la28 --local --file=/tmp/la28.sql`).
+Runtime reads happen in `src/data/sessions.data.server.ts`, which merges the four files on module load. Writer scripts (`generate-content`, `refresh`) use `scripts/lib/content-store.ts` to upsert the three generated files; each stage can be regenerated independently (e.g. refresh news without rewriting descriptions). Regenerated files are committed to the repo — there's no separate deploy step for data.
 
 ### Routing
 

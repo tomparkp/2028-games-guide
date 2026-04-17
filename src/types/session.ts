@@ -62,7 +62,9 @@ export interface RelatedNews {
   eventKeywords?: string[]
 }
 
-export interface Session {
+// Pure session data — hand-validated from external sources. Lives in
+// sessions.json with no generated content mixed in.
+export interface SessionSource {
   id: string
   sport: string
   name: string
@@ -76,6 +78,11 @@ export interface Session {
   pLo: number
   pHi: number
   soccer: boolean
+}
+
+// Runtime shape used by routes/components: source + derived ratings merged
+// from scoring.json so table/sort/filter UI works unchanged.
+export interface Session extends SessionSource {
   rSig: number
   rExp: number
   rStar: number

@@ -8,12 +8,4 @@
   "observability": {
     "enabled": true,
   },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "la28",
-      "database_id": "92ecfb14-5274-42b9-9493-166460e603c7",
-      "migrations_dir": "drizzle",
-    },
-  ],
 }

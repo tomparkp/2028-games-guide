@@ -16,7 +16,7 @@ import type {
   RelatedNews,
   Scorecard,
   ScorecardDimension,
-  Session,
+  SessionSource,
 } from '../../src/types/session.js'
 import {
   getSportMedals,
@@ -252,7 +252,7 @@ function formatMedalist(m: { name: string; country: string } | null): string {
   return m.country ? `${m.name} (${m.country})` : m.name
 }
 
-export function buildParisMedalsBlock(session: Session): string {
+export function buildParisMedalsBlock(session: SessionSource): string {
   if (!session.sport) return ''
   const sportMedals = getSportMedals(PARIS_MEDALS, session.sport)
   if (!sportMedals) return ''
@@ -295,7 +295,7 @@ export function buildSportContext(sport: string): string {
 }
 
 export function buildGroundingPrompt(
-  session: Session,
+  session: SessionSource,
   sport: string,
   extraInstructions?: string,
 ): string {
@@ -315,7 +315,7 @@ export function buildGroundingPrompt(
 }
 
 export function buildWritingPrompt(
-  sessions: Session[],
+  sessions: SessionSource[],
   sport: string,
   grounding: Map<string, GroundingData>,
   extraInstructions?: string,
@@ -422,7 +422,7 @@ export function normalizePerplexitySources(
 
 export async function fetchGrounding(
   apiKey: string,
-  session: Session,
+  session: SessionSource,
   sport: string,
   model: string,
   extraInstructions?: string,
@@ -487,7 +487,7 @@ export async function fetchGrounding(
 // batch (`messages.batches.create`) paths both build their request via this
 // helper so model/max_tokens/system/messages stay identical across paths.
 function buildWritingRequest(
-  sessions: Session[],
+  sessions: SessionSource[],
   sport: string,
   grounding: Map<string, GroundingData>,
   model: string,
@@ -542,7 +542,7 @@ function parseWritingMessage(content: ContentBlock[]): WritingData[] {
 
 export async function generateWriting(
   client: Anthropic,
-  sessions: Session[],
+  sessions: SessionSource[],
   sport: string,
   grounding: Map<string, GroundingData>,
   model: string,
@@ -565,7 +565,7 @@ export async function generateWriting(
 
 export interface WritingJob {
   sport: string
-  batch: Session[]
+  batch: SessionSource[]
   grounding: Map<string, GroundingData>
 }
 
@@ -833,7 +833,7 @@ Example object shape (do not copy values):
 ${BANNED_TERMS_BLOCK}`
 
 export function buildScoringPrompt(
-  sessions: Session[],
+  sessions: SessionSource[],
   sport: string,
   grounding: Map<string, GroundingData>,
   writing: Map<string, WritingData>,
@@ -881,7 +881,7 @@ function parseDimension(raw: unknown): ScorecardDimension | null {
 
 export async function generateScoring(
   client: Anthropic,
-  sessions: Session[],
+  sessions: SessionSource[],
   sport: string,
   grounding: Map<string, GroundingData>,
   writing: Map<string, WritingData>,

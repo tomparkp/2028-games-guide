@@ -53,7 +53,7 @@ export const ANTHROPIC_WRITING_DEFAULT_MODEL = 'claude-sonnet-4-5-20250929'
 export const ANTHROPIC_SCORING_DEFAULT_MODEL = 'claude-haiku-4-5-20251001'
 export const GROUNDING_VERSION = 2
 export const WRITING_VERSION = 3
-export const SCORING_VERSION = 4
+export const SCORING_VERSION = 5
 export const MAX_RETRIES = 3
 export const RETRY_DELAY_MS = 5000
 export const MAX_NEWS_ITEMS = 10
@@ -1073,17 +1073,17 @@ Dimensions and rubric:
 
 For each dimension produce:
 - "score": integer 1-10 (in practice 4-10; do not go below 4).
-- "explanation": ONE punchy sentence (max ~20 words, ideally ~12-15) that justifies THIS score. Short, confident, specific. Fragments welcome. Name the one thing that sets the score — don't list everything.
-  - A 10: "Gold-medal final on the track where Carl Lewis won in '84. Peak Games theater."
-  - A 7-9: "Semifinal night at the Rose Bowl — medal-adjacent, marquee stage, real stakes."
-  - A 5-6: "Quarterfinal volleyball at Long Beach — Games energy, just not a medal round."
-  - A 4: "Morning prelim, small venue, niche event — tickets exist mainly for completionists."
+- "explanation": 1-2 sentences (max ~35 words) that justify THIS score. Punchy and specific; lead with the one thing that sets the score, then optionally add one beat of supporting detail. Fragments welcome. Avoid the "sentence one + sentence two restating the same idea" pattern.
+  - A 10: "Gold-medal final on the track where Carl Lewis won in '84. Peak Games theater with medals on the line."
+  - A 7-9: "Semifinal night at the Rose Bowl — marquee stage, medal-adjacent stakes, and a likely rematch of the Paris final."
+  - A 5-6: "Quarterfinal volleyball at Long Beach — Games energy without the medal drama; good for fans of the sport."
+  - A 4: "Morning prelim of a niche event at a smaller venue. Mostly for completionists and genuine sport fans."
 - Each explanation should sound like a different take, not five variations of the same template sentence. Vary sentence structure across the five dimensions of a single session.
 - Avoid harsh language. Do NOT write "forgettable", "weak demand", "tickets widely available", "lacking". But DO use confident framing: "easier ticket", "softer stakes", "smaller stage" are fine and preferred over hedged PR-speak.
 - Reference the actual session/venue/round factor that drives the score. Skip generic Games boilerplate.
 
 Also produce:
-- "overall": ONE sentence (max ~25 words) — the session's pitch in one line. What it is, what carries it, or what holds it back. Punchy beats comprehensive.
+- "overall": 1-2 sentences (max ~45 words) — the session's pitch. What it is and what carries or limits it. Punchy beats comprehensive; the second sentence should add information, not pad the first.
 
 Rules:
 - Scores are integers 1-10, effectively 4-10 given the Games baseline.

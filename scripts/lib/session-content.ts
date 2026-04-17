@@ -11,6 +11,7 @@ import type {
 import pLimit from 'p-limit'
 
 import type { SportFacts } from '../../src/data/sport-facts.js'
+import type { VenueFacts } from '../../src/data/venue-facts.js'
 import type {
   Contender,
   ContentSource,
@@ -32,6 +33,10 @@ export const ROOT = resolve(__dirname, '..', '..')
 const rawSportFacts = JSON.parse(readFileSync(resolve(ROOT, 'src/data/sport-facts.json'), 'utf8'))
 const { _meta: _, ...sportFactEntries } = rawSportFacts
 const SPORT_FACTS = sportFactEntries as Record<string, SportFacts>
+
+const rawVenueFacts = JSON.parse(readFileSync(resolve(ROOT, 'src/data/venue-facts.json'), 'utf8'))
+const { _meta: __, ...venueFactEntries } = rawVenueFacts
+const VENUE_FACTS = venueFactEntries as Record<string, VenueFacts>
 
 const PARIS_MEDALS = JSON.parse(
   readFileSync(resolve(ROOT, 'src/data/paris-2024-medals.json'), 'utf8'),
@@ -290,7 +295,7 @@ export function buildSportContext(sport: string): string {
   if (facts.gamesContext) out += `### Background\n${facts.gamesContext}\n\n`
   const venueEntries = Object.entries(facts.venueNotes ?? {})
   if (venueEntries.length > 0) {
-    out += `### Venues\n`
+    out += `### Sport-specific venue notes\n`
     for (const [venue, note] of venueEntries) out += `- ${venue}: ${note}\n`
     out += '\n'
   }
@@ -302,6 +307,43 @@ export function buildSportContext(sport: string): string {
   }
   if (facts.parisRecap) {
     out += `### Paris 2024 Recap\n${facts.parisRecap}\n\n`
+  }
+  return out
+}
+
+// Emits stable venue metadata for the venues referenced by a batch of sessions.
+// Returns an empty string if no venue has populated data — callers should skip
+// the cached content block in that case. Kept separate from buildSportContext
+// so venue-facts.json stays the single source of truth for venue identity,
+// while sport-facts.json handles sport-scoped usage notes.
+export function buildVenueContext(sessions: SessionSource[]): string {
+  const venues = new Set<string>()
+  for (const s of sessions) if (s.venue) venues.add(s.venue)
+  const entries: [string, VenueFacts][] = []
+  for (const venue of [...venues].sort()) {
+    const facts = VENUE_FACTS[venue]
+    if (!facts) continue
+    const hasData =
+      facts.location ||
+      facts.iconicMoments ||
+      facts.spectatorExperience ||
+      facts.capacity ||
+      facts.yearBuilt ||
+      facts.changes2028
+    if (hasData) entries.push([venue, facts])
+  }
+  if (entries.length === 0) return ''
+
+  let out = `## Venues in this batch\n\n`
+  for (const [venue, f] of entries) {
+    out += `### ${venue}\n`
+    if (f.location) out += `- Location: ${f.location}\n`
+    if (f.capacity) out += `- Capacity: ~${f.capacity.toLocaleString()}\n`
+    if (f.yearBuilt) out += `- Built: ${f.yearBuilt}\n`
+    if (f.iconicMoments) out += `- History: ${f.iconicMoments}\n`
+    if (f.spectatorExperience) out += `- Experience: ${f.spectatorExperience}\n`
+    if (f.changes2028) out += `- 2028: ${f.changes2028}\n`
+    out += '\n'
   }
   return out
 }
@@ -618,19 +660,23 @@ function buildWritingRequest(
   model: string,
   extraInstructions?: string,
 ): MessageCreateParamsNonStreaming {
+  const content: TextBlockParam[] = [
+    { type: 'text', text: buildSportContext(sport), cache_control: EPHEMERAL_CACHE },
+  ]
+  const venueBlock = buildVenueContext(sessions)
+  if (venueBlock) {
+    content.push({ type: 'text', text: venueBlock, cache_control: EPHEMERAL_CACHE })
+  }
+  content.push({
+    type: 'text',
+    text: buildWritingSessionsBody(sessions, grounding, extraInstructions),
+  })
+
   return {
     model,
     max_tokens: 8192,
     system: [{ type: 'text', text: WRITING_SYSTEM_PROMPT, cache_control: EPHEMERAL_CACHE }],
-    messages: [
-      {
-        role: 'user',
-        content: [
-          { type: 'text', text: buildSportContext(sport), cache_control: EPHEMERAL_CACHE },
-          { type: 'text', text: buildWritingSessionsBody(sessions, grounding, extraInstructions) },
-        ],
-      },
-    ],
+    messages: [{ role: 'user', content }],
   }
 }
 
@@ -1055,22 +1101,23 @@ function buildScoringRequest(
   model: string,
   extraInstructions?: string,
 ): MessageCreateParamsNonStreaming {
+  const content: TextBlockParam[] = [
+    { type: 'text', text: buildSportContext(sport), cache_control: EPHEMERAL_CACHE },
+  ]
+  const venueBlock = buildVenueContext(sessions)
+  if (venueBlock) {
+    content.push({ type: 'text', text: venueBlock, cache_control: EPHEMERAL_CACHE })
+  }
+  content.push({
+    type: 'text',
+    text: buildScoringSessionsBody(sessions, grounding, writing, extraInstructions),
+  })
+
   return {
     model,
     max_tokens: 8192,
     system: [{ type: 'text', text: SCORING_SYSTEM_PROMPT, cache_control: EPHEMERAL_CACHE }],
-    messages: [
-      {
-        role: 'user',
-        content: [
-          { type: 'text', text: buildSportContext(sport), cache_control: EPHEMERAL_CACHE },
-          {
-            type: 'text',
-            text: buildScoringSessionsBody(sessions, grounding, writing, extraInstructions),
-          },
-        ],
-      },
-    ],
+    messages: [{ role: 'user', content }],
   }
 }
 

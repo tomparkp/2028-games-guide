@@ -18,6 +18,7 @@ This file provides guidance to AI coding agents working with code in this reposi
 
 - `pnpm generate-content` — Three-stage AI pipeline: grounding (Perplexity) → writing (Claude Sonnet, batches API) → scoring (Claude Haiku, batches API). Scoped via `--sport=<name>`, `--force`, `--dry-run`. Escape hatches: `--writing-no-batch`, `--scoring-no-batch`, `--skip-grounding|writing|scoring`.
 - `pnpm generate-sport-facts` — Regenerate `src/data/sport-facts.json` per sport via Perplexity, anchored on `paris-2024-medals.json`. Flags: `--sport=<name>`, `--force` (regen even when `parisRecap` already populated), `--dry-run`.
+- `pnpm generate-venue-facts` — Regenerate `src/data/venue-facts.json` per venue via Perplexity (capacity, history, spectator experience, 2028 changes). Flags: `--venue=<name>`, `--force`, `--dry-run`.
 - `pnpm refresh <sessionId>` — Refresh one session with an optional `--prompt "..."` correction; same skip/stage flags as `generate-content`.
 - `pnpm fetch:paris-medals` — Rescrape Olympedia into `paris-2024-medals.json`. One-off; run only when medal data needs refreshing.
 
@@ -46,6 +47,7 @@ Session data lives in JSON files under `src/data/`, committed to the repo and bu
 - `sessions.json` — hand-validated source data (id, sport, venue, date, price, etc.); no generated content
 - `paris-2024-medals.json` — Olympedia-scraped medal results; authoritative history, used as grounding anchor
 - `sport-facts.json` — per-sport Perplexity output (gamesContext, venueNotes, eventHighlights, parisRecap), keyed by sport
+- `venue-facts.json` — per-venue Perplexity output (capacity, yearBuilt, location, iconicMoments, spectatorExperience, changes2028), keyed by venue name
 - `session-facts.json` — per-session Perplexity output (facts, related news, sources), keyed by session id
 - `writing.json` — Anthropic prose (blurb, contenders), keyed by session id
 - `scoring.json` — ratings + optional Scorecard (dimension scores with explanations), keyed by session id

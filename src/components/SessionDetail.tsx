@@ -93,7 +93,7 @@ function PotentialContendersSection({
   potentialContendersIntro?: string
 }) {
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-4">
       {potentialContendersIntro && (
         <p className="text-ink2 text-[0.8rem] leading-relaxed font-medium">
           {potentialContendersIntro}

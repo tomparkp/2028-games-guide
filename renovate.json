@@ -14,21 +14,9 @@
   "osvVulnerabilityAlerts": true,
   "lockFileMaintenance": {
     "enabled": true,
-    "automerge": true,
     "schedule": ["before 6am on monday"]
   },
   "packageRules": [
-    {
-      "description": "Automerge patch updates and digest pins once CI passes",
-      "matchUpdateTypes": ["patch", "pin", "digest"],
-      "automerge": true
-    },
-    {
-      "description": "Automerge minor updates for stable (>=1.0) packages; 0.x minors can break",
-      "matchUpdateTypes": ["minor"],
-      "matchCurrentVersion": ">=1.0.0",
-      "automerge": true
-    },
     {
       "description": "TanStack packages are pinned and must move together",
       "matchPackageNames": ["@tanstack/**"],

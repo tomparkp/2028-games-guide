@@ -6,7 +6,7 @@ export function Nav() {
   return (
     <div className="relative overflow-hidden px-6 pt-12 pb-6 text-center max-md:px-4 max-md:pt-10">
       <a
-        href="https://github.com/tomparkp/2028-games-guide"
+        href="https://github.com/tompiarulli/2028-games-guide"
         target="_blank"
         rel="noopener noreferrer"
         className="border-border bg-surface text-ink2 hover:border-gold hover:bg-surface2 hover:text-gold absolute top-4 right-16 z-5 flex size-9 items-center justify-center rounded-lg border transition-all duration-150 max-md:top-3 max-md:right-14"

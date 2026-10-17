@@ -81,7 +81,7 @@ function PrivacyPage() {
           <p>
             Questions or requests related to your data can be opened as an issue on our{' '}
             <a
-              href="https://github.com/tomparkp/2028-games-guide"
+              href="https://github.com/tompiarulli/2028-games-guide"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gold hover:underline"

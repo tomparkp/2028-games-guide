@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.1](https://github.com/tomparkp/2028-games-guide/compare/28games-v1.7.0...28games-v1.7.1) (2026-10-17)
+
+
+### CI
+
+* add renovate for automated dependency updates ([#123](https://github.com/tomparkp/2028-games-guide/issues/123)) ([b90632b](https://github.com/tomparkp/2028-games-guide/commit/b90632bacb049a3a1d554db31f8dfa19b4fb2f5c))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump sharp from 0.34.5 to 0.35.0 ([#119](https://github.com/tomparkp/2028-games-guide/issues/119)) ([af35c0e](https://github.com/tomparkp/2028-games-guide/commit/af35c0edd2a34fe3172b90e421fdbe5ef526bf7b))
+
 ## [1.7.0](https://github.com/tomparkp/2028-games-guide/compare/28games-v1.6.3...28games-v1.7.0) (2026-04-17)
 
 

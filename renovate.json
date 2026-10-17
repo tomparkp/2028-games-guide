@@ -47,6 +47,11 @@
       "description": "Group GitHub Actions updates",
       "matchManagers": ["github-actions"],
       "groupName": "github actions"
+    },
+    {
+      "description": "Pin and digest updates often lack a release timestamp, which minimumReleaseAge treats as never old enough",
+      "matchUpdateTypes": ["pin", "pinDigest", "digest"],
+      "minimumReleaseAge": null
     }
   ]
 }

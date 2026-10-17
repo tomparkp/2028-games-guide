@@ -20375,78 +20375,6 @@
     "batchId": null,
     "generatedAt": "2026-04-17T10:41:36.003Z"
   },
-  "SHO13": {
-    "agg": 5.1,
-    "rSig": 5,
-    "rExp": 6,
-    "rStar": 5,
-    "rUniq": 4,
-    "rDem": 5,
-    "scorecard": {
-      "significance": {
-        "score": 5,
-        "explanation": "Men's 25m Rapid Fire Pistol Stage 1—preliminary qualification where medals remain undecided. The expanded eight-finalist format increases importance of Stage 1 qualification scores, but no medals are awarded in this session."
-      },
-      "experience": {
-        "score": 6,
-        "explanation": "Monday afternoon-to-evening (2:30 PM–7:00 PM) capturing the rapid-fire format's staccato rhythm and explosive hand-eye coordination. Multiple relays through early evening and the distinctive four-second target sequences create spectacle absent from slow-fire events, offsetting the preliminary status."
-      },
-      "starPower": {
-        "score": 5,
-        "explanation": "Rapid-fire specialists and past medalists are competing, but qualification stages rarely separate top from middle-tier competitors clearly. World-class shooters are present throughout the field without yet emerging as finalists."
-      },
-      "uniqueness": {
-        "score": 4,
-        "explanation": "Stage 1 is a standard preliminary qualification format repeated across the shooting program. The expanded eight-finalist structure is a 2028 change, but Stage 1 itself remains routine—one of multiple preliminary sessions with no format novelty or venue distinction."
-      },
-      "demand": {
-        "score": 5,
-        "explanation": "Afternoon-to-evening timing and the rapid-fire format's distinctive action elevate appeal relative to slower preliminaries. However, non-medal status and qualification-stage stakes limit demand compared to finals. Accessible tickets; appeals primarily to shooting enthusiasts and progressive completists."
-      },
-      "aggregate": 5.1,
-      "overall": "Men's 25m Rapid Fire Pistol Stage 1 qualification in afternoon-to-evening with the format's explosive staccato rhythm. Preliminary stakes without medal finality; improved experience over slow-fire sessions, moderated by lack of medal drama and Stage 1 routine structure."
-    },
-    "model": "claude-haiku-4-5-20251001",
-    "promptVersion": 5,
-    "batchId": null,
-    "generatedAt": "2026-04-17T10:42:46.867Z"
-  },
-  "SHO14": {
-    "agg": 8.1,
-    "rSig": 9,
-    "rExp": 8,
-    "rStar": 8,
-    "rUniq": 7,
-    "rDem": 8,
-    "scorecard": {
-      "significance": {
-        "score": 9,
-        "explanation": "Men's 25m Rapid Fire Pistol final awarding the last shooting gold medal of the Games. Stage 2 completion plus the medal-deciding final concentrates the rifle and pistol program's closing stakes into a single session—maximum significance as program-closing gold."
-      },
-      "experience": {
-        "score": 8,
-        "explanation": "Tuesday afternoon-to-evening (2:30 PM–9:15 PM) with the rapid-fire format's explosive tempo and eight-finalist structure generating highest-energy pistol action. Expanding finalists to eight increases competitive drama; evening slot and the rapid-succession shooting (multiple four-second series) create peak spectacle before shooting concludes."
-      },
-      "starPower": {
-        "score": 8,
-        "explanation": "The final attracts Paris 2024 medalists, world-record holders, and elite rapid-fire specialists. The expanded eight-finalist format brings more competitive parity and star representation; the final stage separates and highlights the world's best rapid-fire shooters under maximum pressure."
-      },
-      "uniqueness": {
-        "score": 7,
-        "explanation": "The expanded eight-finalist format is a 2028 change adding competitive novelty. More importantly, this session closes the entire rifle and pistol program—a program-finale medal match with format-level distinction from Paris. Not iconic-venue or debut-sport uniqueness, but structurally rare as closing shooting gold."
-      },
-      "demand": {
-        "score": 8,
-        "explanation": "Program-closing gold medal, expanded finalist field, evening prime-time, and the rapid-fire format's visual excitement combine for strong demand. Shooting enthusiasts and Games completists prioritize this as the final opportunity for rifle/pistol medals. Expect near-full capacity and elevated pricing."
-      },
-      "aggregate": 8.1,
-      "overall": "The Games' final shooting gold medal featuring men's 25m Rapid Fire Pistol with the expanded eight-finalist format and explosive four-second target sequences. Program-closing prestige, format novelty, and evening prime-time positioning anchor the strongest demand of non-opening shooting sessions."
-    },
-    "model": "claude-haiku-4-5-20251001",
-    "promptVersion": 5,
-    "batchId": null,
-    "generatedAt": "2026-04-17T10:42:46.867Z"
-  },
   "SKB01": {
     "agg": 5.6,
     "rSig": 5,
@@ -23213,42 +23141,6 @@
       },
       "aggregate": 5.3,
       "overall": "Court 2 repeats the men's doubles semifinals and mixed QFs format with superior sightlines to Court 1. More spacious outdoor hard court experience, but the programming and stakes remain unremarkable."
-    },
-    "model": "claude-haiku-4-5-20251001",
-    "promptVersion": 5,
-    "batchId": null,
-    "generatedAt": "2026-04-17T10:46:00.718Z"
-  },
-  "TEN34": {
-    "agg": 4.6,
-    "rSig": 5,
-    "rExp": 4,
-    "rStar": 6,
-    "rUniq": 4,
-    "rDem": 4,
-    "scorecard": {
-      "significance": {
-        "score": 5,
-        "explanation": "Men's singles and women's doubles quarterfinals are advancement rounds in 64-player and 32-team fields—real stakes for competitors, but bronze/gold are still days away. No medal outcomes decided here."
-      },
-      "experience": {
-        "score": 4,
-        "explanation": "Spread across nine courts (3-11) with temporary seating at training facilities. While intimacy near baselines is mentioned, the format fragments focus across simultaneous matches and forces ticket-holders to choose sides. Lacks the concentrated energy of a showcase venue."
-      },
-      "starPower": {
-        "score": 6,
-        "explanation": "Eight men and 16 women's doubles pairs competing across multiple courts represent elite competitors from the original 64/32 draws. National champions and tour-level players throughout, though not the superstar density of later rounds."
-      },
-      "uniqueness": {
-        "score": 4,
-        "explanation": "Multi-court quarterfinal format is logistically common in tennis tournaments and poses no special rarity. The 'choose-your-own-adventure' framing is novelty in presentation, not substance—routine round at distributed venues."
-      },
-      "demand": {
-        "score": 4,
-        "explanation": "Lowest price ceiling in the entire batch ($62 flat rate) and distribution across nine smaller courts reflect softer demand. Games presale scarcity keeps this from scoring 3, but tickets are genuinely more accessible than any other tennis session."
-      },
-      "aggregate": 4.6,
-      "overall": "A budget-friendly entry point to Games tennis spread across nine courts. Quarterfinals at modest venues lack the focus and stakes of medal rounds, making this best for completionists or fans willing to wander."
     },
     "model": "claude-haiku-4-5-20251001",
     "promptVersion": 5,

@@ -13286,56 +13286,6 @@
     "batchId": null,
     "generatedAt": "2026-04-17T05:46:03.320Z"
   },
-  "SHO13": {
-    "blurb": "Men's 25m Rapid Fire Pistol begins its two-stage qualification with Stage 1: shooters engage five targets in succession within tight time limits (eight seconds, six seconds, then four seconds per series). Each target appears once; misses are irretrievable.\n\nThe event demands explosive hand-eye coordination married to precision—transitioning between five separate aim points in four seconds leaves roughly 0.8 seconds per shot including target acquisition. Elite competitors develop muscle memory so refined they can execute the sequence nearly identically across dozens of repetitions.\n\nStage 1 runs through early evening as multiple relays complete their 30-shot strings. The format change for 2028 expands finals to eight shooters instead of six, meaning Stage 1 scores gain importance in securing advancement through the qualifying threshold.",
-    "potentialContendersIntro": "China's Li Yuehong won Paris gold, while Germany's Christian Reitz—a Rio 2016 champion—took silver at age 37. Stage 1 is preliminary; finalists are determined after Stage 2 the following day.",
-    "potentialContenders": [
-      {
-        "name": "Li Yuehong",
-        "country": "China",
-        "note": "Paris 2024 gold medalist"
-      },
-      {
-        "name": "Christian Reitz",
-        "country": "Germany",
-        "note": "Paris 2024 silver medalist"
-      },
-      {
-        "name": "Cho Yeongjae",
-        "country": "South Korea",
-        "note": "Paris 2024 bronze medalist"
-      }
-    ],
-    "model": "claude-sonnet-4-5-20250929",
-    "promptVersion": 3,
-    "batchId": null,
-    "generatedAt": "2026-04-17T05:46:02.985Z"
-  },
-  "SHO14": {
-    "blurb": "Stage 2 completes qualification before the field cuts to eight finalists for the closing medal match—the last shooting gold of the Games' rifle and pistol program. Stage 2 mirrors Stage 1's format: rapid engagement of five targets across decreasing time windows, adding 30 shots to each competitor's total.\n\nThe expanded eight-shooter final represents a format change from Paris, potentially creating more competitive medal races. Finalists face multiple four-second series in sudden-death elimination rounds where the lowest score after each series exits until three remain.\n\nEvening finals at Long Beach carry special energy as the final rifle and pistol session. The rapid-fire format produces the program's fastest-paced action: watch eight shooters draw, aim, and fire in near-simultaneous waves, their combined reports reverberating through the 13,500-seat arena before electronic targets instantly display hit locations.",
-    "potentialContendersIntro": "Li Yuehong's Paris victory continued China's recent 25m Rapid Fire Pistol strength. The eight-finalist format is new for 2028, potentially opening medal opportunities compared to the six-shooter Paris final.",
-    "potentialContenders": [
-      {
-        "name": "Li Yuehong",
-        "country": "China",
-        "note": "Paris 2024 gold medalist"
-      },
-      {
-        "name": "Christian Reitz",
-        "country": "Germany",
-        "note": "Paris 2024 silver medalist; would be 41 in 2028"
-      },
-      {
-        "name": "Cho Yeongjae",
-        "country": "South Korea",
-        "note": "Paris 2024 bronze medalist"
-      }
-    ],
-    "model": "claude-sonnet-4-5-20250929",
-    "promptVersion": 3,
-    "batchId": null,
-    "generatedAt": "2026-04-17T05:46:02.985Z"
-  },
   "SKB01": {
     "blurb": "The street prelims kick off the 2028 Games skateboarding competition in the San Fernando Valley, where 22 of the world's top female skaters compete for a spot in the finals. Watch as competitors navigate rails, ledges, and stairs in two timed runs plus five best-trick attempts.\n\nJapan's Coco Yoshizawa and Liz Akama return as Paris 2024 gold and silver medalists, likely to face Brazil's Rayssa Leal—who claimed bronze in Paris and has been a podium fixture since Tokyo. The format rewards creativity and technical precision, with younger skaters continuing to push boundaries that seemed impossible a generation ago.\n\nValley Complex 1's temporary open-air setup puts you close to the action as boards crack against concrete and the crowd erupts for every landed trick.",
     "potentialContendersIntro": "Japan's Paris 2024 medalists Coco Yoshizawa (gold) and Liz Akama (silver) are expected to return, along with Brazil's Rayssa Leal, who took bronze in Paris.",
@@ -15194,36 +15144,6 @@
         "name": "Daniil Medvedev",
         "country": "RUS",
         "note": "US Open champion and hard-court specialist; projected men's quarterfinal contender."
-      }
-    ],
-    "model": "claude-sonnet-4-5-20250929",
-    "promptVersion": 3,
-    "batchId": null,
-    "generatedAt": "2026-04-17T05:50:23.328Z"
-  },
-  "TEN34": {
-    "blurb": "Carson Courts 3 through 11 spread the quarterfinal load across nine simultaneous match sites, offering a choose-your-own-adventure approach to men's singles and women's doubles. Wander between courts to catch different styles and storylines.\n\nMen's singles quarterfinals feature eight players battling for four semifinal spots from the original 64-player field. Women's doubles quarterfinals progress from 32 teams toward the medal rounds.\n\nExisting USTA training facilities gain temporary seating, creating intimate sightlines where you're close enough to see the spin on every groundstroke.",
-    "potentialContendersIntro": "Men's singles could showcase top ATP players who qualified through June rankings, while women's doubles may include Italy's Paris 2024 champions and other leading WTA pairs.",
-    "potentialContenders": [
-      {
-        "name": "Italy 1",
-        "country": "ITA",
-        "note": "Paris 2024 women's doubles gold medalists; likely quarterfinal participants if qualified."
-      },
-      {
-        "name": "Carlos Alcaraz",
-        "country": "ESP",
-        "note": "Multi-Slam champion; projected men's singles quarterfinal contender."
-      },
-      {
-        "name": "Jannik Sinner",
-        "country": "ITA",
-        "note": "Australian Open winner; expected to reach men's quarterfinals if competing."
-      },
-      {
-        "name": "Taylor Fritz",
-        "country": "USA",
-        "note": "Top American man; home-crowd favorite if he qualifies for quarterfinals."
       }
     ],
     "model": "claude-sonnet-4-5-20250929",

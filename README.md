@@ -4,6 +4,8 @@
 
 # 2028 Games Unofficial Session Guide
 
+[![CI](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml)
+
 After being selected for the 2028 Summer Games local presale, I found myself overwhelmed with the options. 800+ sessions! 40+ venues!
 
 I vibe-coded a better session browser, but I still needed help deciding where to allocate my precious 12 slots. I had Claude come up with a multidimensional system to rank the events (see [AI Ratings Methodology](#ai-ratings-methodology)) and then populate them with easy-to-understand summaries/rating explanations.
@@ -35,6 +37,31 @@ Every dimension is scored on a 1–10 scale. The **aggregate** is a weighted ave
 | **Star power**   | 15%    | Likelihood of globally recognized athletes competing in this session.                                                            |
 | **Uniqueness**   | 15%    | Rarity of the opportunity: new/returning sports, iconic venue pairings, ceremonies.                                              |
 | **Demand**       | 15%    | How hot tickets are likely to be: sport-level demand, round, price ceiling as a signal, standout "cultural moment" combinations. |
+
+## Performance
+
+Every pull request runs [Lighthouse CI](lighthouserc.json) against the production build on a throttled mobile profile, and the check fails if any page misses its budget. In production, [Vercel Speed Insights](https://vercel.com/docs/speed-insights) records real-user Core Web Vitals.
+
+| Page                                | Performance | Accessibility | Best Practices | SEO | LCP   | CLS | TBT   |
+| ----------------------------------- | ----------- | ------------- | -------------- | --- | ----- | --- | ----- |
+| Home `/`                            | 100         | 100           | 100            | 100 | 1.4 s | 0   | 0 ms  |
+| Session deep link `/?session=ATH15` | 94          | 100           | 100            | 100 | 3.0 s | 0   | 20 ms |
+| Privacy `/privacy`                  | 100         | 100           | 100            | 100 | 0.8 s | 0   | 0 ms  |
+
+_Median of 3 Lighthouse 12.6 mobile runs (simulated slow 4G, 4× CPU slowdown), October 2026._
+
+**Budgets:** accessibility, best practices, and SEO must score 100 on every page, with CLS ≤ 0.1 and TBT ≤ 200 ms. Home and static pages also need performance ≥ 95 and LCP ≤ 2.5 s. Session deep links are the slowest page because the session drawer mounts after hydration, so their budget is performance ≥ 85 and LCP ≤ 4 s.
+
+**What keeps it fast:**
+
+- Every URL is server-rendered and cached at the CDN (`s-maxage` 1 hour, `stale-while-revalidate` 1 day). Static pages are prerendered.
+- Session data is bundled into the server function, so there's no database round trip, and the client only fetches the rows or the single session it shows.
+- The document preloads route code, so there's no request waterfall, and an inline script applies the saved theme before first paint.
+- Hashed assets are cached immutably for a year.
+- Client-only state (saved sessions in `localStorage`) loads after hydration, so React never throws away the server HTML.
+- Theme colors meet WCAG AA contrast (4.5:1) in both light and dark mode.
+
+Run it locally with `pnpm build && pnpm lighthouse`. HTML reports are written to `.lighthouseci/reports`.
 
 ## Contributing
 

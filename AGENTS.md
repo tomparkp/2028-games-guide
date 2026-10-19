@@ -9,6 +9,8 @@ This file provides guidance to AI coding agents working with code in this reposi
 - `pnpm dev` — Start dev server on port 3000
 - `pnpm build` — Production build
 - `pnpm preview` — Preview production build
+- `pnpm serve:prod` — Serve the production build the way Vercel does (static files first, Nitro fallback, brotli) on port 4173
+- `pnpm lighthouse` — Run Lighthouse CI (mobile) against `pnpm serve:prod`; budgets in `lighthouserc.json`. Requires a prior `pnpm build`
 - `pnpm test` — Run tests with Vitest (`vitest run`)
 - `pnpm format:check` — Check formatting with oxfmt
 - `pnpm lint` — Lint with oxlint
@@ -42,7 +44,7 @@ For globally-wrong Paris 2024 medal data, fix `src/data/paris-2024-medals.json` 
 
 ### Pre-PR checks
 
-Before opening a pull request, run the CI-equivalent checks locally and fix any failures first: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, and `pnpm test`. Run them in parallel when possible. This avoids pushing commits that fail CI.
+Before opening a pull request, run the CI-equivalent checks locally and fix any failures first: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, and `pnpm test`. For UI or rendering changes, also run `pnpm build && pnpm lighthouse`: CI fails the PR if a page drops below its Lighthouse budget. Run them in parallel when possible. This avoids pushing commits that fail CI.
 
 ### Deploying
 
@@ -97,6 +99,8 @@ Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` 
 `devtools` → `tsconfigPaths` → `tailwindcss` → `tanstackStart` → `nitro` → `viteReact`
 
 Nitro builds the server. It auto-detects Vercel when `VERCEL`/`NITRO_PRESET=vercel` is set and emits `.vercel/output`; otherwise it emits a Node server in `.output`. Static-asset cache headers live in the `nitro({ routeRules })` config in `vite.config.ts`.
+
+`/` is deliberately excluded from prerendering (it's SSR'd per URL and CDN-cached) because a static file would be served for every query string and break hydration on `/?session=…` deep links. Vercel Web Analytics and Speed Insights mount only when `VITE_VERCEL_INSIGHTS=true` at build time, which the release deploy job sets.
 
 ### Git
 

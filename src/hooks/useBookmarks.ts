@@ -1,9 +1,12 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 
 const STORAGE_KEY = '28games_session_guide_bookmarks'
+const EMPTY: Set<string> = new Set()
+
+let snapshot: Set<string> | null = null
+const listeners = new Set<() => void>()
 
 function loadBookmarks(): Set<string> {
-  if (typeof window === 'undefined') return new Set()
   try {
     return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'))
   } catch {
@@ -11,27 +14,40 @@ function loadBookmarks(): Set<string> {
   }
 }
 
-function persistBookmarks(bookmarks: Set<string>) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...bookmarks]))
+function subscribe(listener: () => void) {
+  listeners.add(listener)
+  return () => listeners.delete(listener)
+}
+
+function getSnapshot() {
+  return (snapshot ??= loadBookmarks())
+}
+
+// Server (and hydration) render with no bookmarks, then React re-renders with the stored
+// ones, so prerendered HTML never mismatches a returning visitor's saved sessions.
+function getServerSnapshot() {
+  return EMPTY
+}
+
+function setBookmarks(next: Set<string>) {
+  snapshot = next
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]))
+  } catch {}
+  listeners.forEach((listener) => listener())
 }
 
 export function useBookmarks() {
-  const [bookmarks, setBookmarks] = useState<Set<string>>(loadBookmarks)
+  const bookmarks = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   const toggle = useCallback((id: string) => {
-    setBookmarks((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      persistBookmarks(next)
-      return next
-    })
+    const next = new Set(getSnapshot())
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setBookmarks(next)
   }, [])
 
-  const clearAll = useCallback(() => {
-    setBookmarks(new Set())
-    persistBookmarks(new Set())
-  }, [])
+  const clearAll = useCallback(() => setBookmarks(new Set()), [])
 
   const isBookmarked = useCallback((id: string) => bookmarks.has(id), [bookmarks])
 

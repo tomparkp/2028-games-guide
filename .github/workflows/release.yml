@@ -33,6 +33,8 @@ jobs:
       deployments: write
     env:
       NITRO_PRESET: vercel
+      # Production-only: mounts Vercel Web Analytics + Speed Insights
+      VITE_VERCEL_INSIGHTS: 'true'
       VERCEL_CLI: vercel@63.1.2
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

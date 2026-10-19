@@ -163,10 +163,7 @@ const SessionRow = memo(function SessionRow({
 
   return (
     <tr
-      className={cn(
-        'group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-gold',
-        selected && 'bg-gold-dim',
-      )}
+      className="group focus-visible:outline-gold cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px]"
       data-session-item
       onClick={() => onSelectId(session.id)}
       onKeyDown={handleRowKeyDown}
@@ -282,7 +279,9 @@ export function SessionTable({
         onSort={onSort}
         title="AI-generated aggregate rating (prestige, experience, star power, uniqueness, demand)"
       />
-      <th className={cn(thBase, 'w-9')}></th>
+      <th className={cn(thBase, 'w-9')}>
+        <span className="sr-only">Save</span>
+      </th>
     </tr>
   )
 

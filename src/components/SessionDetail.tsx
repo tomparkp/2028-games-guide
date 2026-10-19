@@ -26,27 +26,27 @@ type ScoreKey = 'rSig' | 'rExp' | 'rStar' | 'rUniq' | 'rDem'
 const ringColors: Record<ScoreKey, { tint: string; label: string; badge: string }> = {
   rSig: {
     tint: 'bg-[#0085c7]/[0.06]',
-    label: 'text-[#0085c7]',
-    badge: 'bg-[#0085c7] text-white',
+    label: 'text-ring-sig',
+    badge: 'bg-[#007bb8] text-white',
   },
   rExp: {
     tint: 'bg-[#dab200]/[0.08]',
-    label: 'text-[#b89400]',
-    badge: 'bg-[#dab200] text-white',
+    label: 'text-ring-exp',
+    badge: 'bg-[#886f00] text-white',
   },
   rStar: {
     tint: 'bg-[#97928a]/[0.08]',
     label: 'text-ink2',
-    badge: 'bg-[#97928a] text-white',
+    badge: 'bg-[#79736b] text-white',
   },
   rUniq: {
     tint: 'bg-[#009f3d]/[0.07]',
-    label: 'text-[#009f3d]',
-    badge: 'bg-[#009f3d] text-white',
+    label: 'text-ring-uniq',
+    badge: 'bg-[#008533] text-white',
   },
   rDem: {
     tint: 'bg-[#df0024]/[0.06]',
-    label: 'text-[#df0024]',
+    label: 'text-ring-dem',
     badge: 'bg-[#df0024] text-white',
   },
 }

@@ -118,7 +118,10 @@ function FilterCombobox({
       value={(value || null) as unknown as FilterOption | null}
       onValueChange={(nextValue) => onChange(typeof nextValue === 'string' ? nextValue : '')}
     >
-      <Combobox.Trigger className={cn(selectCls, active && activeCls, selectTriggerCls)}>
+      <Combobox.Trigger
+        aria-label={label}
+        className={cn(selectCls, active && activeCls, selectTriggerCls)}
+      >
         <span className={selectValueCls}>
           <Combobox.Value>
             {(selectedValue: string | null) => {
@@ -175,7 +178,10 @@ function FilterSelect({ value, label, placeholder, options, active, onChange }: 
       value={value || null}
       onValueChange={(nextValue) => onChange(String(nextValue ?? ''))}
     >
-      <Select.Trigger className={cn(selectCls, active && activeCls, selectTriggerCls)}>
+      <Select.Trigger
+        aria-label={label}
+        className={cn(selectCls, active && activeCls, selectTriggerCls)}
+      >
         <Select.Value className={selectValueCls} placeholder={placeholder} />
         <Select.Icon className="text-ink3">
           <ChevronDown size={14} />
@@ -232,7 +238,10 @@ function SortSelect({ sort, onSortChange }: SortSelectProps) {
         if (match) onSortChange(match.col, match.dir)
       }}
     >
-      <Select.Trigger className={cn(selectCls, selectTriggerCls, 'min-w-0')}>
+      <Select.Trigger
+        aria-label="Sort sessions"
+        className={cn(selectCls, selectTriggerCls, 'min-w-0')}
+      >
         <span className="text-ink3 shrink-0">Sort:</span>
         <Select.Value className={selectValueCls}>
           {(val: string | null) =>

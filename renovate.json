@@ -23,11 +23,6 @@
       "groupName": "tanstack"
     },
     {
-      "description": "Cloudflare tooling and types release together",
-      "matchPackageNames": ["wrangler", "@cloudflare/**"],
-      "groupName": "cloudflare"
-    },
-    {
       "description": "Lint and format tooling",
       "matchPackageNames": ["oxlint", "oxfmt"],
       "groupName": "oxc tooling"

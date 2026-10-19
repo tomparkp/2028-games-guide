@@ -13,7 +13,7 @@ function PrivacyPage() {
       <h1 className="font-display mb-2 text-[2rem] leading-[1.1] font-normal -tracking-[0.03em]">
         Privacy Policy
       </h1>
-      <p className="text-ink3 mb-8 text-xs">Last updated: April 12, 2026</p>
+      <p className="text-ink3 mb-8 text-xs">Last updated: October 18, 2026</p>
 
       <div className="text-ink2 prose prose-sm max-w-none space-y-5 text-sm leading-relaxed">
         <p>
@@ -35,12 +35,7 @@ function PrivacyPage() {
               address, user agent, timestamp) for abuse prevention and operational debugging.
             </li>
             <li>
-              <strong>Aggregate analytics.</strong> We use Cloudflare Web Analytics to measure page
-              views and basic usage trends. It is cookieless and does not fingerprint or track
-              individuals across sites.
-            </li>
-            <li>
-              <strong>No accounts and no advertising cookies.</strong>
+              <strong>No analytics, no accounts, and no advertising cookies.</strong>
             </li>
           </ul>
         </section>
@@ -50,8 +45,8 @@ function PrivacyPage() {
           <p>We rely on the following services to operate the site:</p>
           <ul className="list-disc space-y-1 pl-5">
             <li>
-              <strong>Cloudflare</strong> — hosting, CDN, edge compute (Workers), and cookieless Web
-              Analytics. Cloudflare processes all HTTP requests to the site.
+              <strong>Vercel</strong> — hosting, CDN, and serverless compute. Vercel processes all
+              HTTP requests to the site.
             </li>
             <li>
               <strong>Resend</strong> — email delivery for issue reports submitted through the

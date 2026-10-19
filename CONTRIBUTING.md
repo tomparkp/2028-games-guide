@@ -25,7 +25,7 @@ The dev server runs on port 3000.
 
 ## Data
 
-Session data lives in JSON files under `src/data/`, committed to the repo and bundled into the worker at build time:
+Session data lives in JSON files under `src/data/`, committed to the repo and bundled into the server function at build time:
 
 - `sessions.json` — hand-validated source data from the official Session Table (id, sport, venue, date, price, etc.). No generated content.
 - `paris-2024-medals.json` — Olympedia-scraped Paris 2024 results; authoritative history used as a grounding anchor.

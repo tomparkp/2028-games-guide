@@ -77,8 +77,8 @@ export const reportIssue = createServerFn({ method: 'POST' })
     `
 
     const { error } = await resend.emails.send({
-      from: '28Games Issue Report <28gamesreports@tompark.dev>',
-      to: ['28games@tompark.dev'],
+      from: '28Games Issue Report <reports@tompiarulli.com>',
+      to: ['28games@tompiarulli.com'],
       replyTo: data.email || undefined,
       subject,
       html,

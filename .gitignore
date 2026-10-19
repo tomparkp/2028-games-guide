@@ -9,7 +9,7 @@ dist-ssr
 .env
 .nitro
 .tanstack
-.wrangler
+.vercel
 .output
 .vinxi
 __unconfig*

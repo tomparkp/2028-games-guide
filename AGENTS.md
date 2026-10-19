@@ -46,11 +46,11 @@ Before opening a pull request, run the CI-equivalent checks locally and fix any 
 
 ### Deploying
 
-Production deploys happen automatically when Release Please cuts a release. `.github/workflows/release.yml` runs on every push to `main`; when it creates a release (release PR merged), a follow-up `deploy` job in the same workflow ships to Cloudflare. **Manual deploys are forbidden.** Do not run `wrangler deploy`, do not re-add a `deploy` script to `package.json`, and do not add a manual-trigger workflow. Shipping code means: merge feature PRs to `main` → let Release Please open its release PR → user merges that → CI deploys.
+Production deploys happen automatically when Release Please cuts a release. `.github/workflows/release.yml` runs on every push to `main`; when it creates a release (release PR merged), a follow-up `deploy` job in the same workflow builds with the Vercel CLI (`vercel build` with `NITRO_PRESET=vercel`) and ships a prebuilt production deployment to Vercel. Git-triggered Vercel deploys of `main` are disabled in `vercel.json` so only the release job promotes to production. **Manual deploys are forbidden.** Do not run `vercel deploy` (or `vercel --prod`), do not re-add a `deploy` script to `package.json`, and do not add a manual-trigger workflow. Shipping code means: merge feature PRs to `main` → let Release Please open its release PR → user merges that → CI deploys.
 
-### Cloudflare operations
+### Vercel operations
 
-Always ask the user before using any Cloudflare MCP tools or running `wrangler` commands that touch remote resources. Local-only commands (`wrangler types`, `wrangler dev`) are fine without asking.
+Always ask the user before using any Vercel MCP tools or running `vercel` CLI commands that touch remote resources (`pull`, `env`, `deploy`, `domains`, etc.). Local-only builds (`pnpm build`, `NITRO_PRESET=vercel pnpm build`) are fine without asking.
 
 ## Architecture
 
@@ -58,7 +58,7 @@ This is a **TanStack Start** (React 19) full-stack app with SSR, file-based rout
 
 ### Data
 
-Session data lives in JSON files under `src/data/`, committed to the repo and bundled into the worker at build time:
+Session data lives in JSON files under `src/data/`, committed to the repo and bundled into the server function at build time:
 
 - `sessions.json` — hand-validated source data (id, sport, venue, date, price, etc.); no generated content
 - `paris-2024-medals.json` — Olympedia-scraped medal results; authoritative history, used as grounding anchor
@@ -94,7 +94,9 @@ Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` 
 
 ### Vite Plugins (order matters)
 
-`devtools` → `tsconfigPaths` → `tailwindcss` → `tanstackStart` → `viteReact`
+`devtools` → `tsconfigPaths` → `tailwindcss` → `tanstackStart` → `nitro` → `viteReact`
+
+Nitro builds the server. It auto-detects Vercel when `VERCEL`/`NITRO_PRESET=vercel` is set and emits `.vercel/output`; otherwise it emits a Node server in `.output`. Static-asset cache headers live in the `nitro({ routeRules })` config in `vite.config.ts`.
 
 ### Git
 

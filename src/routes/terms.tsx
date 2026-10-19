@@ -13,7 +13,7 @@ function TermsPage() {
       <h1 className="font-display mb-2 text-[2rem] leading-[1.1] font-normal -tracking-[0.03em]">
         Terms of Use
       </h1>
-      <p className="text-ink3 mb-8 text-xs">Last updated: April 12, 2026</p>
+      <p className="text-ink3 mb-8 text-xs">Last updated: October 18, 2026</p>
 
       <div className="text-ink2 space-y-5 text-sm leading-relaxed">
         <section>
@@ -64,7 +64,7 @@ function TermsPage() {
         <section>
           <h2 className="font-display mt-6 mb-2 text-lg">Third-party services</h2>
           <p>
-            The site is delivered via Cloudflare and uses Resend for email delivery. See our{' '}
+            The site is delivered via Vercel and uses Resend for email delivery. See our{' '}
             <a href="/privacy" className="text-gold hover:underline">
               Privacy Policy
             </a>{' '}

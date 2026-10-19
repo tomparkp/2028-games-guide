@@ -16,6 +16,17 @@
   --color-accent: var(--accent);
   --color-red: var(--red);
   --color-green: var(--green);
+  --color-rate-high: var(--rate-high);
+  --color-rate-mid: var(--rate-mid);
+  --color-rate-low: var(--rate-low);
+  --color-rate-poor: var(--rate-poor);
+  --color-round-ceremony: var(--round-ceremony);
+  --color-round-bronze: var(--round-bronze);
+  --color-round-semi: var(--round-semi);
+  --color-ring-sig: var(--ring-sig);
+  --color-ring-exp: var(--ring-exp);
+  --color-ring-uniq: var(--ring-uniq);
+  --color-ring-dem: var(--ring-dem);
   --font-display: Georgia, 'Times New Roman', serif;
   --ease-panel: cubic-bezier(0.32, 0.72, 0, 1);
 }
@@ -36,6 +47,19 @@
   --accent: #4a9eff;
   --red: #e8473a;
   --green: #3dba6f;
+  /* Rating pills and round tags — each passes WCAG AA (4.5:1) on its tinted background */
+  --rate-high: #3dba6f;
+  --rate-mid: #b8a832;
+  --rate-low: #d49633;
+  --rate-poor: #d5766a;
+  --round-ceremony: #00a0f0;
+  --round-bronze: #d18942;
+  --round-semi: #b386e1;
+  /* Scorecard labels (ring hues) */
+  --ring-sig: #0096e1;
+  --ring-exp: #dab200;
+  --ring-uniq: #00a941;
+  --ring-dem: #ff3c5b;
   color-scheme: dark;
 }
 
@@ -56,6 +80,17 @@
   --accent: #0066cc;
   --red: #b83228;
   --green: #257548;
+  --rate-high: #246d41;
+  --rate-mid: #6c621d;
+  --rate-low: #815a1b;
+  --rate-poor: #a63c2e;
+  --round-ceremony: #00608f;
+  --round-bronze: #875421;
+  --round-semi: #7c32ca;
+  --ring-sig: #006a9e;
+  --ring-exp: #796300;
+  --ring-uniq: #00712b;
+  --ring-dem: #c50020;
   color-scheme: light;
 }
 
@@ -76,6 +111,17 @@
     --accent: #0066cc;
     --red: #b83228;
     --green: #257548;
+    --rate-high: #246d41;
+    --rate-mid: #6c621d;
+    --rate-low: #815a1b;
+    --rate-poor: #a63c2e;
+    --round-ceremony: #00608f;
+    --round-bronze: #875421;
+    --round-semi: #7c32ca;
+    --ring-sig: #006a9e;
+    --ring-exp: #796300;
+    --ring-uniq: #00712b;
+    --ring-dem: #c50020;
     color-scheme: light;
   }
 }

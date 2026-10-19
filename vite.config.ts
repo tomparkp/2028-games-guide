@@ -23,6 +23,10 @@ export default defineConfig(({ command }) => {
               prerender: {
                 enabled: true,
                 crawlLinks: true,
+                // `/` is server-rendered per URL instead: a static file would be served for every
+                // query string, so deep links like `/?session=ATH15` would hydrate against HTML
+                // rendered without the session. The CDN caches each URL via `s-maxage`.
+                filter: ({ path }) => path !== '/',
               },
             }),
             nitro({

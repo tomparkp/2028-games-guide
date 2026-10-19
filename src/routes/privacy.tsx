@@ -2,7 +2,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/privacy')({
   head: () => ({
-    meta: [{ title: 'Privacy Policy · 2028 Games Unofficial Guide' }],
+    meta: [
+      { title: 'Privacy Policy · 2028 Games Unofficial Guide' },
+      {
+        name: 'description',
+        content:
+          'What the 2028 Games Unofficial Guide collects, which providers process it, and how it is used.',
+      },
+    ],
   }),
   component: PrivacyPage,
 })
@@ -35,7 +42,13 @@ function PrivacyPage() {
               address, user agent, timestamp) for abuse prevention and operational debugging.
             </li>
             <li>
-              <strong>No analytics, no accounts, and no advertising cookies.</strong>
+              <strong>Aggregate analytics and performance metrics.</strong> We use Vercel Web
+              Analytics to measure page views and basic usage trends, and Vercel Speed Insights to
+              measure page-load performance (Core Web Vitals) and device type. Both are cookieless
+              and do not fingerprint or track individuals across sites.
+            </li>
+            <li>
+              <strong>No accounts and no advertising cookies.</strong>
             </li>
           </ul>
         </section>
@@ -45,8 +58,8 @@ function PrivacyPage() {
           <p>We rely on the following services to operate the site:</p>
           <ul className="list-disc space-y-1 pl-5">
             <li>
-              <strong>Vercel</strong> — hosting, CDN, and serverless compute. Vercel processes all
-              HTTP requests to the site.
+              <strong>Vercel</strong> — hosting, CDN, serverless compute, cookieless Web Analytics,
+              and Speed Insights. Vercel processes all HTTP requests to the site.
             </li>
             <li>
               <strong>Resend</strong> — email delivery for issue reports submitted through the
@@ -79,7 +92,7 @@ function PrivacyPage() {
               href="https://github.com/tompiarulli/2028-games-guide"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gold hover:underline"
+              className="text-gold2 underline underline-offset-2 hover:no-underline"
             >
               GitHub repository
             </a>

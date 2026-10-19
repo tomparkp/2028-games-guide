@@ -2,15 +2,23 @@ import type { QueryClient } from '@tanstack/react-query'
 import {
   HeadContent,
   Link,
+  ScriptOnce,
   Scripts,
   createRootRouteWithContext,
   type ErrorComponentProps,
 } from '@tanstack/react-router'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import { Nav } from '../components/Nav'
 import { DEFAULT_FILTERS } from '../lib/session-search'
 
 import appCss from '../styles.css?url'
+
+// Inlined (not an external file) so the stored theme applies before first paint without
+// adding a render-blocking request. ScriptOnce removes the tag after it runs so it can't
+// cause a hydration mismatch.
+const themeInitScript = `(function(){try{var t=window.localStorage.getItem('28games_session_guide_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -18,6 +26,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: '2028 Games Unofficial Guide' },
+      {
+        name: 'description',
+        content:
+          'Browse all 800+ sessions of the 2028 Summer Games in Los Angeles by sport, venue, date, and price, with AI ratings and summaries to help you choose tickets.',
+      },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
@@ -44,7 +57,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script src="/theme-init.js" />
+        <ScriptOnce>{themeInitScript}</ScriptOnce>
         <HeadContent />
       </head>
       <body>
@@ -63,6 +76,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           </div>
         </footer>
         <Scripts />
+        {import.meta.env.VITE_VERCEL_INSIGHTS === 'true' && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   )

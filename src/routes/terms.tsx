@@ -2,7 +2,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/terms')({
   head: () => ({
-    meta: [{ title: 'Terms of Use · 2028 Games Unofficial Guide' }],
+    meta: [
+      { title: 'Terms of Use · 2028 Games Unofficial Guide' },
+      {
+        name: 'description',
+        content:
+          'Terms for using the 2028 Games Unofficial Guide, an open-source, unofficial session browser.',
+      },
+    ],
   }),
   component: TermsPage,
 })
@@ -65,7 +72,10 @@ function TermsPage() {
           <h2 className="font-display mt-6 mb-2 text-lg">Third-party services</h2>
           <p>
             The site is delivered via Vercel and uses Resend for email delivery. See our{' '}
-            <a href="/privacy" className="text-gold hover:underline">
+            <a
+              href="/privacy"
+              className="text-gold2 underline underline-offset-2 hover:no-underline"
+            >
               Privacy Policy
             </a>{' '}
             for details. Your use of those services is also governed by their respective terms.

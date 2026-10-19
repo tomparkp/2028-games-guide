@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.9.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.8.0...v1.9.0) (2026-10-19)
+
+
+### Features
+
+* add vercel analytics and enforce core web vitals budgets ([900caab](https://github.com/tompiarulli/2028-games-guide/commit/900caab48240f3b15324e9cef2e4cd076f1698a4))
+
+
+### Build System
+
+* migrate hosting from cloudflare to vercel ([a01fb1c](https://github.com/tompiarulli/2028-games-guide/commit/a01fb1c0029542feb86c0ed7c317ba03294378b7))
+
+
+### CI
+
+* publish lighthouse badges from production ([#157](https://github.com/tompiarulli/2028-games-guide/issues/157)) ([d9e2b8f](https://github.com/tompiarulli/2028-games-guide/commit/d9e2b8fa86da02ddedc9576df0906975efd93a5a))
+
+
+### Miscellaneous
+
+* **report-issue:** send reports via tompiarulli.com ([#155](https://github.com/tompiarulli/2028-games-guide/issues/155)) ([17d812e](https://github.com/tompiarulli/2028-games-guide/commit/17d812eda2dbe0f132798d827cc8a80bb19fa6dc))
+
 ## [1.8.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.7.0...v1.8.0) (2026-10-19)
 
 

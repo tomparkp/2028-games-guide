@@ -1,5 +1,45 @@
 # Changelog
 
+## [1.8.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.7.0...v1.8.0) (2026-10-19)
+
+
+### Features
+
+* **data:** apply LA28 V4.0 competition schedule ([1b37613](https://github.com/tompiarulli/2028-games-guide/commit/1b37613bb1ed94f6b94e8d3a062faeebac5ddd74))
+
+
+### Bug Fixes
+
+* **deps:** update dependency lucide-react to ^0.577.0 ([#147](https://github.com/tompiarulli/2028-games-guide/issues/147)) ([f66b6f9](https://github.com/tompiarulli/2028-games-guide/commit/f66b6f913684dcff02058f75287c79d50ab992ed))
+* **deps:** update tanstack router packages for react-start security fix ([#128](https://github.com/tompiarulli/2028-games-guide/issues/128)) ([ba2ae3c](https://github.com/tompiarulli/2028-games-guide/commit/ba2ae3c70b28ce5d41b064b6a1150b88d64ecb46))
+* point github links to renamed tompiarulli account ([#138](https://github.com/tompiarulli/2028-games-guide/issues/138)) ([bb4c111](https://github.com/tompiarulli/2028-games-guide/commit/bb4c1118f1d7b0758e6fc4999ade05456be6af39))
+
+
+### CI
+
+* add renovate for automated dependency updates ([#123](https://github.com/tompiarulli/2028-games-guide/issues/123)) ([b90632b](https://github.com/tompiarulli/2028-games-guide/commit/b90632bacb049a3a1d554db31f8dfa19b4fb2f5c))
+* **release:** drop component name from release tags and titles ([#132](https://github.com/tompiarulli/2028-games-guide/issues/132)) ([4bc0874](https://github.com/tompiarulli/2028-games-guide/commit/4bc08746caab6cf1cbe8c82f25f7354fa2d7e07f))
+* **renovate:** disable automerge ([#131](https://github.com/tompiarulli/2028-games-guide/issues/131)) ([4016eee](https://github.com/tompiarulli/2028-games-guide/commit/4016eee89fe703c7b44035074244c24081a6c6f8))
+* **renovate:** exempt pin and digest updates from minimumReleaseAge ([#137](https://github.com/tompiarulli/2028-games-guide/issues/137)) ([9e4ead3](https://github.com/tompiarulli/2028-games-guide/commit/9e4ead3f26d2968eff5c838497b79945cdc0afe2))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump sharp from 0.34.5 to 0.35.0 ([#119](https://github.com/tompiarulli/2028-games-guide/issues/119)) ([af35c0e](https://github.com/tompiarulli/2028-games-guide/commit/af35c0edd2a34fe3172b90e421fdbe5ef526bf7b))
+* **deps:** lock file maintenance ([#144](https://github.com/tompiarulli/2028-games-guide/issues/144)) ([e2899f8](https://github.com/tompiarulli/2028-games-guide/commit/e2899f83114af3a5cc600a715bccba43b7a75730))
+* **deps:** pin dependencies ([#135](https://github.com/tompiarulli/2028-games-guide/issues/135)) ([f0dc7cd](https://github.com/tompiarulli/2028-games-guide/commit/f0dc7cd638d652fba52443e340ba4e2a0098290a))
+* **deps:** update dependency @anthropic-ai/sdk to ^0.91.0 [security] ([#126](https://github.com/tompiarulli/2028-games-guide/issues/126)) ([8bc277c](https://github.com/tompiarulli/2028-games-guide/commit/8bc277c7012d8732b0c3c769afdeaaf039cd07b5))
+* **deps:** update dependency @cloudflare/workers-types to v5 ([#149](https://github.com/tompiarulli/2028-games-guide/issues/149)) ([b3fd58c](https://github.com/tompiarulli/2028-games-guide/commit/b3fd58c571463c4563a4a236690c8b5cffee0ae9))
+* **deps:** update dependency dotenv to v18 ([#150](https://github.com/tompiarulli/2028-games-guide/issues/150)) ([061bc85](https://github.com/tompiarulli/2028-games-guide/commit/061bc850c5ff269c081634b19f42b19f6b94809c))
+* **deps:** update dependency h3-v2 to v2.0.2 ([#141](https://github.com/tompiarulli/2028-games-guide/issues/141)) ([61d0da3](https://github.com/tompiarulli/2028-games-guide/commit/61d0da3867a1e590c2187629365549299f394d27))
+* **deps:** update dependency oxfmt to ^0.73.0 ([#146](https://github.com/tompiarulli/2028-games-guide/issues/146)) ([7fe0a79](https://github.com/tompiarulli/2028-games-guide/commit/7fe0a795a1ade9ec089c6da48949f44b07bdc7e3))
+* **deps:** update dependency p-limit to v7.3.3 ([#142](https://github.com/tompiarulli/2028-games-guide/issues/142)) ([e5fbfd9](https://github.com/tompiarulli/2028-games-guide/commit/e5fbfd95538d38971bc0e1c3807e1a62ec8b1f63))
+* **deps:** update dependency sharp to v0.35.5 [security] ([#124](https://github.com/tompiarulli/2028-games-guide/issues/124)) ([f814437](https://github.com/tompiarulli/2028-games-guide/commit/f814437f0783253decbe0eeeeb515a3dda8ce2d8))
+* **deps:** update dependency vite to v7.3.5 [security] ([#125](https://github.com/tompiarulli/2028-games-guide/issues/125)) ([e822014](https://github.com/tompiarulli/2028-games-guide/commit/e8220147cde953e82a57c752df5729f712127709))
+* **deps:** update dependency vitest to v4 [security] ([#129](https://github.com/tompiarulli/2028-games-guide/issues/129)) ([c81a152](https://github.com/tompiarulli/2028-games-guide/commit/c81a15232ecd746c1a6a2eb94aa3b6991d769fbd))
+* **deps:** update pnpm to v10.34.7 ([#134](https://github.com/tompiarulli/2028-games-guide/issues/134)) ([4055b6c](https://github.com/tompiarulli/2028-games-guide/commit/4055b6c2c1861de293390de180f97e0739e5e631))
+* **format:** ignore generated worker-configuration.d.ts ([#148](https://github.com/tompiarulli/2028-games-guide/issues/148)) ([d0d3085](https://github.com/tompiarulli/2028-games-guide/commit/d0d308536709f7ae08b800be98ed09dc8916eedf))
+
 ## [1.7.0](https://github.com/tomparkp/2028-games-guide/compare/28games-v1.6.3...28games-v1.7.0) (2026-04-17)
 
 

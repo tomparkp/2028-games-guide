@@ -56,3 +56,9 @@ jobs:
           sleep 5
           curl -s -o /dev/null -w "CDN warm: HTTP %{http_code} in %{time_total}s\n" \
             https://28games.tompiarulli.com/
+
+  badges:
+    needs: deploy
+    permissions:
+      contents: write
+    uses: ./.github/workflows/lighthouse-badges.yml

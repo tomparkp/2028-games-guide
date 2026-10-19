@@ -5,6 +5,15 @@
 # 2028 Games Unofficial Session Guide
 
 [![CI](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml)
+[![Lighthouse performance](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Fperformance.json&logo=lighthouse&logoColor=white)][lighthouse-report]
+[![Lighthouse accessibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Faccessibility.json&logo=lighthouse&logoColor=white)][lighthouse-report]
+[![Lighthouse best practices](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Fbest-practices.json&logo=lighthouse&logoColor=white)][lighthouse-report]
+[![Lighthouse SEO](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Fseo.json&logo=lighthouse&logoColor=white)][lighthouse-report]
+[![LCP](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Flcp.json)][lighthouse-report]
+[![CLS](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Fcls.json)][lighthouse-report]
+[![TBT](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Ftbt.json)][lighthouse-report]
+
+[lighthouse-report]: https://googlechrome.github.io/lighthouse/viewer/?jsonurl=https://raw.githubusercontent.com/tompiarulli/2028-games-guide/badges/report.json
 
 After being selected for the 2028 Summer Games local presale, I found myself overwhelmed with the options. 800+ sessions! 40+ venues!
 
@@ -41,6 +50,8 @@ Every dimension is scored on a 1–10 scale. The **aggregate** is a weighted ave
 ## Performance
 
 Every pull request runs [Lighthouse CI](lighthouserc.json) against the production build on a throttled mobile profile, and the check fails if any page misses its budget. In production, [Vercel Speed Insights](https://vercel.com/docs/speed-insights) records real-user Core Web Vitals.
+
+The badges at the top come from a mobile Lighthouse run against the live home page, refreshed after every release and weekly ([workflow](.github/workflows/lighthouse-badges.yml)). Each badge links to the full report.
 
 | Page                                | Performance | Accessibility | Best Practices | SEO | LCP   | CLS | TBT   |
 | ----------------------------------- | ----------- | ------------- | -------------- | --- | ----- | --- | ----- |

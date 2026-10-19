@@ -4,7 +4,7 @@
 
 # 2028 Games Unofficial Session Guide
 
-[![CI](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml)
+[![CI](https://github.com/tomparkp/2028-games-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/tomparkp/2028-games-guide/actions/workflows/ci.yml)
 
 After being selected for the 2028 Summer Games local presale, I found myself overwhelmed with the options. 800+ sessions! 40+ venues!
 

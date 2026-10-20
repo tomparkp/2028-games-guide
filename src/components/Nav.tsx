@@ -24,7 +24,7 @@ function GithubIcon({ size = 24 }: { size?: number }) {
 
 export function Nav() {
   return (
-    <div className="relative overflow-hidden px-6 pt-12 pb-6 text-center max-md:px-4 max-md:pt-10">
+    <div className="relative overflow-hidden px-6 pt-12 pb-6 text-center max-md:px-4 max-md:pt-14">
       <a
         href="https://github.com/tompiarulli/2028-games-guide"
         target="_blank"

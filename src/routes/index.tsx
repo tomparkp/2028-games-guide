@@ -1,12 +1,10 @@
 import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute, stripSearchParams, useNavigate } from '@tanstack/react-router'
 import { LoaderCircle } from 'lucide-react'
-import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, startTransition, useEffect, useMemo, useRef, useState } from 'react'
 
-import { BookmarkPanel } from '@/components/BookmarkPanel'
 import { FilterBar } from '@/components/FilterBar'
 import { ScrollToTopButton } from '@/components/ScrollToTopButton'
-import { SessionDetail } from '@/components/SessionDetail'
 import { SessionTable } from '@/components/SessionTable'
 import { useBookmarks } from '@/hooks/useBookmarks'
 import { sessionDetailQueryOptions, sessionsInfiniteQueryOptions } from '@/lib/session-query'
@@ -19,6 +17,17 @@ import {
   type SessionRouteSearch,
 } from '@/lib/session-search'
 import type { Filters, SortColumn, SortDirection } from '@/types/session'
+
+// The side drawers (and the report dialog inside SessionDetail) pull in base-ui's Drawer
+// and Dialog, which aren't needed for first paint. Lazy chunks stay out of the document's
+// preloads and load during hydration instead. They still server-render, so
+// `/?session=…` deep links arrive with the drawer open.
+const SessionDetail = lazy(() =>
+  import('@/components/SessionDetail').then((m) => ({ default: m.SessionDetail })),
+)
+const BookmarkPanel = lazy(() =>
+  import('@/components/BookmarkPanel').then((m) => ({ default: m.BookmarkPanel })),
+)
 
 export const Route = createFileRoute('/')({
   validateSearch: validateSessionSearch,
@@ -233,24 +242,28 @@ function SessionPicker() {
           ) : null}
         </div>
 
-        <SessionDetail
-          open={!!selectedSessionId}
-          session={selectedSession}
-          insights={selectedInsights}
-          isLoading={selectedDetailQuery.isPending}
-          onClose={handleCloseSession}
-          isBookmarked={isBookmarked}
-          onToggleBookmark={toggle}
-        />
+        <Suspense fallback={null}>
+          <SessionDetail
+            open={!!selectedSessionId}
+            session={selectedSession}
+            insights={selectedInsights}
+            isLoading={selectedDetailQuery.isPending}
+            onClose={handleCloseSession}
+            isBookmarked={isBookmarked}
+            onToggleBookmark={toggle}
+          />
+        </Suspense>
 
-        <BookmarkPanel
-          open={bookmarkPanelOpen}
-          onClose={() => setBookmarkPanelOpen(false)}
-          bookmarkIds={bookmarkIds}
-          onToggleBookmark={toggle}
-          onClearAll={clearAll}
-          onSelectSessionId={handleSelectSessionId}
-        />
+        <Suspense fallback={null}>
+          <BookmarkPanel
+            open={bookmarkPanelOpen}
+            onClose={() => setBookmarkPanelOpen(false)}
+            bookmarkIds={bookmarkIds}
+            onToggleBookmark={toggle}
+            onClearAll={clearAll}
+            onSelectSessionId={handleSelectSessionId}
+          />
+        </Suspense>
       </div>
 
       <ScrollToTopButton />

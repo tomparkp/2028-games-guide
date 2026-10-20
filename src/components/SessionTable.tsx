@@ -281,7 +281,7 @@ export function SessionTable({
   return isMobile ? (
     <div className="space-y-2">
       {sessions.length === 0 ? (
-        <div className="text-ink3 px-4 py-12 text-center text-[0.85rem] font-light">
+        <div className="text-ink3 px-4 py-12 text-center text-[0.85rem] font-normal">
           No sessions match your filters
         </div>
       ) : (
@@ -306,7 +306,7 @@ export function SessionTable({
             <tr>
               <td
                 colSpan={7}
-                className="text-ink3 px-4 py-12 text-center text-[0.85rem] font-light"
+                className="text-ink3 px-4 py-12 text-center text-[0.85rem] font-normal"
               >
                 No sessions match your filters
               </td>

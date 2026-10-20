@@ -160,8 +160,8 @@ export const BookmarkPanel = memo(function BookmarkPanel({
         {bookmarkIds.length === 0 ? (
           <div className="mt-12 text-center">
             <Bookmark size={32} className="text-ink3/40 mx-auto" />
-            <p className="text-ink3 mt-3 text-[0.85rem] font-light">No sessions saved yet</p>
-            <p className="text-ink3/70 mt-1 text-[0.72rem] font-light">
+            <p className="text-ink3 mt-3 text-[0.85rem] font-normal">No sessions saved yet</p>
+            <p className="text-ink3/70 mt-1 text-[0.72rem] font-normal">
               Click the save icon on any session to add it here
             </p>
           </div>

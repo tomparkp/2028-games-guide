@@ -86,7 +86,7 @@ function applySessionCacheHeaders() {
 }
 
 export const getSessionsPage = createServerFn({ method: 'GET' })
-  .inputValidator(normalizePageInput)
+  .validator(normalizePageInput)
   .handler(async ({ data }) => {
     applySessionCacheHeaders()
 
@@ -95,7 +95,7 @@ export const getSessionsPage = createServerFn({ method: 'GET' })
   })
 
 export const getSessionDetail = createServerFn({ method: 'GET' })
-  .inputValidator(normalizeSessionId)
+  .validator(normalizeSessionId)
   .handler(async ({ data: sessionId }) => {
     applySessionCacheHeaders()
 
@@ -104,7 +104,7 @@ export const getSessionDetail = createServerFn({ method: 'GET' })
   })
 
 export const getSessionsByIds = createServerFn({ method: 'GET' })
-  .inputValidator(normalizeSessionIds)
+  .validator(normalizeSessionIds)
   .handler(async ({ data: ids }) => {
     applySessionCacheHeaders()
 

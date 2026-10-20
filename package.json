@@ -71,15 +71,5 @@
     "vite": "^8.3.4",
     "vitest": "^5.0.0"
   },
-  "packageManager": "pnpm@12.14.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss",
-      "sharp"
-    ],
-    "overrides": {
-      "h3-v2": "npm:h3@2.0.2"
-    }
-  }
+  "packageManager": "pnpm@12.14.0"
 }

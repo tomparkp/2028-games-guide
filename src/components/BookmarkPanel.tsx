@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Bookmark, ChevronsRight, Download, LoaderCircle, Trash2, X } from 'lucide-react'
 import { memo } from 'react'
 
+import { cn } from '@/lib/cn'
 import { exportBookmarksCSV } from '@/lib/csv'
 import { bookmarkedSessionsQueryOptions } from '@/lib/session-query'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
@@ -72,11 +73,12 @@ const BookmarkCard = memo(function BookmarkCard({
         <span className="bg-surface3 text-ink3 inline-block rounded-md px-1.5 py-0.5 text-[0.58rem] font-semibold tracking-[0.02em] whitespace-nowrap">
           {session.zone}
         </span>
-        <span className={roundTagClasses(session.rt)}>{session.rt}</span>
-      </div>
-
-      <div className="mt-2 flex items-center justify-end">
-        <span className={ratingClasses(session.agg)}>{session.agg.toFixed(1)}</span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className={roundTagClasses(session.rt)}>{session.rt}</span>
+          <span className={cn(ratingClasses(session.agg), 'min-w-0 text-[0.6rem]')}>
+            {session.agg.toFixed(1)}
+          </span>
+        </span>
       </div>
     </article>
   )

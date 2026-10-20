@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.10.1](https://github.com/tompiarulli/2028-games-guide/compare/v1.10.0...v1.10.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **mobile:** fix mobile layout and thin secondary text ([#183](https://github.com/tompiarulli/2028-games-guide/issues/183)) ([958a11a](https://github.com/tompiarulli/2028-games-guide/commit/958a11a6ec27ef9a323bd6c14f72f04295c59f48))
+
+
+### Performance
+
+* speed up first paint on the home page ([#184](https://github.com/tompiarulli/2028-games-guide/issues/184)) ([c26bbdc](https://github.com/tompiarulli/2028-games-guide/commit/c26bbdcc5d3a89e3affdd99b1fc50063d13a589d))
+
+
+### Documentation
+
+* **readme:** rewrite intro paragraph ([#185](https://github.com/tompiarulli/2028-games-guide/issues/185)) ([734aa6f](https://github.com/tompiarulli/2028-games-guide/commit/734aa6f52e7641b496550b499b0edb838dab0968))
+* **readme:** update screenshot and retitle the scores checklist ([#181](https://github.com/tompiarulli/2028-games-guide/issues/181)) ([e3e607a](https://github.com/tompiarulli/2028-games-guide/commit/e3e607a87fcffef2a73bf41bccb7c688cd54d196))
+
 ## [1.10.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.9.1...v1.10.0) (2026-10-20)
 
 

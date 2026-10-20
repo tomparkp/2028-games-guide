@@ -91,7 +91,7 @@ Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` 
 - Tailwind CSS v4 with `@tailwindcss/vite` plugin
 - Custom CSS variables and theme system in `src/styles.css`
 - Dark mode via `data-theme` attribute + `prefers-color-scheme` fallback
-- Fonts: Manrope (body), Fraunces (display headings)
+- Fonts: system UI stack (body), Georgia (display headings); no web fonts are loaded
 - Use existing CSS variables (`--lagoon`, `--sea-ink`, `--sand`, etc.) for theme colors
 
 ### Vite Plugins (order matters)

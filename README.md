@@ -66,6 +66,17 @@ The badges at the top come from a mobile Lighthouse run against the live home pa
 
 Run it locally with `pnpm build && pnpm lighthouse`. HTML reports are written to `.lighthouseci/reports`.
 
+## How This Was Built
+
+I built this with [Claude Code](https://claude.com/claude-code) as my main development tool. The agent instructions it works from are committed in [`AGENTS.md`](AGENTS.md). I set the direction and made the calls: the architecture, the data model, what the ratings measure and how they're weighted, the performance budgets, and what ships. Claude wrote much of the code under that direction. Every change goes through the same gates whoever wrote it: formatting, lint, strict type-checking, tests, and Lighthouse budgets in CI, then [Release Please](release-please-config.json) cuts a release and deploys.
+
+The session content is AI-generated on purpose, so the pipeline is built to keep it honest:
+
+- **Grounded, not invented.** Perplexity first gathers sourced facts for each sport, venue, and session. Claude then writes and scores only from those facts. Paris 2024 medal results, scraped from Olympedia, serve as the authoritative record in every prompt.
+- **Staged and independently re-runnable.** Grounding, writing, and scoring are separate scripts with their own JSON outputs, so I can refresh the news for one session without rewriting everything else.
+- **Human corrections win.** When the AI gets something wrong, I add a fix to a hand-edited corrections file (per session, sport, or venue). The fix is fed into every later regeneration, so it never gets overwritten.
+- **Committed and reviewable.** All generated content is committed to the repo, so every change to a blurb or score shows up in a diff.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.

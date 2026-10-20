@@ -10,6 +10,8 @@ import { nitro } from 'nitro/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
+import { securityHeaders } from './src/lib/security-headers.ts'
+
 const oneDayCache = { headers: { 'cache-control': 'public, max-age=86400' } }
 
 // The `/assets/**` cache header below is applied before Vercel's filesystem check, so an
@@ -63,6 +65,14 @@ export default defineConfig(({ command }) => {
             }),
             nitro({
               routeRules: {
+                // Security headers for every page, prerendered or server-rendered: Vercel applies
+                // header rules before its filesystem check, so they reach static files too. They
+                // set no `cache-control`, so the cache rules below are untouched. Route rules are
+                // fixed at build time; Vercel sets VERCEL_ENV for preview builds, which allow the
+                // Vercel Toolbar.
+                '/**': {
+                  headers: securityHeaders({ vercelToolbar: process.env.VERCEL_ENV === 'preview' }),
+                },
                 // Hashed assets (JS, CSS) — safe to cache indefinitely
                 '/assets/**': {
                   headers: { 'cache-control': 'public, max-age=31536000, immutable' },

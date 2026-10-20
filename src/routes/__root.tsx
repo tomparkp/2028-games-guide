@@ -11,7 +11,6 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import { Nav } from '../components/Nav'
-import { contentSecurityPolicy } from '../lib/content-security-policy'
 import { DEFAULT_FILTERS } from '../lib/session-search'
 
 import appCss from '../styles.css?url'
@@ -42,17 +41,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // load on login-protected Vercel previews instead of redirecting to Vercel SSO.
       { rel: 'manifest', href: '/manifest.json', crossOrigin: 'use-credentials' },
     ],
-  }),
-  headers: () => ({
-    // Runs on the server per request, so previews can allow the Vercel Toolbar while
-    // production keeps the strict same-origin policy.
-    'Content-Security-Policy': contentSecurityPolicy({
-      vercelToolbar: process.env.VERCEL_ENV === 'preview',
-    }),
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
   }),
   shellComponent: RootDocument,
   errorComponent: RootError,

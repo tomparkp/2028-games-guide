@@ -1,7 +1,7 @@
 // Serves the production build the way Vercel does, for Lighthouse runs:
 // prerendered pages and assets come straight from `.output/public` (with the same
-// cache headers), everything else falls through to the Nitro server, and every
-// compressible response is brotli-encoded like Vercel's CDN.
+// cache and security headers), everything else falls through to the Nitro server, and
+// every compressible response is brotli-encoded like Vercel's CDN.
 //
 // Usage: pnpm build && node scripts/serve-prod.mjs   (PORT defaults to 4173)
 import { spawn } from 'node:child_process'
@@ -9,6 +9,8 @@ import { existsSync, readFileSync, statSync } from 'node:fs'
 import http from 'node:http'
 import { extname, join, normalize } from 'node:path'
 import { brotliCompressSync, constants } from 'node:zlib'
+
+import { securityHeaders } from '../src/lib/security-headers.ts'
 
 const PORT = Number(process.env.PORT ?? 4173)
 const NITRO_PORT = PORT + 1
@@ -68,6 +70,7 @@ http
 
     if (file) {
       const headers = {
+        ...securityHeaders(),
         'content-type': MIME[extname(file)] ?? 'application/octet-stream',
         'cache-control': cacheControl(file.endsWith('index.html') ? '/index.html' : pathname),
       }

@@ -53,14 +53,6 @@ Every pull request runs [Lighthouse CI](lighthouserc.json) against the productio
 
 The badges at the top come from a mobile Lighthouse run against the live home page, refreshed after every release and weekly ([workflow](.github/workflows/lighthouse-badges.yml)). Each badge links to the full report.
 
-| Page                                | Performance | Accessibility | Best Practices | SEO | LCP   | CLS | TBT   |
-| ----------------------------------- | ----------- | ------------- | -------------- | --- | ----- | --- | ----- |
-| Home `/`                            | 100         | 100           | 100            | 100 | 1.4 s | 0   | 0 ms  |
-| Session deep link `/?session=ATH15` | 94          | 100           | 100            | 100 | 3.0 s | 0   | 20 ms |
-| Privacy `/privacy`                  | 100         | 100           | 100            | 100 | 0.8 s | 0   | 0 ms  |
-
-_Median of 3 Lighthouse 12.6 mobile runs (simulated slow 4G, 4× CPU slowdown), October 2026._
-
 **Budgets:** accessibility, best practices, and SEO must score 100 on every page, with CLS ≤ 0.1 and TBT ≤ 200 ms. Home and static pages also need performance ≥ 95 and LCP ≤ 2.5 s. Session deep links are the slowest page because the session drawer mounts after hydration, so their budget is performance ≥ 85 and LCP ≤ 4 s.
 
 **What keeps it fast:**

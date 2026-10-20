@@ -77,7 +77,7 @@ The badges at the top come from a mobile Lighthouse run against the live home pa
 - Session data is bundled into the server function, so there's no database round trip, and the client only fetches the rows or the single session it shows.
 - Nothing blocks first paint: the CSS is inlined into the document, and an inline script applies the saved theme.
 - The first page renders 20 sessions, which keeps the DOM and embedded data small, and infinite scroll loads the rest.
-- The document preloads route code, so there's no request waterfall. The side drawers and report dialog load as separate chunks during hydration.
+- Only the main bundle loads with the document. The page component (`index.lazy.tsx`), the side drawers and the report dialog are separate chunks fetched after it runs. That's after first paint, and it costs about one round trip before the page is interactive.
 - Hashed assets are cached immutably for a year.
 - Client-only state (saved sessions in `localStorage`) loads after hydration, and session data never goes stale on the client, so React never throws away the server HTML.
 - Theme colors meet WCAG AA contrast (4.5:1) in both light and dark mode.

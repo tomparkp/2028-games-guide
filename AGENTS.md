@@ -126,6 +126,12 @@ Nitro builds the server. It auto-detects Vercel when `VERCEL`/`NITRO_PRESET=verc
 
 - Store repo worktrees under `.worktrees/` at the repository root when creating additional checkouts for this project
 
+### Agent skills
+
+Project skills come from skills.sh and are tracked in `skills-lock.json`. The files live in `.agents/skills/`, and `.claude/skills/` holds symlinks to them. Update them with `pnpm dlx skills update --project -y`, then review the diff before committing.
+
+- `web-design-guidelines` is locally modified. Upstream tells the agent to fetch its rules from `raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` on every run. We vendor that file as `references/guidelines.md` instead, so the rules only change through a reviewed commit. Updating the skill overwrites `SKILL.md` with the fetching version. After an update, point `SKILL.md` back at `references/guidelines.md`. To refresh the rules themselves, download the upstream `command.md`, review it, and replace `references/guidelines.md`. Then update the commit SHA in the `SKILL.md` comment.
+
 ### Key Conventions
 
 - Strict TypeScript: no unused locals/parameters

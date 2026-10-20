@@ -13,6 +13,11 @@ import {
 // during hydration and makes React discard the server HTML (minified error #418).
 const DEPLOYMENT_STATIC = Infinity
 
+// The first page is server-rendered into the document, so it stays small: about two
+// screens of rows keeps the DOM and the embedded query data light for first paint.
+// Infinite scroll then loads full pages.
+const FIRST_PAGE_SIZE = 20
+
 export function sessionsInfiniteQueryOptions(search: SessionRouteSearch) {
   const filters = routeSearchToFilters(search)
   const sort = routeSearchToSort(search)
@@ -26,7 +31,7 @@ export function sessionsInfiniteQueryOptions(search: SessionRouteSearch) {
           filters,
           sort,
           offset: pageParam,
-          limit: PAGE_SIZE,
+          limit: pageParam === 0 ? FIRST_PAGE_SIZE : PAGE_SIZE,
         },
       }),
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,

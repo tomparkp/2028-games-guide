@@ -16,8 +16,6 @@ function makeSession(index: number, overrides: Partial<Session> = {}): Session {
     dk: '2028-07-13',
     time: '12:00 PM-1:00 PM',
     rt: 'Prelim',
-    pLo: 100,
-    pHi: 200,
     soccer: false,
     rSig: 7,
     rExp: 7,

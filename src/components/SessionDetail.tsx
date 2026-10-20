@@ -12,7 +12,7 @@ import { useMemo, useState } from 'react'
 
 import type { SessionInsights } from '@/lib/ai-scorecard'
 import { cn } from '@/lib/cn'
-import { fmtPrice, fmtTime } from '@/lib/format'
+import { fmtTime } from '@/lib/format'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
 import type { Contender, RelatedNews, Session } from '@/types/session'
 
@@ -231,10 +231,6 @@ function LoadingBlock({ session, onClose }: { session: Session | null; onClose: 
                 {session.venue}
               </span>
             </div>
-
-            <div className="text-ink mt-2 text-[0.9rem] font-semibold tabular-nums">
-              {fmtPrice(session.pLo, session.pHi)}
-            </div>
           </>
         ) : null}
       </div>
@@ -346,10 +342,6 @@ export function SessionDetail({
             <MapPin size={12} className="shrink-0" />
             {session.venue}
           </span>
-        </div>
-
-        <div className="text-ink mt-2 text-[0.9rem] font-semibold tabular-nums">
-          {fmtPrice(session.pLo, session.pHi)}
         </div>
       </div>
 

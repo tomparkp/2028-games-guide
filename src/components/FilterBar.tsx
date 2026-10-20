@@ -98,7 +98,6 @@ function activeFilterCount(filters: Filters): number {
   if (filters.round) count++
   if (filters.zone) count++
   if (filters.score) count++
-  if (filters.price) count++
   return count
 }
 
@@ -357,20 +356,6 @@ export function FilterBar({
         ]}
         active={!!filters.score}
         onChange={(value) => update('score', value)}
-      />
-      <FilterSelect
-        label="Price"
-        placeholder="Any Price"
-        value={filters.price}
-        options={[
-          { value: '0-50', label: '<$50' },
-          { value: '0-100', label: '<$100' },
-          { value: '0-200', label: '<$200' },
-          { value: '0-500', label: '<$500' },
-          { value: '500-99999', label: '$500+' },
-        ]}
-        active={!!filters.price}
-        onChange={(value) => update('price', value)}
       />
     </>
   )

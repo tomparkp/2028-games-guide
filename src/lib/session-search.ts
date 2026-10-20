@@ -11,7 +11,6 @@ export const DEFAULT_FILTERS: Filters = {
   round: '',
   zone: '',
   score: '',
-  price: '',
 }
 
 export const DEFAULT_SORT: SortState = {
@@ -32,7 +31,6 @@ export function validateSessionSearch(search: Record<string, unknown>): SessionR
     round: parseString(search.round),
     zone: parseString(search.zone),
     score: typeof search.score === 'string' ? search.score : DEFAULT_FILTERS.score,
-    price: typeof search.price === 'string' ? search.price : DEFAULT_FILTERS.price,
     sortCol:
       sortCol === 'name' || sortCol === 'date' || sortCol === 'venue' || sortCol === 'agg'
         ? sortCol
@@ -48,7 +46,6 @@ export function routeSearchToFilters(search: SessionRouteSearch): Filters {
     round: search.round,
     zone: search.zone,
     score: search.score,
-    price: search.price,
   }
 }
 

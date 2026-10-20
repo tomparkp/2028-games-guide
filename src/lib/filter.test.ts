@@ -15,8 +15,6 @@ function makeSession(overrides: Partial<Session> = {}): Session {
     dk: '2028-07-13',
     time: '12:00 PM-4:15 PM',
     rt: 'Final',
-    pLo: 150,
-    pHi: 500,
     soccer: false,
     rSig: 7,
     rExp: 8,
@@ -33,7 +31,6 @@ const defaultFilters: Filters = {
   round: '',
   zone: '',
   score: '',
-  price: '',
 }
 
 describe('filterSessions', () => {
@@ -57,19 +54,18 @@ describe('filterSessions', () => {
     expect(filtered.map((session) => session.id)).toEqual(['ATH01'])
   })
 
-  it('keeps single-select price and rating filters working', () => {
+  it('keeps the single-select rating filter working', () => {
     const sessions = [
-      makeSession({ id: 'LOW01', pLo: 40, agg: 5.5 }),
-      makeSession({ id: 'MID01', pLo: 90, agg: 8.2 }),
-      makeSession({ id: 'HIGH01', pLo: 220, agg: 9.1 }),
+      makeSession({ id: 'LOW01', agg: 5.5 }),
+      makeSession({ id: 'MID01', agg: 8.2 }),
+      makeSession({ id: 'HIGH01', agg: 9.1 }),
     ]
 
     const filtered = filterSessions(sessions, {
       ...defaultFilters,
-      price: '0-100',
       score: '8',
     })
 
-    expect(filtered.map((session) => session.id)).toEqual(['MID01'])
+    expect(filtered.map((session) => session.id)).toEqual(['MID01', 'HIGH01'])
   })
 })

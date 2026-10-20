@@ -15,8 +15,6 @@ function makeSession(overrides: Partial<SessionWithContent> = {}): SessionWithCo
     dk: '2028-07-13',
     time: '12:00 PM-4:15 PM',
     rt: 'Prelim',
-    pLo: 150,
-    pHi: 500,
     soccer: false,
     rSig: 7,
     rExp: 8,

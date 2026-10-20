@@ -33,19 +33,19 @@ This ended up being hugely helpful for me when buying tickets, so I hope it help
 
 ## AI Ratings Methodology
 
-Sessions are scored by an AI pipeline (`pnpm generate-content`) that grounds each session in up-to-date facts, writes a blurb, then produces a scorecard across five dimensions. The methodology is opinionated: it is meant to surface interesting sessions, not to be official or authoritative. **Ticket price is not part of the rating**; it stays in the table so you can judge value yourself. Sessions that haven't been scored yet still appear in the schedule but don't display a scorecard.
+Sessions are scored by an AI pipeline (`pnpm generate-content`) that grounds each session in up-to-date facts, writes a blurb, then produces a scorecard across five dimensions. The methodology is opinionated: it is meant to surface interesting sessions, not to be official or authoritative. Sessions that haven't been scored yet still appear in the schedule but don't display a scorecard.
 
 ### Dimensions and weights
 
 Every dimension is scored on a 1–10 scale. The **aggregate** is a weighted average of the five (shown in the UI to one decimal place).
 
-| Dimension        | Weight | What it reflects                                                                                                                 |
-| ---------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| **Significance** | 30%    | How much the session matters in context: round type (e.g. gold medal vs preliminary), sport stakes, multi-medal sessions.        |
-| **Experience**   | 25%    | How strong the live-watch experience is likely to be: sport watchability, venue, round importance, prime-time slotting.          |
-| **Star power**   | 15%    | Likelihood of globally recognized athletes competing in this session.                                                            |
-| **Uniqueness**   | 15%    | Rarity of the opportunity: new/returning sports, iconic venue pairings, ceremonies.                                              |
-| **Demand**       | 15%    | How hot tickets are likely to be: sport-level demand, round, price ceiling as a signal, standout "cultural moment" combinations. |
+| Dimension        | Weight | What it reflects                                                                                                          |
+| ---------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **Significance** | 30%    | How much the session matters in context: round type (e.g. gold medal vs preliminary), sport stakes, multi-medal sessions. |
+| **Experience**   | 25%    | How strong the live-watch experience is likely to be: sport watchability, venue, round importance, prime-time slotting.   |
+| **Star power**   | 15%    | Likelihood of globally recognized athletes competing in this session.                                                     |
+| **Uniqueness**   | 15%    | Rarity of the opportunity: new/returning sports, iconic venue pairings, ceremonies.                                       |
+| **Demand**       | 15%    | How hot tickets are likely to be: sport-level demand, round, standout "cultural moment" combinations.                     |
 
 ## Tech Stack
 

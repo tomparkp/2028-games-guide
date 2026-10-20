@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.9.1](https://github.com/tompiarulli/2028-games-guide/compare/v1.9.0...v1.9.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **build:** don't cache 404s for missing hashed assets ([#158](https://github.com/tompiarulli/2028-games-guide/issues/158)) ([b48fae9](https://github.com/tompiarulli/2028-games-guide/commit/b48fae9adf26869264362eef436b8468b8e2d63e))
+* **csp:** allow the vercel toolbar on preview deployments ([#161](https://github.com/tompiarulli/2028-games-guide/issues/161)) ([a2f944c](https://github.com/tompiarulli/2028-games-guide/commit/a2f944c15449322c0c8457bdc66038cf778348bf))
+* **headers:** send security headers with prerendered pages ([#162](https://github.com/tompiarulli/2028-games-guide/issues/162)) ([260a49f](https://github.com/tompiarulli/2028-games-guide/commit/260a49f1348e21e8fddaa8fb10bdfdaef1a351a4))
+* **head:** send credentials when fetching the web manifest ([#159](https://github.com/tompiarulli/2028-games-guide/issues/159)) ([403f13d](https://github.com/tompiarulli/2028-games-guide/commit/403f13d62f6d67628db0d21562a6cd357e81c207))
+
 ## [1.9.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.8.0...v1.9.0) (2026-10-19)
 
 

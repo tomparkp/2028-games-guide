@@ -31,12 +31,14 @@ jobs:
       - run: pnpm dlx @lhci/cli@0.15.1 collect --config=lighthouserc.production.json
       - run: node scripts/lighthouse-badges.mjs .lighthouseci badges
       # Single-commit orphan branch, force-pushed, so badge updates never touch `main`
-      # history or show up in Release Please changelogs.
+      # history or show up in Release Please changelogs. Vercel reads vercel.json from
+      # the pushed commit, so the branch carries its own config to skip preview deploys.
       - name: Publish to badges branch
         working-directory: badges
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          echo '{ "git": { "deploymentEnabled": false } }' > vercel.json
           git init -q -b badges
           git add .
           git -c user.name='github-actions[bot]' \

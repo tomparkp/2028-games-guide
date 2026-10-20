@@ -1,5 +1,42 @@
 # Changelog
 
+## [1.10.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.9.1...v1.10.0) (2026-10-20)
+
+
+### Features
+
+* remove ticket prices and price filter ([#178](https://github.com/tompiarulli/2028-games-guide/issues/178)) ([95b8d34](https://github.com/tompiarulli/2028-games-guide/commit/95b8d34c417038c45f0041f9c7701267c5fef7e4))
+* **skills:** expose tanstack skills via .agents/skills ([#177](https://github.com/tompiarulli/2028-games-guide/issues/177)) ([548f6ca](https://github.com/tompiarulli/2028-games-guide/commit/548f6caf7916b64ebca2427cdce50e9450ace6d5))
+* **skills:** wire up tanstack package skills from node_modules ([#176](https://github.com/tompiarulli/2028-games-guide/issues/176)) ([2da3b27](https://github.com/tompiarulli/2028-games-guide/commit/2da3b2740ac48afe22cbde0f95b68574d5d88f25))
+
+
+### Bug Fixes
+
+* **data:** keep session queries fresh to avoid hydration mismatch ([#165](https://github.com/tompiarulli/2028-games-guide/issues/165)) ([580249b](https://github.com/tompiarulli/2028-games-guide/commit/580249b62f011fe7d793f4bf029df7c105965c75))
+* **deps:** upgrade to vite 8 and tanstack start 1.169 ([#172](https://github.com/tompiarulli/2028-games-guide/issues/172)) ([b4387cd](https://github.com/tompiarulli/2028-games-guide/commit/b4387cd55496c2f28b8158aef20d15e9384c6e4a))
+
+
+### Documentation
+
+* **readme:** add tech stack section ([#174](https://github.com/tompiarulli/2028-games-guide/issues/174)) ([c5ba966](https://github.com/tompiarulli/2028-games-guide/commit/c5ba966c41af85cc51dac200ab7c820ee20382dd))
+* **readme:** remove manual lighthouse scores table ([#163](https://github.com/tompiarulli/2028-games-guide/issues/163)) ([143837b](https://github.com/tompiarulli/2028-games-guide/commit/143837b9077624444b5888918ea8740d6e350711))
+
+
+### CI
+
+* **badges:** disable vercel deployments on badges branch ([#166](https://github.com/tompiarulli/2028-games-guide/issues/166)) ([6548ad6](https://github.com/tompiarulli/2028-games-guide/commit/6548ad6e3b905cbd9e5003ef1db273091c9d1d12))
+* drop FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 now that actions run on node 24 ([#169](https://github.com/tompiarulli/2028-games-guide/issues/169)) ([cb644e6](https://github.com/tompiarulli/2028-games-guide/commit/cb644e632964389359b117353cb0e08d5e0115aa))
+
+
+### Miscellaneous
+
+* **deps:** update dependency typescript to v7 ([#180](https://github.com/tompiarulli/2028-games-guide/issues/180)) ([182ed94](https://github.com/tompiarulli/2028-games-guide/commit/182ed94b26fd5e6210cfc8fdb3f80a69c461e450))
+* **deps:** update github actions (major) ([#168](https://github.com/tompiarulli/2028-games-guide/issues/168)) ([4289797](https://github.com/tompiarulli/2028-games-guide/commit/42897977c3c4bcdb5ec0e576e59ecdf6e6c33e8c))
+* **deps:** update pnpm to v12 ([#179](https://github.com/tompiarulli/2028-games-guide/issues/179)) ([5e4aaff](https://github.com/tompiarulli/2028-games-guide/commit/5e4aaff8fc031816863190bfdd39fb25fd965137))
+* **deps:** update test tooling (major) ([#170](https://github.com/tompiarulli/2028-games-guide/issues/170)) ([e98406c](https://github.com/tompiarulli/2028-games-guide/commit/e98406ce8b4c17e3cf1200c0d930ac6c91ee3b43))
+* rename .node-version to .nvmrc ([#171](https://github.com/tompiarulli/2028-games-guide/issues/171)) ([13ea939](https://github.com/tompiarulli/2028-games-guide/commit/13ea9394d7b7edf9376d8b383af33a89833f686e))
+* **skills:** update agent skills to latest upstream ([#173](https://github.com/tompiarulli/2028-games-guide/issues/173)) ([b80c2b2](https://github.com/tompiarulli/2028-games-guide/commit/b80c2b24aaa1539f658c77c856ceff48d03f9a65))
+
 ## [1.9.1](https://github.com/tompiarulli/2028-games-guide/compare/v1.9.0...v1.9.1) (2026-10-20)
 
 

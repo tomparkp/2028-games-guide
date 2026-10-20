@@ -33,7 +33,7 @@
       "groupName": "test tooling"
     },
     {
-      "description": "Keep @types/node on the major matching .node-version",
+      "description": "Keep @types/node on the major matching .nvmrc",
       "matchPackageNames": ["@types/node"],
       "matchUpdateTypes": ["major"],
       "enabled": false

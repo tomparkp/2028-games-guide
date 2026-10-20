@@ -73,7 +73,7 @@ The badges at the top come from a mobile Lighthouse run against the live home pa
 
 **Budgets:** accessibility, best practices, and SEO must score 100 on every page, with CLS ≤ 0.1 and TBT ≤ 200 ms. Home and static pages also need performance ≥ 95 and LCP ≤ 2.5 s. Session deep links are the slowest page because the session drawer mounts after hydration, so their budget is performance ≥ 85 and LCP ≤ 4 s.
 
-**What keeps it fast:**
+**What keeps scores high:**
 
 - Every URL is server-rendered and cached at the CDN (`s-maxage` 1 hour, `stale-while-revalidate` 1 day). Static pages are prerendered.
 - Session data is bundled into the server function, so there's no database round trip, and the client only fetches the rows or the single session it shows.

@@ -13,7 +13,10 @@ import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Nav } from '../components/Nav'
 import { DEFAULT_FILTERS } from '../lib/session-search'
 
-import appCss from '../styles.css?url'
+// Inlined into the document rather than linked: the stylesheet was the only render-blocking
+// request, and on a slow connection that extra round trip delayed first paint. It's about
+// 8 KB compressed, and the site is essentially one page, so separate caching buys little.
+import appCss from '../styles.css?inline'
 
 // Inlined (not an external file) so the stored theme applies before first paint without
 // adding a render-blocking request. ScriptOnce removes the tag after it runs so it can't
@@ -32,8 +35,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           'Browse all 800+ sessions of the 2028 Summer Games in Los Angeles by sport, venue, and date, with AI ratings and summaries to help you choose tickets.',
       },
     ],
+    styles: [{ children: appCss }],
     links: [
-      { rel: 'stylesheet', href: appCss },
       { rel: 'icon', href: '/favicon.svg?v=5', type: 'image/svg+xml', sizes: 'any' },
       { rel: 'icon', href: '/favicon.ico?v=5', type: 'image/x-icon', sizes: '32x32 16x16' },
       { rel: 'apple-touch-icon', href: '/logo192.png' },

@@ -7,7 +7,6 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import type { NitroModule } from 'nitro/types'
 import { nitro } from 'nitro/vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
 import { securityHeaders } from './src/lib/security-headers.ts'
@@ -49,7 +48,6 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [
       ...(isDev && !isTest ? [devtools()] : []),
-      tsconfigPaths({ projects: ['./tsconfig.json'] }),
       tailwindcss(),
       ...(!isTest
         ? [
@@ -91,6 +89,9 @@ export default defineConfig(({ command }) => {
         : []),
       viteReact(),
     ],
+    resolve: {
+      tsconfigPaths: true,
+    },
     build: {
       target: 'esnext',
     },

@@ -24,5 +24,12 @@
       }
     }
   ],
-  "ignorePatterns": ["src/routeTree.gen.ts", "dist", ".output", "node_modules", ".claude/skills"]
+  "ignorePatterns": [
+    "src/routeTree.gen.ts",
+    "dist",
+    ".output",
+    "node_modules",
+    ".agents/skills",
+    ".claude/skills"
+  ]
 }

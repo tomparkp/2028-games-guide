@@ -24,7 +24,7 @@ function GithubIcon({ size = 24 }: { size?: number }) {
 
 export function Nav() {
   return (
-    <div className="relative overflow-hidden px-6 pt-12 pb-6 text-center max-md:px-4 max-md:pt-10">
+    <div className="relative overflow-hidden px-6 pt-12 pb-6 text-center max-md:px-4 max-md:pt-14">
       <a
         href="https://github.com/tompiarulli/2028-games-guide"
         target="_blank"
@@ -39,7 +39,7 @@ export function Nav() {
       <h1 className="font-display relative mb-1.5 text-[2.2rem] leading-[1.1] font-normal -tracking-[0.03em] max-md:text-[1.6rem]">
         <em className="text-gold italic">2028 Games</em> Unofficial Guide
       </h1>
-      <p className="text-ink3 relative mx-auto mt-2 max-w-[600px] text-[0.72rem] leading-normal font-light max-md:px-2">
+      <p className="text-ink3 relative mx-auto mt-2 max-w-[600px] text-[0.72rem] leading-normal font-normal max-md:px-2">
         This is an{' '}
         <strong>
           <u>unofficial</u>

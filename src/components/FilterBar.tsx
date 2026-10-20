@@ -399,7 +399,7 @@ export function FilterBar({
             keepMounted
             className="ease-panel h-[var(--collapsible-panel-height)] overflow-hidden transition-[height] duration-200 data-[closed]:h-0"
           >
-            <div className="grid grid-cols-2 gap-2 pt-1 pb-0.5 max-[400px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-2 pt-1 pb-0.5 *:w-full *:max-w-none max-[400px]:grid-cols-1">
               {filterSelects}
             </div>
           </Collapsible.Panel>

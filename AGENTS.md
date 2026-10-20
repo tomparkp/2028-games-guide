@@ -96,7 +96,9 @@ Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` 
 
 ### Vite Plugins (order matters)
 
-`devtools` → `tsconfigPaths` → `tailwindcss` → `tanstackStart` → `nitro` → `viteReact`
+`devtools` → `tailwindcss` → `tanstackStart` → `nitro` → `viteReact`
+
+The `@/*` path alias comes from `tsconfig.json` through Vite's built-in `resolve.tsconfigPaths`, not a plugin.
 
 Nitro builds the server. It auto-detects Vercel when `VERCEL`/`NITRO_PRESET=vercel` is set and emits `.vercel/output`; otherwise it emits a Node server in `.output`. Static-asset cache headers live in the `nitro({ routeRules })` config in `vite.config.ts`.
 

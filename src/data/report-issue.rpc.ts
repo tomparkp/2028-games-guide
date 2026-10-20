@@ -47,7 +47,7 @@ function escapeHtml(value: string): string {
 }
 
 export const reportIssue = createServerFn({ method: 'POST' })
-  .inputValidator(normalizeInput)
+  .validator(normalizeInput)
   .handler(async ({ data }) => {
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {

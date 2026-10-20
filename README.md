@@ -77,9 +77,11 @@ The badges at the top come from a mobile Lighthouse run against the live home pa
 
 - Every URL is server-rendered and cached at the CDN (`s-maxage` 1 hour, `stale-while-revalidate` 1 day). Static pages are prerendered.
 - Session data is bundled into the server function, so there's no database round trip, and the client only fetches the rows or the single session it shows.
-- The document preloads route code, so there's no request waterfall, and an inline script applies the saved theme before first paint.
+- Nothing blocks first paint: the CSS is inlined into the document, and an inline script applies the saved theme.
+- The first page renders 20 sessions, which keeps the DOM and embedded data small, and infinite scroll loads the rest.
+- The document preloads route code, so there's no request waterfall. The side drawers and report dialog load as separate chunks during hydration.
 - Hashed assets are cached immutably for a year.
-- Client-only state (saved sessions in `localStorage`) loads after hydration, so React never throws away the server HTML.
+- Client-only state (saved sessions in `localStorage`) loads after hydration, and session data never goes stale on the client, so React never throws away the server HTML.
 - Theme colors meet WCAG AA contrast (4.5:1) in both light and dark mode.
 
 Run it locally with `pnpm build && pnpm lighthouse`. HTML reports are written to `.lighthouseci/reports`.

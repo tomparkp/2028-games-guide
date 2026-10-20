@@ -11,6 +11,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import { Nav } from '../components/Nav'
+import { contentSecurityPolicy } from '../lib/content-security-policy'
 import { DEFAULT_FILTERS } from '../lib/session-search'
 
 import appCss from '../styles.css?url'
@@ -43,8 +44,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
   }),
   headers: () => ({
-    'Content-Security-Policy':
-      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'",
+    // Runs on the server per request, so previews can allow the Vercel Toolbar while
+    // production keeps the strict same-origin policy.
+    'Content-Security-Policy': contentSecurityPolicy({
+      vercelToolbar: process.env.VERCEL_ENV === 'preview',
+    }),
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
     'Referrer-Policy': 'strict-origin-when-cross-origin',

@@ -1,12 +1,44 @@
+import { readFile, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+
 import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
+import type { NitroModule } from 'nitro/types'
 import { nitro } from 'nitro/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
 const oneDayCache = { headers: { 'cache-control': 'public, max-age=86400' } }
+
+// The `/assets/**` cache header below is applied before Vercel's filesystem check, so an
+// asset path with no file behind it (e.g. an old hash requested mid-deploy) falls through
+// to the SSR 404 page *with* the immutable header, and browsers cache that 404 for a year.
+// This inserts a route right after the filesystem check that answers those misses with an
+// uncacheable 404 instead. Nitro's `vercel.config.routes` option can't do it: it prepends
+// routes, ahead of the filesystem check. Modules install after the preset's hooks, so this
+// `compiled` hook runs once the preset has written `config.json`.
+const vercelMissingAssets404: NitroModule = {
+  name: 'vercel-missing-assets-404',
+  setup(nitro) {
+    if (!nitro.options.preset.startsWith('vercel')) return
+    nitro.hooks.hook('compiled', async () => {
+      const configPath = join(nitro.options.output.dir, 'config.json')
+      const config = JSON.parse(await readFile(configPath, 'utf8'))
+      const filesystem = config.routes.findIndex(
+        (route: { handle?: string }) => route.handle === 'filesystem',
+      )
+      if (filesystem === -1) throw new Error(`No filesystem handle in ${configPath}`)
+      config.routes.splice(filesystem + 1, 0, {
+        src: '/assets/(.*)',
+        status: 404,
+        headers: { 'cache-control': 'no-store' },
+      })
+      await writeFile(configPath, JSON.stringify(config, null, 2))
+    })
+  },
+}
 
 export default defineConfig(({ command }) => {
   const isDev = command === 'serve'
@@ -43,6 +75,7 @@ export default defineConfig(({ command }) => {
                 '/manifest.json': oneDayCache,
                 '/robots.txt': oneDayCache,
               },
+              modules: [vercelMissingAssets404],
             }),
           ]
         : []),

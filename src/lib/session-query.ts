@@ -7,6 +7,12 @@ import {
   type SessionRouteSearch,
 } from '@/lib/session-search'
 
+// Session data is bundled into each deployment, so it can't change until the next deploy.
+// It must never go stale on the client: `/` is served from the CDN cache for up to a day,
+// and stale dehydrated data refetches on the first client render, which flips `isFetching`
+// during hydration and makes React discard the server HTML (minified error #418).
+const DEPLOYMENT_STATIC = Infinity
+
 export function sessionsInfiniteQueryOptions(search: SessionRouteSearch) {
   const filters = routeSearchToFilters(search)
   const sort = routeSearchToSort(search)
@@ -24,7 +30,7 @@ export function sessionsInfiniteQueryOptions(search: SessionRouteSearch) {
         },
       }),
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
-    staleTime: 60_000,
+    staleTime: DEPLOYMENT_STATIC,
   })
 }
 
@@ -32,7 +38,7 @@ export function sessionDetailQueryOptions(sessionId: string) {
   return queryOptions({
     queryKey: ['session-detail', sessionId] as const,
     queryFn: () => getSessionDetail({ data: { sessionId } }),
-    staleTime: 5 * 60_000,
+    staleTime: DEPLOYMENT_STATIC,
   })
 }
 
@@ -42,6 +48,6 @@ export function bookmarkedSessionsQueryOptions(ids: string[]) {
   return queryOptions({
     queryKey: ['bookmarked-sessions', sortedIds] as const,
     queryFn: () => getSessionsByIds({ data: { ids: sortedIds } }),
-    staleTime: 60_000,
+    staleTime: DEPLOYMENT_STATIC,
   })
 }

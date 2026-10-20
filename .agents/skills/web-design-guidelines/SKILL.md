@@ -13,27 +13,26 @@ Review files for compliance with Web Interface Guidelines.
 
 ## How It Works
 
-1. Fetch the latest guidelines from the source URL below
+1. Read the guidelines from `references/guidelines.md`
 2. Read the specified files (or prompt user for files/pattern)
-3. Check against all rules in the fetched guidelines
+3. Check against all rules in the guidelines
 4. Output findings in the terse `file:line` format
 
 ## Guidelines Source
 
-Fetch fresh guidelines before each review:
+The guidelines are vendored in `references/guidelines.md`. Do not fetch them from the network; that file contains all the rules and output format instructions.
 
-```
+<!-- Locally modified: upstream fetches the rules from
 https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
-```
-
-Use WebFetch to retrieve the latest rules. The fetched content contains all the rules and output format instructions.
+at run time. Vendored from commit 4ecfb9fb8d1d3b7009674869b3aaee2f904042e1 (2026-10-05).
+See "Agent skills" in AGENTS.md before updating. -->
 
 ## Usage
 
 When a user provides a file or pattern argument:
-1. Fetch guidelines from the source URL above
+1. Read the guidelines from `references/guidelines.md`
 2. Read the specified files
-3. Apply all rules from the fetched guidelines
+3. Apply all rules from the guidelines
 4. Output findings using the format specified in the guidelines
 
 If no files specified, ask the user which files to review.

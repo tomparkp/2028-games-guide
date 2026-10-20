@@ -5,6 +5,8 @@ import {
   ScriptOnce,
   Scripts,
   createRootRouteWithContext,
+  rootRouteId,
+  useRouterState,
   type ErrorComponentProps,
 } from '@tanstack/react-router'
 import { Analytics } from '@vercel/analytics/react'
@@ -76,12 +78,27 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         {import.meta.env.VITE_VERCEL_INSIGHTS === 'true' && (
           <>
             <Analytics />
-            <SpeedInsights />
+            <SpeedInsightsWithRoute />
           </>
         )}
       </body>
     </html>
   )
+}
+
+// Speed Insights only detects routes on its first-party framework integrations, so without
+// this every page shows up as "Unknown". Reports the matched route pattern rather than the
+// URL, so filter and `?session=` query strings don't fragment the data. Not-found pages
+// match only the root route and stay unlabelled.
+function SpeedInsightsWithRoute() {
+  const route = useRouterState({
+    select: (state) => {
+      const match = state.matches.at(-1)
+      return match && match.routeId !== rootRouteId ? match.fullPath : null
+    },
+  })
+
+  return <SpeedInsights route={route} />
 }
 
 function ErrorMessage({ heading, body }: { heading: string; body: string }) {

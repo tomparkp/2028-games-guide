@@ -3,7 +3,6 @@ import { Bookmark, ChevronsRight, Download, LoaderCircle, Trash2, X } from 'luci
 import { memo } from 'react'
 
 import { exportBookmarksCSV } from '@/lib/csv'
-import { fmtPrice } from '@/lib/format'
 import { bookmarkedSessionsQueryOptions } from '@/lib/session-query'
 import { ratingClasses, roundTagClasses } from '@/lib/tw'
 import type { Session } from '@/types/session'
@@ -76,10 +75,7 @@ const BookmarkCard = memo(function BookmarkCard({
         <span className={roundTagClasses(session.rt)}>{session.rt}</span>
       </div>
 
-      <div className="mt-2 flex items-center justify-between">
-        <span className="text-ink text-[0.78rem] font-semibold tabular-nums">
-          {fmtPrice(session.pLo, session.pHi)}
-        </span>
+      <div className="mt-2 flex items-center justify-end">
         <span className={ratingClasses(session.agg)}>{session.agg.toFixed(1)}</span>
       </div>
     </article>

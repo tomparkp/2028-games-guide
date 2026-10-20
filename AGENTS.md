@@ -62,7 +62,7 @@ This is a **TanStack Start** (React 19) full-stack app with SSR, file-based rout
 
 Session data lives in JSON files under `src/data/`, committed to the repo and bundled into the server function at build time:
 
-- `sessions.json` — hand-validated source data (id, sport, venue, date, price, etc.); no generated content
+- `sessions.json` — hand-validated source data (id, sport, venue, date, etc.); no generated content
 - `paris-2024-medals.json` — Olympedia-scraped medal results; authoritative history, used as grounding anchor
 - `sport-facts.json` — per-sport Perplexity output (gamesContext, parisRecap), keyed by sport
 - `venue-facts.json` — per-venue Perplexity output (capacity, yearBuilt, location, iconicMoments, spectatorExperience, changes2028), keyed by venue name

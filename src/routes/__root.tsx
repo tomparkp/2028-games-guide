@@ -29,7 +29,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: 'description',
         content:
-          'Browse all 800+ sessions of the 2028 Summer Games in Los Angeles by sport, venue, date, and price, with AI ratings and summaries to help you choose tickets.',
+          'Browse all 800+ sessions of the 2028 Summer Games in Los Angeles by sport, venue, and date, with AI ratings and summaries to help you choose tickets.',
       },
     ],
     links: [

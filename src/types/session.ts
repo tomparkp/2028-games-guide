@@ -75,8 +75,6 @@ export interface SessionSource {
   dk: string
   time: string
   rt: RoundType
-  pLo: number
-  pHi: number
   soccer: boolean
 }
 
@@ -108,5 +106,4 @@ export interface Filters {
   round: string
   zone: string
   score: string
-  price: string
 }

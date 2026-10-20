@@ -3,7 +3,7 @@ import { memo, type KeyboardEvent } from 'react'
 
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { cn } from '@/lib/cn'
-import { fmtPrice, fmtTime } from '@/lib/format'
+import { fmtTime } from '@/lib/format'
 import { roundTagClasses } from '@/lib/tw'
 import type { Session, SortColumn, SortState } from '@/types/session'
 
@@ -118,9 +118,6 @@ const SessionCard = memo(function SessionCard({
           {session.zone}
         </span>
         <span className={roundTagClasses(session.rt)}>{session.rt}</span>
-        <span className="text-ink text-[0.78rem] font-semibold tabular-nums">
-          {fmtPrice(session.pLo, session.pHi)}
-        </span>
         <span className="ml-auto">
           <ScorePill
             agg={session.agg}
@@ -195,9 +192,6 @@ const SessionRow = memo(function SessionRow({
           {session.zone}
         </span>
       </td>
-      <td className={cn(cellBase, 'font-semibold whitespace-nowrap tabular-nums')}>
-        {fmtPrice(session.pLo, session.pHi)}
-      </td>
       <td className={cellBase}>
         <span className={roundTagClasses(session.rt)}>{session.rt}</span>
       </td>
@@ -270,7 +264,6 @@ export function SessionTable({
       <SortHeader label="Date" col="date" sort={sort} onSort={onSort} />
       <SortHeader label="Venue" col="venue" sort={sort} onSort={onSort} />
       <th className={thBase}>Zone</th>
-      <th className={thBase}>Price</th>
       <th className={thBase}>Round</th>
       <SortHeader
         label="AI Rating"
@@ -312,7 +305,7 @@ export function SessionTable({
           {sessions.length === 0 ? (
             <tr>
               <td
-                colSpan={8}
+                colSpan={7}
                 className="text-ink3 px-4 py-12 text-center text-[0.85rem] font-light"
               >
                 No sessions match your filters

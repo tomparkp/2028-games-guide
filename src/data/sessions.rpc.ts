@@ -24,7 +24,6 @@ function normalizeFilters(input: unknown): Filters {
     round: normalizeString(value.round),
     zone: normalizeString(value.zone),
     score: normalizeString(value.score),
-    price: normalizeString(value.price),
   }
 }
 

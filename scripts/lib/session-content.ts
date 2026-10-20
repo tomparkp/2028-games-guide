@@ -225,7 +225,7 @@ ${BANNED_TERMS_BLOCK}`
 export const WRITING_SYSTEM_PROMPT = `You are writing session blurbs for a 2028 Los Angeles Summer Games ticket-buying guide. Readers are deciding whether to attend; give them a flavorful picture of what the session actually is and why it could be worth watching.
 
 You will receive a batch of sessions for one sport. For each session you'll get:
-- The session's basic facts (name, description, round, venue, date/time, price).
+- The session's basic facts (name, description, round, venue, date/time).
 - Sport-level background (venue notes, event highlights, known athletes).
 - A "groundingFacts" list gathered from recent web searches — use these as your authoritative source for current information (rosters, injuries, recent results, 2028 Games status).
 
@@ -451,7 +451,6 @@ function buildWritingSessionsBody(
     prompt += `- Round: ${s.rt}\n`
     prompt += `- Venue: ${s.venue}\n`
     prompt += `- Date/Time: ${s.date}, ${s.time}\n`
-    prompt += `- Price Range: $${s.pLo}–$${s.pHi}\n`
     const paris = buildParisMedalsBlock(s)
     if (paris) {
       prompt += paris
@@ -1064,11 +1063,11 @@ Dimensions and rubric:
 
 5. demand — How sought-after / hard to get tickets for.
    IMPORTANT CONTEXT: Presale is active and the vast majority of sessions are tracking toward sell-out regardless of individual session profile — Games scarcity drives a high floor on demand.
-   10 = Opening/Closing Ceremony, basketball final, baseball final at Dodger, Athletics finals night, anything with a $3000+ price ceiling.
-   8-9 = marquee sport finals/semifinals; price ceiling $1500-$3000.
-   6-7 = mid-tier sport finals, marquee sport early rounds at iconic venues, or price ceiling $500-$1500.
+   10 = Opening/Closing Ceremony, basketball final, baseball final at Dodger, Athletics finals night.
+   8-9 = marquee sport finals/semifinals.
+   6-7 = mid-tier sport finals, or marquee sport early rounds at iconic venues.
    5 = mid-tier sport non-medal rounds at decent venues, or early-round sessions of popular sports — still generally expected to sell but less competitive to book.
-   4 = lowest typical score: an early prelim of a niche sport at a generic venue with a low price ceiling. Even here, Games scarcity means "easier to get" does not mean "easy to get."
+   4 = lowest typical score: an early prelim of a niche sport at a generic venue. Even here, Games scarcity means "easier to get" does not mean "easy to get."
    Do not go below 4 — ticket scarcity sets a floor; no 2028 session is genuinely low-demand.
 
 For each dimension produce:
@@ -1123,7 +1122,6 @@ function buildScoringSessionsBody(
     prompt += `- Round: ${s.rt}\n`
     prompt += `- Venue: ${s.venue}\n`
     prompt += `- Date/Time: ${s.date}, ${s.time}\n`
-    prompt += `- Price Range: $${s.pLo}–$${s.pHi}\n`
     const paris = buildParisMedalsBlock(s)
     if (paris) {
       prompt += paris

@@ -82,9 +82,10 @@ const SessionCard = memo(function SessionCard({
       )}
     >
       <div className="text-ink text-[0.84rem] leading-tight font-semibold">{session.name}</div>
+      <div className="text-ink3 mt-0.5 line-clamp-1 text-[0.72rem]">{session.desc}</div>
       <button
         type="button"
-        className="hover:bg-gold-dim row-span-2 -mt-1 -mr-1 flex size-10 items-center justify-center rounded-md transition-all duration-100"
+        className="hover:bg-gold-dim col-start-2 row-span-2 row-start-1 -mt-1 -mr-1 flex size-10 items-center justify-center rounded-md transition-all duration-100"
         onClick={(event) => {
           event.stopPropagation()
           onToggleBookmark(session.id)
@@ -99,7 +100,6 @@ const SessionCard = memo(function SessionCard({
           stroke={bookmarked ? 'var(--gold)' : 'var(--ink3)'}
         />
       </button>
-      <div className="text-ink3 mt-0.5 line-clamp-1 text-[0.72rem]">{session.desc}</div>
 
       {/* Text runs become anonymous flex items, so they need no wrapper spans. */}
       <div className="text-ink2 col-span-2 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.72rem] whitespace-nowrap">

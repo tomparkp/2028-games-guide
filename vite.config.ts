@@ -60,6 +60,7 @@ export default defineConfig(({ command }) => {
                 // rendered without the session. The CDN caches each URL via `s-maxage`.
                 filter: ({ path }) => path !== '/',
               },
+              sitemap: { host: 'https://28games.tompiarulli.com' },
             }),
             nitro({
               routeRules: {

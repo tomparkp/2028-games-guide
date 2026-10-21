@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.2](https://github.com/tompiarulli/2028-games-guide/compare/v1.10.1...v1.10.2) (2026-10-21)
+
+
+### Bug Fixes
+
+* **insights:** report route names to vercel speed insights ([#187](https://github.com/tompiarulli/2028-games-guide/issues/187)) ([2408699](https://github.com/tompiarulli/2028-games-guide/commit/240869953ee928da64295119a26aed51c26dd59f))
+
+
+### Performance
+
+* **home:** move the page component to a lazy route ([#186](https://github.com/tompiarulli/2028-games-guide/issues/186)) ([3a9e949](https://github.com/tompiarulli/2028-games-guide/commit/3a9e949af965527bcdcf335d468845e0c43d2934))
+
 ## [1.10.1](https://github.com/tompiarulli/2028-games-guide/compare/v1.10.0...v1.10.1) (2026-10-20)
 
 

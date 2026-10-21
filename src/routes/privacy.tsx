@@ -22,7 +22,7 @@ function PrivacyPage() {
       </h1>
       <p className="text-ink3 mb-8 text-xs">Last updated: October 18, 2026</p>
 
-      <div className="text-ink2 prose prose-sm max-w-none space-y-5 text-sm leading-relaxed">
+      <div className="text-ink2 space-y-5 text-sm leading-relaxed">
         <p>
           2028 Games Unofficial Guide is an open-source project. We try to collect as little
           information as possible. This page describes what we do collect and the third parties that

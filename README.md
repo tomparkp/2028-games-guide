@@ -4,6 +4,8 @@
 
 # 2028 Games Unofficial Session Guide
 
+**Live site: [28games.tompiarulli.com](https://28games.tompiarulli.com)**
+
 [![CI](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/tompiarulli/2028-games-guide/actions/workflows/ci.yml)
 [![Lighthouse performance](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Fperformance.json&logo=lighthouse&logoColor=white)][lighthouse-report]
 [![Lighthouse accessibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftompiarulli%2F2028-games-guide%2Fbadges%2Faccessibility.json&logo=lighthouse&logoColor=white)][lighthouse-report]
@@ -31,7 +33,7 @@ I worked with Claude to research and create full summaries and rankings for ever
 
 ## AI Ratings Methodology
 
-Sessions are scored by an AI pipeline (`pnpm generate-content`) that grounds each session in up-to-date facts, writes a blurb, then produces a scorecard across five dimensions. The methodology is opinionated: it is meant to surface interesting sessions, not to be official or authoritative. Sessions that haven't been scored yet still appear in the schedule but don't display a scorecard.
+Sessions are scored by an AI pipeline (the `pnpm generate:*` scripts, described in [CONTRIBUTING.md](CONTRIBUTING.md)) that grounds each session in up-to-date facts, writes a blurb, then produces a scorecard across five dimensions. The methodology is opinionated: it is meant to surface interesting sessions, not to be official or authoritative. Sessions that haven't been scored yet still appear in the schedule but don't display a scorecard.
 
 ### Dimensions and weights
 
@@ -47,7 +49,7 @@ Every dimension is scored on a 1–10 scale. The **aggregate** is a weighted ave
 
 ## Tech Stack
 
-- **App:** [TanStack Start](https://tanstack.com/start) (React 19, server-side rendering, file-based routing) with TanStack Router, Query, and Virtual. Built with Vite and [Nitro](https://nitro.build).
+- **App:** [TanStack Start](https://tanstack.com/start) (React 19, server-side rendering, file-based routing) with TanStack Router and Query. Built with Vite and [Nitro](https://nitro.build).
 - **UI:** Tailwind CSS v4, [Base UI](https://base-ui.com), and Lucide icons.
 - **Content pipeline:** TypeScript scripts that use the [Perplexity](https://www.perplexity.ai) API for grounded research and the [Anthropic](https://www.anthropic.com) API for writing and scoring. They use prompt caching and batch requests to keep costs down.
 - **Quality:** strict TypeScript, Vitest and Testing Library, oxlint and oxfmt, and Lighthouse CI budgets on every pull request.

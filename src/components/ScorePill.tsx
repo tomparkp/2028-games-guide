@@ -1,5 +1,6 @@
 import { memo } from 'react'
 
+import { cn } from '@/lib/cn'
 import { ratingClasses } from '@/lib/tw'
 
 interface ScorePillProps {
@@ -9,6 +10,7 @@ interface ScorePillProps {
   rStar: number
   rUniq: number
   rDem: number
+  className?: string
 }
 
 export const ScorePill = memo(function ScorePill({
@@ -18,10 +20,11 @@ export const ScorePill = memo(function ScorePill({
   rStar,
   rUniq,
   rDem,
+  className,
 }: ScorePillProps) {
   return (
     <span
-      className={ratingClasses(agg)}
+      className={cn(ratingClasses(agg), className)}
       title={`Significance ${rSig} · Experience ${rExp} · Star Power ${rStar} · Uniqueness ${rUniq} · Demand ${rDem}`}
     >
       {agg.toFixed(1)}

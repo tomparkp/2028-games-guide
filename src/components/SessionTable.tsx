@@ -77,57 +77,51 @@ const SessionCard = memo(function SessionCard({
       onClick={() => onSelectId(session.id)}
       onKeyDown={handleKeyDown}
       className={cn(
-        'rounded-lg border border-border bg-surface p-3 transition-colors duration-100 active:bg-surface2',
+        'grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 rounded-lg border border-border bg-surface p-3 transition-colors duration-100 active:bg-surface2',
         selected && 'border-gold bg-gold-dim',
       )}
     >
-      <div className="flex items-start gap-2">
-        <div className="min-w-0 flex-1">
-          <div className="text-ink text-[0.84rem] leading-tight font-semibold">{session.name}</div>
-          <div className="text-ink3 mt-0.5 line-clamp-1 text-[0.72rem]">{session.desc}</div>
-        </div>
-        <button
-          type="button"
-          className="hover:bg-gold-dim -mt-1 -mr-1 flex size-10 shrink-0 items-center justify-center rounded-md transition-all duration-100"
-          onClick={(event) => {
-            event.stopPropagation()
-            onToggleBookmark(session.id)
-          }}
-          title={bookmarked ? 'Remove from saved' : 'Save'}
-          aria-label={bookmarked ? `Remove ${session.name} from saved` : `Save ${session.name}`}
-        >
-          <Bookmark
-            size={20}
-            className="transition-all duration-100"
-            fill={bookmarked ? 'var(--gold)' : 'none'}
-            stroke={bookmarked ? 'var(--gold)' : 'var(--ink3)'}
-          />
-        </button>
-      </div>
+      <div className="text-ink text-[0.84rem] leading-tight font-semibold">{session.name}</div>
+      <button
+        type="button"
+        className="hover:bg-gold-dim row-span-2 -mt-1 -mr-1 flex size-10 items-center justify-center rounded-md transition-all duration-100"
+        onClick={(event) => {
+          event.stopPropagation()
+          onToggleBookmark(session.id)
+        }}
+        title={bookmarked ? 'Remove from saved' : 'Save'}
+        aria-label={bookmarked ? `Remove ${session.name} from saved` : `Save ${session.name}`}
+      >
+        <Bookmark
+          size={20}
+          className="transition-all duration-100"
+          fill={bookmarked ? 'var(--gold)' : 'none'}
+          stroke={bookmarked ? 'var(--gold)' : 'var(--ink3)'}
+        />
+      </button>
+      <div className="text-ink3 mt-0.5 line-clamp-1 text-[0.72rem]">{session.desc}</div>
 
-      <div className="text-ink2 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.72rem]">
-        <span className="whitespace-nowrap">
-          {session.date} · {fmtTime(session.time)}
-        </span>
+      {/* Text runs become anonymous flex items, so they need no wrapper spans. */}
+      <div className="text-ink2 col-span-2 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.72rem] whitespace-nowrap">
+        {session.date} · {fmtTime(session.time)}
         <span className="text-border">|</span>
-        <span className="whitespace-nowrap">{session.venue}</span>
+        {session.venue}
       </div>
 
-      <div className="mt-2 flex items-center gap-2">
+      <div className="col-span-2 mt-2 flex items-center gap-2">
         <span className="bg-surface3 text-ink2 inline-block rounded-md px-1.5 py-0.5 text-[0.6rem] font-semibold tracking-[0.02em] whitespace-nowrap">
           {session.zone}
         </span>
         <span className={roundTagClasses(session.rt)}>{session.rt}</span>
-        <span className="ml-auto">
-          <ScorePill
-            agg={session.agg}
-            rSig={session.rSig}
-            rExp={session.rExp}
-            rStar={session.rStar}
-            rUniq={session.rUniq}
-            rDem={session.rDem}
-          />
-        </span>
+        <ScorePill
+          className="ml-auto"
+          agg={session.agg}
+          rSig={session.rSig}
+          rExp={session.rExp}
+          rStar={session.rStar}
+          rUniq={session.rUniq}
+          rDem={session.rDem}
+        />
       </div>
     </div>
   )

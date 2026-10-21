@@ -7,7 +7,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import type { NitroModule } from 'nitro/types'
 import { nitro } from 'nitro/vite'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 import { securityHeaders } from './src/lib/security-headers.ts'
 
@@ -60,6 +60,7 @@ export default defineConfig(({ command }) => {
                 // rendered without the session. The CDN caches each URL via `s-maxage`.
                 filter: ({ path }) => path !== '/',
               },
+              sitemap: { host: 'https://28games.tompiarulli.com' },
             }),
             nitro({
               routeRules: {
@@ -98,6 +99,8 @@ export default defineConfig(({ command }) => {
     test: {
       environment: 'jsdom',
       setupFiles: './src/test/setup.ts',
+      // Other checkouts of this repo live inside it; their tests would otherwise run too.
+      exclude: [...configDefaults.exclude, '.claude/**', '.worktrees/**'],
     },
   }
 })

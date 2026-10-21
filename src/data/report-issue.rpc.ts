@@ -16,6 +16,12 @@ function normalizeString(value: unknown, max: number): string {
   return typeof value === 'string' ? value.trim().slice(0, max) : ''
 }
 
+// For fields that end up in email headers (the subject) or one-per-line metadata: collapses
+// line breaks so a crafted value can't add header lines or fake metadata rows.
+function normalizeLine(value: unknown, max: number): string {
+  return normalizeString(typeof value === 'string' ? value.replace(/\s+/g, ' ') : value, max)
+}
+
 function normalizeInput(input: unknown): ReportIssueInput {
   const value = (input ?? {}) as Record<string, unknown>
   const email = normalizeString(value.email, MAX_EMAIL_LENGTH)
@@ -31,9 +37,9 @@ function normalizeInput(input: unknown): ReportIssueInput {
   return {
     email,
     message,
-    sessionId: normalizeString(value.sessionId, 200),
-    sessionName: normalizeString(value.sessionName, 300),
-    pageUrl: normalizeString(value.pageUrl, 500),
+    sessionId: normalizeLine(value.sessionId, 200),
+    sessionName: normalizeLine(value.sessionName, 300),
+    pageUrl: normalizeLine(value.pageUrl, 500),
   }
 }
 
@@ -46,12 +52,17 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;')
 }
 
+// Shown to the reporter for any server-side failure; the details only go to the server log.
+const SEND_FAILED_MESSAGE = "Couldn't send your report. Please try again later."
+
 export const reportIssue = createServerFn({ method: 'POST' })
   .validator(normalizeInput)
   .handler(async ({ data }) => {
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {
-      throw new Error('Email service is not configured.')
+      // eslint-disable-next-line no-console
+      console.error('Report issue: RESEND_API_KEY is not set')
+      throw new Error(SEND_FAILED_MESSAGE)
     }
 
     const { Resend } = await import('resend')
@@ -86,7 +97,9 @@ export const reportIssue = createServerFn({ method: 'POST' })
     })
 
     if (error) {
-      throw new Error(error.message || 'Failed to send report.')
+      // eslint-disable-next-line no-console
+      console.error('Report issue: Resend send failed:', error.name, error.message)
+      throw new Error(SEND_FAILED_MESSAGE)
     }
 
     return { ok: true as const }

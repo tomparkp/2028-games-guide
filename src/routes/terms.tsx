@@ -1,16 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { SITE_NAME, pageHead } from '@/lib/seo'
+
 export const Route = createFileRoute('/terms')({
-  head: () => ({
-    meta: [
-      { title: 'Terms of Use · 2028 Games Unofficial Guide' },
-      {
-        name: 'description',
-        content:
-          'Terms for using the 2028 Games Unofficial Guide, an open-source, unofficial session browser.',
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: `Terms of Use · ${SITE_NAME}`,
+      description: `Terms for using the ${SITE_NAME}, an open-source, unofficial session browser.`,
+      path: '/terms',
+    }),
   component: TermsPage,
 })
 

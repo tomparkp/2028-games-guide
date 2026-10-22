@@ -1,16 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { SITE_NAME, pageHead } from '@/lib/seo'
+
 export const Route = createFileRoute('/privacy')({
-  head: () => ({
-    meta: [
-      { title: 'Privacy Policy · 2028 Games Unofficial Guide' },
-      {
-        name: 'description',
-        content:
-          'What the 2028 Games Unofficial Guide collects, which providers process it, and how it is used.',
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: `Privacy Policy · ${SITE_NAME}`,
+      description: `What the ${SITE_NAME} collects, which providers process it, and how it is used.`,
+      path: '/privacy',
+    }),
   component: PrivacyPage,
 })
 

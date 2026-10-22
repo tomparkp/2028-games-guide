@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.11.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.10.2...v1.11.0) (2026-10-22)
+
+
+### Features
+
+* add a sitemap and fix assorted rough edges ([#192](https://github.com/tompiarulli/2028-games-guide/issues/192)) ([e8865ee](https://github.com/tompiarulli/2028-games-guide/commit/e8865ee3c09dddf4d3c141a24d9948462e6b8caf))
+* **nav:** move privacy and terms links under the disclaimer ([#193](https://github.com/tompiarulli/2028-games-guide/issues/193)) ([83d3f5d](https://github.com/tompiarulli/2028-games-guide/commit/83d3f5d1b47f115db0a5ee7940169d0f87520269))
+
+
+### Bug Fixes
+
+* **session:** show not-found for invalid session deep links ([#194](https://github.com/tompiarulli/2028-games-guide/issues/194)) ([b96834d](https://github.com/tompiarulli/2028-games-guide/commit/b96834dc7cf2d18694a583ca740ec6db4415cfd2))
+
+
+### Performance
+
+* **ui:** flatten mobile session card markup ([#189](https://github.com/tompiarulli/2028-games-guide/issues/189)) ([cd62e65](https://github.com/tompiarulli/2028-games-guide/commit/cd62e657b20250fb4a5b81579150b6564abde4f8))
+
 ## [1.10.2](https://github.com/tompiarulli/2028-games-guide/compare/v1.10.1...v1.10.2) (2026-10-21)
 
 

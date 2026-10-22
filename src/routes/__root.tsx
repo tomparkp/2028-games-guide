@@ -43,7 +43,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: 'og:image', content: `${SITE_URL}${OG_IMAGE.path}` },
       { property: 'og:image:width', content: String(OG_IMAGE.width) },
       { property: 'og:image:height', content: String(OG_IMAGE.height) },
-      { property: 'og:image:alt', content: `${SITE_NAME}: the session browser` },
+      { property: 'og:image:alt', content: `${SITE_NAME}, an unofficial session browser` },
       // X falls back to the og: tags for title, description and image.
       { name: 'twitter:card', content: 'summary_large_image' },
     ],

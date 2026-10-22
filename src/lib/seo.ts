@@ -2,9 +2,9 @@ import { fmtTime } from '@/lib/format'
 import type { Session } from '@/types/session'
 
 export const SITE_URL = 'https://28games.tompiarulli.com'
-export const SITE_NAME = '2028 Games Unofficial Guide'
+export const SITE_NAME = '2028 Games Session Guide'
 export const SITE_DESCRIPTION =
-  'Browse all 800+ sessions of the 2028 Summer Games in Los Angeles by sport, venue, and date, with AI ratings and summaries to help you choose tickets.'
+  'An unofficial guide to all 800+ sessions of the 2028 Summer Games in Los Angeles. Browse by sport, venue, and date, with AI ratings and summaries to help you choose tickets.'
 export const OG_IMAGE = { path: '/og-image.png', width: 1200, height: 630 }
 
 const MAX_TITLE_DETAIL_LENGTH = 60

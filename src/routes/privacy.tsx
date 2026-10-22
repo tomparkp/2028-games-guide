@@ -22,9 +22,9 @@ function PrivacyPage() {
 
       <div className="text-ink2 space-y-5 text-sm leading-relaxed">
         <p>
-          2028 Games Unofficial Guide is an open-source project. We try to collect as little
-          information as possible. This page describes what we do collect and the third parties that
-          process it.
+          2028 Games Session Guide is an unofficial, open-source project. We try to collect as
+          little information as possible. This page describes what we do collect and the third
+          parties that process it.
         </p>
 
         <section>

@@ -1,8 +1,8 @@
-![2028 Games Unofficial Session Guide screenshot](screenshot.png)
+![2028 Games Session Guide screenshot](screenshot.png)
 
 > **Disclaimer:** This is an unofficial, open-source project and is not affiliated with, endorsed by, or connected to any official games organizing body. Session data is scraped from publicly available schedules and materials and may be inaccurate, incomplete, or outdated. Always verify details against official sources before making any plans or purchasing decisions. Use at your own risk.
 
-# 2028 Games Unofficial Session Guide
+# 2028 Games Session Guide
 
 **Live site: [28games.tompiarulli.com](https://28games.tompiarulli.com)**
 

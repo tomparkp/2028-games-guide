@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router'
+
 import { ThemeToggle } from './ThemeToggle'
 
 // lucide-react 1.0 dropped brand icons. This is the outline GitHub mark from the last
@@ -49,6 +51,26 @@ export function Nav() {
         and should not be used as a sole basis for decisions. Always verify against official
         sources.
       </p>
+      {/* Here rather than in the footer: the home page scrolls infinitely, so the footer is
+          effectively unreachable there. */}
+      <nav
+        aria-label="Legal"
+        className="text-ink3 relative mt-2 flex items-center justify-center gap-2 text-[0.72rem]"
+      >
+        <Link
+          to="/privacy"
+          className="hover:text-gold underline-offset-2 transition-colors hover:underline"
+        >
+          Privacy
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link
+          to="/terms"
+          className="hover:text-gold underline-offset-2 transition-colors hover:underline"
+        >
+          Terms
+        </Link>
+      </nav>
     </div>
   )
 }

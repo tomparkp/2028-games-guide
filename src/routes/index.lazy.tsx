@@ -5,6 +5,7 @@ import { Suspense, lazy, startTransition, useEffect, useMemo, useRef, useState }
 
 import { FilterBar } from '@/components/FilterBar'
 import { ScrollToTopButton } from '@/components/ScrollToTopButton'
+import type { SessionDetailStatus } from '@/components/SessionDetail'
 import { SessionTable } from '@/components/SessionTable'
 import { useBookmarks } from '@/hooks/useBookmarks'
 import { sessionDetailQueryOptions, sessionsInfiniteQueryOptions } from '@/lib/session-query'
@@ -61,6 +62,15 @@ function SessionPicker() {
 
   const selectedSession = selectedDetailQuery.data?.session ?? selectedSummary
   const selectedInsights = selectedDetailQuery.data?.insights ?? null
+  // The detail lookup returns `null` for an id that doesn't exist (e.g. a stale or mistyped
+  // `?session=` link), which is distinct from still loading.
+  const selectedDetailStatus: SessionDetailStatus = selectedDetailQuery.isPending
+    ? 'loading'
+    : selectedDetailQuery.isError
+      ? 'error'
+      : selectedDetailQuery.data
+        ? 'ready'
+        : 'not-found'
 
   useEffect(() => {
     const element = loadMoreRef.current
@@ -227,7 +237,7 @@ function SessionPicker() {
             open={!!selectedSessionId}
             session={selectedSession}
             insights={selectedInsights}
-            isLoading={selectedDetailQuery.isPending}
+            status={selectedDetailStatus}
             onClose={handleCloseSession}
             isBookmarked={isBookmarked}
             onToggleBookmark={toggle}

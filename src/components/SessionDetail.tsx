@@ -176,20 +176,52 @@ function RelatedNewsSection({ items }: { items: RelatedNewsItem[] }) {
   )
 }
 
+export type SessionDetailStatus = 'loading' | 'ready' | 'not-found' | 'error'
+
+function CloseButton({ onClose }: { onClose: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClose}
+      aria-label="Close panel"
+      className="text-ink3 hover:bg-surface2 hover:text-ink flex size-10 items-center justify-center rounded-md transition-colors md:size-9"
+    >
+      <ChevronsRight size={18} className="hidden md:block" />
+      <X size={20} className="md:hidden" />
+    </button>
+  )
+}
+
+function UnavailableBlock({
+  status,
+  onClose,
+}: {
+  status: 'not-found' | 'error'
+  onClose: () => void
+}) {
+  return (
+    <div className="px-5 pt-3 pb-5 max-md:px-4">
+      <div className="mb-3 flex items-center">
+        <CloseButton onClose={onClose} />
+      </div>
+      <h2 className="font-display text-ink text-[1.35rem] leading-tight font-semibold">
+        {status === 'not-found' ? 'Session not found' : "Couldn't load this session"}
+      </h2>
+      <p className="text-ink2 mt-2 text-[0.82rem] leading-relaxed">
+        {status === 'not-found'
+          ? 'This link points to a session that doesn’t exist. Pick one from the list instead.'
+          : 'Something went wrong while loading the details. Please try again in a moment.'}
+      </p>
+    </div>
+  )
+}
+
 function LoadingBlock({ session, onClose }: { session: Session | null; onClose: () => void }) {
   return (
     <>
       <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
         <div className="mb-3 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close panel"
-            className="text-ink3 hover:bg-surface2 hover:text-ink flex size-10 items-center justify-center rounded-md transition-colors md:size-9"
-          >
-            <ChevronsRight size={18} className="hidden md:block" />
-            <X size={20} className="md:hidden" />
-          </button>
+          <CloseButton onClose={onClose} />
           <div className="text-ink3 flex size-10 items-center justify-center rounded-md md:size-9">
             <LoaderCircle size={18} className="animate-spin" />
           </div>
@@ -249,7 +281,7 @@ export function SessionDetail({
   open,
   session,
   insights,
-  isLoading,
+  status,
   onClose,
   isBookmarked,
   onToggleBookmark,
@@ -257,7 +289,7 @@ export function SessionDetail({
   open: boolean
   session: Session | null
   insights: SessionInsights | null
-  isLoading: boolean
+  status: SessionDetailStatus
   onClose: () => void
   isBookmarked?: (id: string) => boolean
   onToggleBookmark?: (id: string) => void
@@ -273,19 +305,11 @@ export function SessionDetail({
     [insights],
   )
 
-  const panelContent = !open ? null : !isLoading && insights && session ? (
+  const panelContent = !open ? null : status === 'ready' && insights && session ? (
     <>
       <div className="shrink-0 px-5 pt-3 pb-5 max-md:px-4">
         <div className="mb-3 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close panel"
-            className="text-ink3 hover:bg-surface2 hover:text-ink flex size-10 items-center justify-center rounded-md transition-colors md:size-9"
-          >
-            <ChevronsRight size={18} className="hidden md:block" />
-            <X size={20} className="md:hidden" />
-          </button>
+          <CloseButton onClose={onClose} />
 
           {onToggleBookmark && isBookmarked ? (
             <button
@@ -448,6 +472,8 @@ export function SessionDetail({
 
       <div className="h-6 shrink-0" />
     </>
+  ) : status === 'not-found' || status === 'error' ? (
+    <UnavailableBlock status={status} onClose={onClose} />
   ) : (
     <LoadingBlock session={session} onClose={onClose} />
   )

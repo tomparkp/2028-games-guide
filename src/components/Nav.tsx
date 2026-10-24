@@ -58,17 +58,17 @@ export function Nav() {
         className="text-ink3 relative mt-2 flex items-center justify-center gap-2 text-[0.72rem]"
       >
         <Link
-          to="/privacy"
-          className="hover:text-gold underline-offset-2 transition-colors hover:underline"
-        >
-          Privacy
-        </Link>
-        <span aria-hidden="true">·</span>
-        <Link
           to="/terms"
           className="hover:text-gold underline-offset-2 transition-colors hover:underline"
         >
           Terms
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link
+          to="/privacy"
+          className="hover:text-gold underline-offset-2 transition-colors hover:underline"
+        >
+          Privacy
         </Link>
       </nav>
     </div>

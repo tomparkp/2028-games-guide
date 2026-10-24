@@ -374,8 +374,9 @@ export function SessionDetail({
           Disclaimer
         </h3>
         <p className="text-ink3 mt-2 text-[0.82rem] leading-snug italic">
-          The content below is AI-generated and may contain inaccuracies — double-check relevant
-          information with official sources.
+          This is an unofficial guide, not affiliated with any official organizing body. The content
+          below is AI-generated and may contain inaccuracies — double-check relevant information
+          with official sources.
         </p>
         <div className="mt-2 text-[0.78rem]">
           <button

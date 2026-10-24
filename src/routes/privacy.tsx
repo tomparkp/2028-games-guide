@@ -1,16 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { SITE_NAME, pageHead } from '@/lib/seo'
+
 export const Route = createFileRoute('/privacy')({
-  head: () => ({
-    meta: [
-      { title: 'Privacy Policy · 2028 Games Unofficial Guide' },
-      {
-        name: 'description',
-        content:
-          'What the 2028 Games Unofficial Guide collects, which providers process it, and how it is used.',
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: `Privacy Policy · ${SITE_NAME}`,
+      description: `What the ${SITE_NAME} collects, which providers process it, and how it is used.`,
+      path: '/privacy',
+    }),
   component: PrivacyPage,
 })
 
@@ -24,9 +22,9 @@ function PrivacyPage() {
 
       <div className="text-ink2 space-y-5 text-sm leading-relaxed">
         <p>
-          2028 Games Unofficial Guide is an open-source project. We try to collect as little
-          information as possible. This page describes what we do collect and the third parties that
-          process it.
+          2028 Games Session Guide is an unofficial, open-source project. We try to collect as
+          little information as possible. This page describes what we do collect and the third
+          parties that process it.
         </p>
 
         <section>

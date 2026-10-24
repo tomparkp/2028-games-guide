@@ -39,7 +39,7 @@ export function Nav() {
       </a>
       <ThemeToggle />
       <h1 className="font-display relative mb-1.5 text-[2.2rem] leading-[1.1] font-normal -tracking-[0.03em] max-md:text-[1.6rem]">
-        <em className="text-gold italic">2028 Games</em> Unofficial Guide
+        <em className="text-gold italic">2028 Games</em> Session Guide
       </h1>
       <p className="text-ink3 relative mx-auto mt-2 max-w-[600px] text-[0.72rem] leading-normal font-normal max-md:px-2">
         This is an{' '}
@@ -58,17 +58,17 @@ export function Nav() {
         className="text-ink3 relative mt-2 flex items-center justify-center gap-2 text-[0.72rem]"
       >
         <Link
-          to="/privacy"
-          className="hover:text-gold underline-offset-2 transition-colors hover:underline"
-        >
-          Privacy
-        </Link>
-        <span aria-hidden="true">·</span>
-        <Link
           to="/terms"
           className="hover:text-gold underline-offset-2 transition-colors hover:underline"
         >
           Terms
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link
+          to="/privacy"
+          className="hover:text-gold underline-offset-2 transition-colors hover:underline"
+        >
+          Privacy
         </Link>
       </nav>
     </div>

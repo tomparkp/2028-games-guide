@@ -13,6 +13,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 
 import { Nav } from '../components/Nav'
+import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '../lib/seo'
 import { DEFAULT_FILTERS } from '../lib/session-search'
 
 // Inlined into the document rather than linked: the stylesheet was the only render-blocking
@@ -30,12 +31,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: '2028 Games Unofficial Guide' },
-      {
-        name: 'description',
-        content:
-          'Browse all 800+ sessions of the 2028 Summer Games in Los Angeles by sport, venue, and date, with AI ratings and summaries to help you choose tickets.',
-      },
+      // Defaults; page routes override title, description and og:title/description/url and
+      // add the canonical link (see `pageHead`).
+      { title: SITE_NAME },
+      { name: 'description', content: SITE_DESCRIPTION },
+      { property: 'og:site_name', content: SITE_NAME },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:locale', content: 'en_US' },
+      { property: 'og:title', content: SITE_NAME },
+      { property: 'og:description', content: SITE_DESCRIPTION },
+      { property: 'og:image', content: `${SITE_URL}${OG_IMAGE.path}` },
+      { property: 'og:image:width', content: String(OG_IMAGE.width) },
+      { property: 'og:image:height', content: String(OG_IMAGE.height) },
+      { property: 'og:image:alt', content: `${SITE_NAME}, an unofficial session browser` },
+      // X falls back to the og: tags for title, description and image.
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     styles: [{ children: appCss }],
     links: [

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.11.0...v1.12.0) (2026-10-24)
+
+
+### Features
+
+* rename to 2028 Games Session Guide and add per-page meta tags ([#195](https://github.com/tompiarulli/2028-games-guide/issues/195)) ([42a406d](https://github.com/tompiarulli/2028-games-guide/commit/42a406d474b41c75798c5916110cbf8b928f49a7))
+
 ## [1.11.0](https://github.com/tompiarulli/2028-games-guide/compare/v1.10.2...v1.11.0) (2026-10-22)
 
 
